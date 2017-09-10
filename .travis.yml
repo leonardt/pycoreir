@@ -1,0 +1,32 @@
+language: python
+python:
+    - "2.7"
+    - "3.4"
+    - "3.5"
+
+addons:
+  apt:
+    sources:
+    - ubuntu-toolchain-r-test
+    packages:
+      - g++-4.9
+
+before_install:
+  # BEGIN: coreir installation
+  - git clone -b dev https://github.com/rdaly525/coreir.git
+  - cd coreir;
+  - export COREIRCONFIG="g++-4.9";
+  - export COREIR=$PWD
+  - make install -j 2
+  - cd ..;
+  # END: coreir installation
+
+script:
+  - pip install -e .
+  - pytest -s
+
+compiler:
+  - gcc
+
+os:
+  - linux
