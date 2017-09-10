@@ -1,0 +1,73 @@
+{
+  "namespaces": {
+    "global": {
+      "modules": {
+        "add8": {
+          "configparams": {
+            "init": "int"
+          },
+          "type": [
+            "Record",
+            {
+              "in1": [
+                "Array",
+                8,
+                "BitIn"
+              ],
+              "in2": [
+                "Array",
+                8,
+                "BitIn"
+              ],
+              "out": [
+                "Array",
+                9,
+                "Bit"
+              ]
+            }
+          ]
+        },
+        "multiply_by_2": {
+          "connections": [
+            [
+              "self.output",
+              "adder.out"
+            ],
+            [
+              "self.input",
+              "adder.in2"
+            ],
+            [
+              "self.input",
+              "adder.in1"
+            ]
+          ],
+          "instances": {
+            "adder": {
+              "configargs": {
+                "init": 5
+              },
+              "modref": "global.add8"
+            }
+          },
+          "type": [
+            "Record",
+            {
+              "input": [
+                "Array",
+                8,
+                "BitIn"
+              ],
+              "output": [
+                "Array",
+                9,
+                "Bit"
+              ]
+            }
+          ]
+        }
+      }
+    }
+  },
+  "top": "global.multiply_by_2"
+}
