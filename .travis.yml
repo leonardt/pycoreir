@@ -1,35 +1,36 @@
 language: python
 python:
-    - "2.7"
-    - "3.4"
-    - "3.5"
-
+    - '2.7'
+    - '3.4'
+    - '3.5'
 addons:
   apt:
     sources:
-    - ubuntu-toolchain-r-test
+        - ubuntu-toolchain-r-test
     packages:
-      - g++-4.9
-
+        - g++-4.9
 before_install:
-  # BEGIN: coreir installation
-  - mkdir deps
-  - cd deps
-  - git clone -b dev https://github.com/rdaly525/coreir.git
-  - cd coreir
-  - export COREIRCONFIG="g++-4.9"
-  - export COREIR=$PWD
-  - make install -j 2
-  - cd ..  # out of coreir
-  - cd ..  # out of deps
-  # END: coreir installation
-
+    - mkdir deps
+    - cd deps
+    - git clone -b dev https://github.com/rdaly525/coreir.git
+    - cd coreir
+    - export COREIRCONFIG="g++-4.9"
+    - export COREIR=$PWD
+    - make install -j 2
+    - cd ..
+    - cd ..
 script:
-  - pip install -e .
-  - pytest -s tests/
-
+    - pip install -e .
+    - pytest -s tests/
 compiler:
-  - gcc
-
+    - gcc
 os:
-  - linux
+    - linux
+deploy:
+  provider: pypi
+  user: leonardt
+  password:
+    secure: StzPsr9p+2JLSbKNHHM0Tu7EejUwWiwZ6l+20ozOuYtC8vnRs5c73H+bwTzv1aQF7l0JpE3EwnpwlaUwhBjEn9ax2flNHfiGp6hb22BA1tUH+700bm2T8u9aBGF5fdKnB+wrAR7GeEagR7yYUblbwHywqG3Vi/X7yv9nuVeupq6lgzji1QsMaR6ioyVvfTSd0edibavfjDBxmu30xEdeIW5sOBc3cI+tA8j8YUUvS8eTDat+hy3eCFcEYZLV3U2Gv1X1Qe4TK24ffVDWCxTeNa3svaCQmTm81RrQRsIXek5o1jRa4tTIzqZ1dF5EyYPhUpBLa7Zm/Tz083feTRtJPIGscqf8nwX/rLdHk1AlpL1B8RGshCsQE/GMP4QoSJONwzk/jlaCyi1ufSHhbOQvvdt6+tSh4gPGQ4/Uqy2IJHd2+RaT84LM4hqw+rvW9x7Mpsw9xxICJVqk0RER5z+y/VEHLuTOhm9flZg7Yq6VlIOVaoTiI3M5zMAXkPOqw3YqJwKXSP4igSYqpv2oEkg3UaJMXIxIlBhNcpVrF3WUqWjZxwevnvrQFVRwtAISXTvaWaY9TjA4Am8UlU9sxSRe5cA53GGxo7iAwdDBsrYgtBB2p9IgLPeYvedsPwPdyCh7wneSoTyxTHZuKJoZEWngR4BpOd5sCfF3igY/pgcIHdI=
+  on:
+    tags: true
+    branch: master
