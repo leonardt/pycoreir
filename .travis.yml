@@ -16,7 +16,7 @@ before_install:
     - cd coreir
     - export COREIRCONFIG="g++-4.9"
     - export COREIR=$PWD
-    - make install -j 2
+    - sudo make install -j 2
     - cd ..
     - cd ..
 script:
