@@ -13,12 +13,15 @@ addons:
 
 before_install:
   # BEGIN: coreir installation
+  - mkdir deps
+  - cd deps
   - git clone -b dev https://github.com/rdaly525/coreir.git
-  - cd coreir;
-  - export COREIRCONFIG="g++-4.9";
+  - cd coreir
+  - export COREIRCONFIG="g++-4.9"
   - export COREIR=$PWD
   - make install -j 2
-  - cd ..;
+  - cd ..  # out of coreir
+  - cd ..  # out of deps
   # END: coreir installation
 
 script:
