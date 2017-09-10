@@ -23,7 +23,7 @@ before_install:
 
 script:
   - pip install -e .
-  - pytest -s
+  - pytest -s tests/
 
 compiler:
   - gcc
