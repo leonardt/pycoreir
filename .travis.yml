@@ -14,7 +14,6 @@ before_install:
     - cd deps
     - git clone -b dev https://github.com/rdaly525/coreir.git
     - cd coreir
-    - export LD_LIBRARY_PATH=`pwd`/lib:$LD_LIBRARY_PATH
     - export COREIRCONFIG="g++-4.9"
     - export COREIR=$PWD
     - sudo make install -j 2
