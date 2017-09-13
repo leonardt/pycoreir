@@ -2,6 +2,10 @@
 
 Python bindings for [coreir](https://github.com/rdaly525/coreir)
 
+```
+pip install coreir
+```
+
 # Development Setup
 Install a local working copy to your python packages using
 ```
