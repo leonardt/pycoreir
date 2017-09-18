@@ -6,10 +6,10 @@ coreir_primitives = context.get_namespace("coreir")
 counter_type = context.Record({
     "en"  : context.BitIn(),
     "out" : context.Array(16, context.Bit()),
-    "clk" : context.get_named_type("coreir", "clkIn")
+    "clk" : context.named_types[("coreir", "clkIn")]
 })
 
-counter = context.G.new_module("counter", counter_type)
+counter = context.global_namespace.new_module("counter", counter_type)
 counter_definition = counter.new_definition()
 
 Add = coreir_primitives.generators["add"]
