@@ -1,12 +1,12 @@
 import coreir
 import test_utils
-import os 
+import os
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
 
 def test_coreir():
     context = coreir.Context()
-    assert context.G.name == "global"
+    assert context.global_namespace.name == "global"
     coreir_stdlib = context.get_namespace("coreir")
     assert coreir_stdlib.name == "coreir"
     add_instantiable = coreir_stdlib.instantiables["add"]
@@ -18,7 +18,7 @@ def test_coreir():
     test_utils.assert_pointers_equal(add_generator.ptr, add_instantiable.ptr)
 
     module_typ = context.Record({"input": context.Array(8, context.BitIn()), "output": context.Array(9, context.Bit())})
-    module = context.G.new_module("multiply_by_2", module_typ)
+    module = context.global_namespace.new_module("multiply_by_2", module_typ)
     module_def = module.new_definition()
     add8_inst = module_def.add_generator_instance("add8_inst", add_generator, context.newArgs({"width":8}))
     assert add8_inst.generator_args["width"].value == 8
@@ -32,10 +32,10 @@ def test_ice40():
     SB_DFF = coreir_ice40.modules["SB_DFF"]
     SB_DFFE = coreir_ice40.modules["SB_DFFE"]
     module_typ = context.Record({
-        "I" : context.Array(4, context.BitIn()), 
+        "I" : context.Array(4, context.BitIn()),
         "O" : context.Bit()
     })
-    module = context.G.new_module("test_module", module_typ)
+    module = context.global_namespace.new_module("test_module", module_typ)
     module_def = module.new_definition()
     A0 = 0xAAAA
     A1 = 0xCCCC

@@ -6,9 +6,9 @@ from test_utils import get_pointer_addr
 def test_directed_module():
     c = coreir.Context()
     module_typ = c.Record({"input": c.Array(8, c.BitIn()), "output": c.Array(8, c.Bit())})
-    module = c.G.new_module("multiply_by_4", module_typ)
+    module = c.global_namespace.new_module("multiply_by_4", module_typ)
     module_def = module.new_definition()
-    add8 = c.G.new_module("add8",
+    add8 = c.global_namespace.new_module("add8",
         c.Record({
             "in1": c.Array(8, c.BitIn()),
             "in2": c.Array(8, c.BitIn()),

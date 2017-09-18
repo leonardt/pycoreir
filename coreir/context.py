@@ -23,7 +23,11 @@ class Context:
         # FIXME: Rename this to ptr or context_ptr to be consistent with other
         #        API objects
         self.context = libcoreir_c.CORENewContext()
-        self.G = Namespace(libcoreir_c.COREGetGlobal(self.context),self)
+        self.global_namespace = Namespace(libcoreir_c.COREGetGlobal(self.context),self)
+
+    @property
+    def G(self):
+        raise Exception("Context.G has been removed, use Context.global_namespace instead")
 
     def print_errors(self):
         libcoreir_c.COREPrintErrors(self.context)
