@@ -1,4 +1,5 @@
 import coreir
+from collections import OrderedDict
 import test_utils
 import os
 dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -31,10 +32,13 @@ def test_ice40():
     SB_CARRY = coreir_ice40.modules["SB_CARRY"]
     SB_DFF = coreir_ice40.modules["SB_DFF"]
     SB_DFFE = coreir_ice40.modules["SB_DFFE"]
-    module_typ = context.Record({
-        "I" : context.Array(4, context.BitIn()),
-        "O" : context.Bit()
-    })
+    module_typ = context.Record(
+        # NOTE: An OrderedDict so the json output is deterministic
+        OrderedDict(
+            I = context.Array(4, context.BitIn()),
+            O = context.Bit()
+        )
+    )
     module = context.global_namespace.new_module("test_module", module_typ)
     module_def = module.new_definition()
     A0 = 0xAAAA
