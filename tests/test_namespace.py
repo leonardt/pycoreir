@@ -33,10 +33,12 @@ def test_ice40():
     SB_DFF = coreir_ice40.modules["SB_DFF"]
     SB_DFFE = coreir_ice40.modules["SB_DFFE"]
     module_typ = context.Record(
-        # NOTE: An OrderedDict so the json output is deterministic
+        # NOTE: A sorted OrderedDict so the json output is deterministic
         OrderedDict(
-            I = context.Array(4, context.BitIn()),
-            O = context.Bit()
+            sorted({
+                "I": context.Array(4, context.BitIn()),
+                "O": context.Bit()
+            }.items())
         )
     )
     module = context.global_namespace.new_module("test_module", module_typ)
