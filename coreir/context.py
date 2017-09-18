@@ -24,12 +24,9 @@ class Context:
         #        API objects
         self.context = libcoreir_c.CORENewContext()
         self.G = Namespace(libcoreir_c.COREGetGlobal(self.context),self)
-    
+
     def print_errors(self):
         libcoreir_c.COREPrintErrors(self.context)
-    
-    def Any(self):
-        return Type(libcoreir_c.COREAny(self.context),self)
 
     def BitIn(self):
         return Type(libcoreir_c.COREBitIn(self.context),self)
@@ -62,7 +59,7 @@ class Context:
             ct.c_void_p), ct.cast(values, ct.c_void_p), len(fields),
             COREMapKind_STR2PARAM_MAP)
         return Params(gen_params,self)
-  
+
     def newArgs(self,fields={}):
         args = []
         for v in fields.values():

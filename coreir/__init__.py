@@ -27,9 +27,6 @@ libcoreir_c.COREContextNamed.restype = COREType_p
 
 libcoreir_c.COREPrintErrors.argtypes = [COREContext_p]
 
-libcoreir_c.COREAny.argtypes = [COREContext_p]
-libcoreir_c.COREAny.restype = COREType_p
-
 libcoreir_c.COREBitIn.argtypes = [COREContext_p]
 libcoreir_c.COREBitIn.restype = COREType_p
 

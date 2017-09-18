@@ -34,7 +34,7 @@ class Args(CoreIRType):
 class Type(CoreIRType):
     def print_(self):  # _ because print is a keyword in py2
         libcoreir_c.COREPrintType(self.ptr)
-    
+
     @property
     def size(self):
         return libcoreir_c.CORETypeGetSize(self.ptr)
@@ -48,8 +48,7 @@ class Type(CoreIRType):
             1: "BitIn",
             2: "Array",
             3: "Record",
-            4: "Named",
-            5: "Any"
+            4: "Named"
         }[kind]
 
     def __len__(self):
