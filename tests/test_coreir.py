@@ -174,7 +174,7 @@ def test_module_def_connections():
 
 def test_context():
     context = coreir.Context()
-    _type = context.get_named_type("coreir", "clkIn")
+    _type = context.named_types[("coreir", "clkIn")]
     assert _type.kind == "Named"
 
 if __name__ == "__main__":

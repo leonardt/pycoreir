@@ -15,6 +15,28 @@ COREMapKind_STR2PARAM_MAP = COREMapKind(1)
 COREMapKind_STR2ARG_MAP = COREMapKind(2)
 
 
+class NamedTypesDict:
+    def __init__(self, context):
+        self.context = context
+
+    def __getitem__(self, key):
+        if not isinstance(key, tuple) and len(key) == 2 \
+                and isinstance(key[0], str) and isinstance(key[1], str):
+            raise KeyError("Key should be a tuple of the form (str, str), "
+                    "not {}".format(key))
+        namespace = key[0]
+        type_name = key[1]
+        # TODO: Check existence of namespace and named type
+        return Type(
+            libcoreir_c.COREContextNamed(
+                self.context.context, str.encode(namespace),
+                str.encode(type_name)
+            ),
+            self.context
+        )
+
+
+
 class Context:
     AINT=0
     ASTRING=1
@@ -24,6 +46,7 @@ class Context:
         #        API objects
         self.context = libcoreir_c.CORENewContext()
         self.global_namespace = Namespace(libcoreir_c.COREGetGlobal(self.context),self)
+        self.named_types = NamedTypesDict(self)
 
     @property
     def G(self):
@@ -105,8 +128,3 @@ class Context:
 
     def __del__(self):
         libcoreir_c.COREDeleteContext(self.context)
-
-    def get_named_type(self, namespace, type_name):
-        return Type(
-            libcoreir_c.COREContextNamed(self.context, str.encode(namespace), str.encode(type_name)),
-            self)
