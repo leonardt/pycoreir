@@ -52,7 +52,8 @@ class Select(Wireable):
 class Instance(Wireable):
     def __init__(self, ptr, context):
         super(Instance, self).__init__(ptr, context)
-        self.config = LazyDict(self, Arg, libcoreir_c.COREGetConfigValue)
+        self.config = LazyDict(self, Arg, libcoreir_c.COREGetConfigValue,
+                libcoreir_c.COREHasConfigValue)
 
     #TODO This is actually getting the instanitable which could be a generator
     @property

@@ -14,9 +14,15 @@ CORENamespace_p = ct.POINTER(CORENamespace)
 class Namespace(CoreIRType):
     def __init__(self, ptr, context):
         super(Namespace, self).__init__(ptr, context)
-        self.instantiables = LazyDict(self, Instantiable, libcoreir_c.CORENamespaceGetInstantiable)
-        self.generators = LazyDict(self, Generator, libcoreir_c.CORENamespaceGetGenerator)
-        self.modules = LazyDict(self, Module, libcoreir_c.CORENamespaceGetModule)
+        self.instantiables = LazyDict(self, Instantiable,
+                libcoreir_c.CORENamespaceGetInstantiable,
+                libcoreir_c.CORENamespaceHasInstantiable)
+        self.generators = LazyDict(self, Generator,
+                libcoreir_c.CORENamespaceGetGenerator,
+                libcoreir_c.CORENamespaceHasGenerator)
+        self.modules = LazyDict(self, Module,
+                libcoreir_c.CORENamespaceGetModule,
+                libcoreir_c.CORENamespaceHasModule)
 
     @property
     def name(self):
@@ -27,8 +33,8 @@ class Namespace(CoreIRType):
         if cparams==None:
             cparams = self.context.newParams()
         assert isinstance(cparams,Params)
-        return Module(libcoreir_c.CORENewModule(self.ptr, 
-                                               ct.c_char_p(str.encode(name)), 
+        return Module(libcoreir_c.CORENewModule(self.ptr,
+                                               ct.c_char_p(str.encode(name)),
                                                typ.ptr,
                                                cparams.ptr),
                       self.context)

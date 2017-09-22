@@ -43,7 +43,8 @@
             },
             "p0": {
               "configargs": {
-                "op": "add"
+                "op_kind": "data",
+                "alu_op": "add"
               },
               "genargs": {
                 "numdataports": 2,
