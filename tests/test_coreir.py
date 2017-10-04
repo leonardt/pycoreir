@@ -53,7 +53,6 @@ def test_save_module():
 
 
 def test_module_def_instances():
-    pass
     c = coreir.Context()
     module_typ = c.Record({"input": c.Array(8, c.BitIn()), "output": c.Array(9, c.Bit())})
     module = c.global_namespace.new_module("multiply_by_2", module_typ)
@@ -79,7 +78,6 @@ def test_module_def_instances():
     assert_pointers_equal(instances[0].module.ptr, module.ptr)
 
 def test_module_def_select():
-    pass
     c = coreir.Context()
     module_typ = c.Record({"input": c.Array(8, c.BitIn()), "output": c.Array(9, c.Bit())})
     module = c.global_namespace.new_module("multiply_by_2", module_typ)
@@ -99,7 +97,6 @@ def test_module_def_select():
     assert get_pointer_addr(add8_inst.ptr) == get_pointer_addr(add8_inst_select.ptr)
 
 def test_wireable():
-    pass
     c = coreir.Context()
     module_typ = c.Record({"input": c.Array(8, c.BitIn()), "output": c.Array(9, c.Bit())})
     module = c.global_namespace.new_module("multiply_by_2", module_typ)
@@ -132,7 +129,6 @@ def test_wireable():
     assert get_pointer_addr(wireable.select("input").ptr) == get_pointer_addr(_input.ptr)
 
 def test_module_def_connections():
-    pass
     c = coreir.Context()
     module_typ = c.Record({"input": c.Array(8, c.BitIn()), "output": c.Array(9, c.Bit())})
     module = c.global_namespace.new_module("multiply_by_2", module_typ)
@@ -178,7 +174,6 @@ def test_module_def_connections():
     assert len(seen) == len(expected_conns)
 
 def test_context():
-    pass
     context = coreir.Context()
     _type = context.named_types[("coreir", "clkIn")]
     assert _type.kind == "Named"
