@@ -9,13 +9,7 @@ def test_genargs():
     for instance in mod.definition.instances:
         for name, arg in instance.generator_args.items():
             if name == "width":
-                assert arg.value == 16
-            elif name == "numdataports":
-                assert instance.module_name == "PE"
-                assert arg.value == 2
-            elif name == "numbitports":
-                assert instance.module_name == "PE"
-                assert arg.value == 3
+                assert arg.value == 4
             elif name in {"en", "clr", "rst"}:
                 assert instance.module_name == "reg"
                 assert arg.value == False

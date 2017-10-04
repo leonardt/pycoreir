@@ -1,5 +1,5 @@
 import ctypes as ct
-from coreir.type import CoreIRType, Args
+from coreir.type import CoreIRType, Values
 from coreir.lib import libcoreir_c
 from coreir.wireable import Instance, Interface
 import coreir.wireable
@@ -19,16 +19,16 @@ COREModuleDef_p = ct.POINTER(COREModuleDef)
 class ModuleDef(CoreIRType):
     def add_module_instance(self, name, module, config=None):
         if config==None:
-            config = self.context.newArgs()
-        assert isinstance(module,Module)
-        assert isinstance(config,Args)
+            config = self.context.new_values()
+        assert isinstance(module, Module)
+        assert isinstance(config, Values)
         return Instance(libcoreir_c.COREModuleDefAddModuleInstance(self.ptr, str.encode(name), module.ptr,config.ptr),self.context)
 
     def add_generator_instance(self, name, generator, genargs, config=None):
         if config is None:
-            config = self.context.newArgs()
-        assert isinstance(genargs, Args)
-        assert isinstance(config, Args)
+            config = self.context.new_values()
+        assert isinstance(genargs, Values)
+        assert isinstance(config, Values)
         return Instance(libcoreir_c.COREModuleDefAddGeneratorInstance(self.ptr, str.encode(name), generator.ptr, genargs.ptr, config.ptr), self.context)
 
     @property

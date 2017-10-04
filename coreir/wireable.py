@@ -1,7 +1,7 @@
 import ctypes as ct
 from coreir.base import CoreIRType
 from coreir.lib import libcoreir_c
-from coreir.type import Type, COREArg_p, Arg
+from coreir.type import Type, COREValue_p, Value
 from coreir.util import LazyDict
 import coreir.module
 
@@ -52,8 +52,8 @@ class Select(Wireable):
 class Instance(Wireable):
     def __init__(self, ptr, context):
         super(Instance, self).__init__(ptr, context)
-        self.config = LazyDict(self, Arg, libcoreir_c.COREGetConfigValue,
-                libcoreir_c.COREHasConfigValue)
+        self.config = LazyDict(self, Value, libcoreir_c.COREGetModArg,
+                libcoreir_c.COREHasModArg)
 
     #TODO This is actually getting the instanitable which could be a generator
     @property
@@ -65,11 +65,12 @@ class Instance(Wireable):
     def generator_args(self):
         num_args = ct.c_int()
         names = ct.POINTER(ct.c_char_p)()
-        args = ct.POINTER(COREArg_p)()
-        libcoreir_c.COREInstanceGetGenArgs(self.ptr, ct.byref(names), ct.byref(args), ct.byref(num_args))
+        args = ct.POINTER(COREValue_p)()
+        libcoreir_c.COREInstanceGetGenValues(self.ptr, ct.byref(names),
+                ct.byref(args), ct.byref(num_args))
         ret = {}
         for i in range(num_args.value):
-            ret[names[i].decode()] = Arg(args[i], self.context)
+            ret[names[i].decode()] = Value(args[i], self.context)
         return ret
 
 

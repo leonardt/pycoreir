@@ -1,8 +1,11 @@
 import ctypes as ct
-from coreir.type import COREType_p, Type, Params, COREArg_p, Args
+from coreir.type import COREType_p, Type, Params, COREValue_p, Values
 from coreir.namespace import Namespace, CORENamespace_p
 from coreir.lib import libcoreir_c, load_shared_lib
 import coreir.module
+from collections import namedtuple
+
+BitVector = namedtuple('BitVector', ['width', 'val'])
 
 class COREContext(ct.Structure):
     pass
@@ -38,9 +41,6 @@ class NamedTypesDict:
 
 
 class Context:
-    AINT=0
-    ASTRING=1
-    ATYPE=2
     def __init__(self, ptr=None):
         # FIXME: Rename this to ptr or context_ptr to be consistent with other
         #        API objects
@@ -83,30 +83,34 @@ class Context:
 
     def newParams(self, fields={}):
         keys = (ct.c_char_p * len(fields))(*(str.encode(key) for key in fields.keys()))
-        values = (ct.c_int * len(fields))(*(value for value in fields.values()))
+        values = (COREType_p * len(fields))(*(value for value in fields.values()))
         gen_params = libcoreir_c.CORENewMap(self.context, ct.cast(keys,
             ct.c_void_p), ct.cast(values, ct.c_void_p), len(fields),
             COREMapKind_STR2PARAM_MAP)
         return Params(gen_params,self)
 
-    def newArgs(self,fields={}):
+    def new_values(self,fields={}):
         args = []
         for v in fields.values():
-          if type(v) is int:
-            args.append(libcoreir_c.COREArgInt(self.context,ct.c_int(v)))
-          elif type(v) is str:
-            args.append(libcoreir_c.COREArgString(self.context,ct.c_char_p(str.encode(v))))
-          elif type(v) is bool:
-            args.append(libcoreir_c.COREArgBool(self.context,v))
-          else:
-            raise NotImplementedError()
+            if type(v) is int:
+                args.append(libcoreir_c.COREValueInt(self.context, ct.c_int(v)))
+            elif type(v) is str:
+                args.append(libcoreir_c.COREValueString(self.context,
+                    ct.c_char_p(str.encode(v))))
+            elif type(v) is bool:
+                args.append(libcoreir_c.COREValueBool(self.context, v))
+            elif isinstance(v, BitVector):
+                args.append(libcoreir_c.COREValueBitVector(self.context,
+                    v.width, v.val))
+            else:
+                raise NotImplementedError()
 
         keys = (ct.c_char_p * len(fields))(*(str.encode(key) for key in fields.keys()))
-        values = (COREArg_p * len(fields))(*(arg for arg in args))
+        values = (COREValue_p * len(fields))(*(arg for arg in args))
         gen_args = libcoreir_c.CORENewMap(self.context, ct.cast(keys,
             ct.c_void_p), ct.cast(values, ct.c_void_p), len(fields),
             COREMapKind_STR2ARG_MAP)
-        return Args(gen_args,self)
+        return Values(gen_args,self)
 
     def load_from_file(self, file_name):
         err = ct.c_bool(False)
@@ -130,3 +134,18 @@ class Context:
 
     def __del__(self):
         libcoreir_c.COREDeleteContext(self.context)
+
+    def Int(self):
+        return libcoreir_c.COREContextInt(self.context)
+
+    def String(self):
+        return libcoreir_c.COREContextString(self.context)
+
+    def Bool(self):
+        return libcoreir_c.COREContextBool(self.context)
+
+    def BitVector(self):
+        return libcoreir_c.COREContextBitVector(self.context)
+
+    def CoreIRType(self):
+        return libcoreir_c.COREContextCOREIRType(self.context)

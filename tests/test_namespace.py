@@ -21,7 +21,7 @@ def test_coreir():
     module_typ = context.Record({"input": context.Array(8, context.BitIn()), "output": context.Array(9, context.Bit())})
     module = context.global_namespace.new_module("multiply_by_2", module_typ)
     module_def = module.new_definition()
-    add8_inst = module_def.add_generator_instance("add8_inst", add_generator, context.newArgs({"width":8}))
+    add8_inst = module_def.add_generator_instance("add8_inst", add_generator, context.new_values({"width": 8}))
     assert add8_inst.generator_args["width"].value == 8
 
 
@@ -48,14 +48,17 @@ def test_ice40():
     A2 = 0xF0F0
     A3 = 0xFF00
 
-    lut0 = module_def.add_module_instance("lut0", SB_LUT4, context.newArgs({"LUT_INIT": A0 & A1}))
+    lut0 = module_def.add_module_instance("lut0", SB_LUT4, context.new_values({"LUT_INIT": coreir.BitVector(16, A0 & A1)}))
     module_def.connect(module_def.select("self.I.0"), module_def.select("lut0.I0"))
     module_def.connect(module_def.select("self.I.1"), module_def.select("lut0.I1"))
     module_def.connect(module_def.select("self.I.2"), module_def.select("lut0.I2"))
     module_def.connect(module_def.select("self.I.3"), module_def.select("lut0.I3"))
-    module_def.connect(module_def.select("self.O")            , module_def.select("lut0.O"))
+    module_def.connect(module_def.select("self.O")  , module_def.select("lut0.O"))
     module.definition = module_def
     module.save_to_file(os.path.join(dir_path, "ice40_test.json"))
     with open(os.path.join(dir_path, "ice40_test.json")) as actual:
         with open(os.path.join(dir_path, "ice40_test_gold.json")) as gold:
             assert actual.read() == gold.read()
+
+if __name__ == "__main__":
+    test_ice40()

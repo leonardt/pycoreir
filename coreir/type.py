@@ -10,25 +10,27 @@ COREType_p = ct.POINTER(COREType)
 class Params(CoreIRType):
     pass
 
-class COREArg(ct.Structure):
+class COREValue(ct.Structure):
   pass
 
-COREArg_p = ct.POINTER(COREArg)
+COREValue_p = ct.POINTER(COREValue)
 
-class Arg(CoreIRType):
+class Value(CoreIRType):
     @property
     def value(self):
-        type = libcoreir_c.COREGetArgKind(self.ptr)
+        type = libcoreir_c.COREGetValueType(self.ptr)
         # type enum values defined in include/coreir-c/coreir-args.h
         if type == 0:
-            return libcoreir_c.COREArgIntGet(self.ptr)
-        elif type == 1:
-            return libcoreir_c.COREArgStringGet(self.ptr).decode()
+            return libcoreir_c.COREValueBoolGet(self.ptr)
+        if type == 1:
+            return libcoreir_c.COREValueIntGet(self.ptr)
+        elif type == 2:
+            return libcoreir_c.COREValueBitVectorGet(self.ptr)
         elif type == 3:
-            return libcoreir_c.COREArgBoolGet(self.ptr)
+            return libcoreir_c.COREValueStringGet(self.ptr).decode()
         raise NotImplementedError()
 
-class Args(CoreIRType):
+class Values(CoreIRType):
     pass
 
 class Type(CoreIRType):

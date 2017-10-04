@@ -2,91 +2,85 @@
   "namespaces": {
     "global": {
       "modules": {
-        "Top": {
+        "ShiftRegister": {
           "connections": [
-            ["r4.out","io1.in"],
-            ["r3.out","r4.in"],
-            ["c0.out","p0.data.in.0"],
-            ["p0.data.out","r1.in"],
-            ["r0.out","p0.data.in.1"],
-            ["r2.out","r3.in"],
-            ["r1.out","r2.in"],
-            ["io0.out","r0.in"]
+            [
+              "self.O",
+              "inst3.out"
+            ],
+            [
+              "self.I",
+              "inst0.in"
+            ],
+            [
+              "inst3.in",
+              "inst2.out"
+            ],
+            [
+              "inst2.in",
+              "inst1.out"
+            ],
+            [
+              "inst1.in",
+              "inst0.out"
+            ]
           ],
           "instances": {
-            "c0": {
-              "configargs": {
-                "value": 795
-              },
+            "inst0": {
               "genargs": {
-                "width": 16
-              },
-              "genref": "coreir.const"
-            },
-            "io0": {
-              "configargs": {
-                "mode": "i"
-              },
-              "genargs": {
-                "width": 16
-              },
-              "genref": "cgralib.IO"
-            },
-            "io1": {
-              "configargs": {
-                "mode": "o"
-              },
-              "genargs": {
-                "width": 16
-              },
-              "genref": "cgralib.IO"
-            },
-            "p0": {
-              "configargs": {
-                "op_kind": "data",
-                "alu_op": "add"
-              },
-              "genargs": {
-                "numdataports": 2,
-                "width": 16
-              },
-              "genref": "cgralib.PE"
-            },
-            "r0": {
-              "genargs": {
-                "width": 16
-              },
-              "genref":"coreir.reg"
-            },
-            "r1": {
-              "genargs": {
-                "width": 16
+                "clr": ["Bool", false],
+                "en": ["Bool", false],
+                "rst": ["Bool", false],
+                "width": ["Int", 4]
               },
               "genref": "coreir.reg"
             },
-            "r2": {
+            "inst1": {
               "genargs": {
-                "width": 16
-              },
-              "genref":"coreir.reg"
-            },
-            "r3": {
-              "genargs": {
-                "width": 16
+                "clr": ["Bool", false],
+                "en": ["Bool", false],
+                "rst": ["Bool", false],
+                "width": ["Int", 4]
               },
               "genref": "coreir.reg"
             },
-            "r4": {
+            "inst2": {
               "genargs": {
-                "width": 16
+                "clr": ["Bool", false],
+                "en": ["Bool", false],
+                "rst": ["Bool", false],
+                "width": ["Int", 4]
+              },
+              "genref": "coreir.reg"
+            },
+            "inst3": {
+              "genargs": {
+                "clr": ["Bool", false],
+                "en": ["Bool", false],
+                "rst": ["Bool", false],
+                "width": ["Int", 4]
               },
               "genref": "coreir.reg"
             }
           },
-          "type": ["Record", {}]
+          "type": [
+            "Record",
+            {
+              "I": [
+                "Array",
+                4,
+                "BitIn"
+              ],
+              "O": [
+                "Array",
+                4,
+                "Bit"
+              ]
+            }
+          ]
         }
       }
     }
   },
-  "top": "global.Top"
+  "top": "global.ShiftRegister"
 }
