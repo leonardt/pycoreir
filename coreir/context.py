@@ -41,10 +41,12 @@ class Context:
     AINT=0
     ASTRING=1
     ATYPE=2
-    def __init__(self):
+    def __init__(self, ptr=None):
         # FIXME: Rename this to ptr or context_ptr to be consistent with other
         #        API objects
-        self.context = libcoreir_c.CORENewContext()
+        if ptr is None:
+            ptr = libcoreir_c.CORENewContext()
+        self.context = ptr
         self.global_namespace = Namespace(libcoreir_c.COREGetGlobal(self.context),self)
         self.named_types = NamedTypesDict(self)
 
