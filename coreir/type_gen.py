@@ -10,7 +10,7 @@ def type_gen(fn):
         names = ctypes.cast(names, ctypes.POINTER(ctypes.c_char_p))
         values_map = {}
         for i in range(num_values):
-            values_map[names[i]] = coreir.Value(values[i], context)
+            values_map[names[i].decode()] = coreir.Value(values[i], context)
         type_obj = fn(context, values_map)
         return ctypes.addressof(type_obj.ptr.contents)
     return wrapped
