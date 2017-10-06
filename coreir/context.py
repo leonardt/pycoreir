@@ -44,7 +44,9 @@ class Context:
     def __init__(self, ptr=None):
         # FIXME: Rename this to ptr or context_ptr to be consistent with other
         #        API objects
+        self.external_ptr = True
         if ptr is None:
+            self.external_ptr = False
             ptr = libcoreir_c.CORENewContext()
         self.context = ptr
         self.global_namespace = Namespace(libcoreir_c.COREGetGlobal(self.context),self)
@@ -133,7 +135,8 @@ class Context:
       return Namespace(ns,self)
 
     def __del__(self):
-        libcoreir_c.COREDeleteContext(self.context)
+        if not self.external_ptr:
+            libcoreir_c.COREDeleteContext(self.context)
 
     def Int(self):
         return libcoreir_c.COREContextInt(self.context)
