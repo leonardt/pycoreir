@@ -15,7 +15,7 @@ COREContext_p = ct.POINTER(COREContext)
 COREMapKind = ct.c_int
 COREMapKind_STR2TYPE_ORDEREDMAP = COREMapKind(0)
 COREMapKind_STR2PARAM_MAP = COREMapKind(1)
-COREMapKind_STR2ARG_MAP = COREMapKind(2)
+COREMapKind_STR2VALUE_MAP = COREMapKind(2)
 
 
 class NamedTypesDict:
@@ -100,7 +100,7 @@ class Context:
                 args.append(libcoreir_c.COREValueString(self.context,
                     ct.c_char_p(str.encode(v))))
             elif type(v) is bool:
-                args.append(libcoreir_c.COREValueBool(self.context, v))
+                args.append(libcoreir_c.COREValueBool(self.context, ct.c_bool(v)))
             elif isinstance(v, BitVector):
                 args.append(libcoreir_c.COREValueBitVector(self.context,
                     v.width, v.val))
@@ -111,7 +111,7 @@ class Context:
         values = (COREValue_p * len(fields))(*(arg for arg in args))
         gen_args = libcoreir_c.CORENewMap(self.context, ct.cast(keys,
             ct.c_void_p), ct.cast(values, ct.c_void_p), len(fields),
-            COREMapKind_STR2ARG_MAP)
+            COREMapKind_STR2VALUE_MAP)
         return Values(gen_args,self)
 
     def load_from_file(self, file_name):

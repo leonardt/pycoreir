@@ -3,7 +3,7 @@ import ctypes as ct
 import platform
 import os
 from coreir.lib import load_shared_lib, libcoreir_c
-from coreir.context import COREContext, COREContext_p, Context, COREMapKind, COREMapKind_STR2ARG_MAP, COREMapKind_STR2PARAM_MAP, COREMapKind_STR2ARG_MAP, BitVector
+from coreir.context import COREContext, COREContext_p, Context, COREMapKind, COREMapKind_STR2PARAM_MAP, BitVector
 from coreir.module import Module, COREModule, COREModule_p, COREModuleDef, COREModuleDef_p, ModuleDef, Module, \
         COREDirectedInstance_p, COREDirectedConnection_p, COREDirectedModule_p
 from coreir.instantiable import Instantiable, COREInstantiable_p, Generator
