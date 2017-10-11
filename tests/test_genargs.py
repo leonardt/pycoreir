@@ -10,7 +10,7 @@ def test_genargs():
         for name, arg in instance.generator_args.items():
             if name == "width":
                 assert arg.value == 4
-            elif name in {"has_en", "has_clr", "has_rst"}:
+            elif name in {"en", "clr", "rst"}:
                 assert instance.module_name == "reg"
                 assert arg.value == False
             else:
