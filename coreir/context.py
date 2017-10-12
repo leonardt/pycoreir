@@ -1,11 +1,8 @@
 import ctypes as ct
-from coreir.type import COREType_p, Type, Params, COREValue_p, Values
+from coreir.type import COREType_p, Type, Params, COREValue_p, Values, BitVector
 from coreir.namespace import Namespace, CORENamespace_p
 from coreir.lib import libcoreir_c, load_shared_lib
 import coreir.module
-from collections import namedtuple
-
-BitVector = namedtuple('BitVector', ['width', 'val'])
 
 class COREContext(ct.Structure):
     pass

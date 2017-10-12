@@ -4,9 +4,9 @@
     "modules":{
       "add8":{
         "type":["Record",{
+          "in1":["Array",8,"BitIn"],
           "in2":["Array",8,"BitIn"],
-          "out":["Array",9,"Bit"],
-          "in1":["Array",8,"BitIn"]
+          "out":["Array",9,"Bit"]
         }],
         "modparams":{"init":"Int"}
       },

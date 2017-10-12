@@ -1,6 +1,9 @@
 import ctypes as ct
 from coreir.base import CoreIRType
 from coreir.lib import libcoreir_c
+from collections import namedtuple
+
+BitVector = namedtuple('BitVector', ['width', 'val'])
 
 class COREType(ct.Structure):
     pass
@@ -25,7 +28,10 @@ class Value(CoreIRType):
         if type == 1:
             return libcoreir_c.COREValueIntGet(self.ptr)
         elif type == 2:
-            return libcoreir_c.COREValueBitVectorGet(self.ptr)
+            width = ct.c_int()
+            value = ct.c_int()
+            libcoreir_c.COREValueBitVectorGet(self.ptr, ct.byref(width), ct.byref(value))
+            return BitVector(width.value, value.value)
         elif type == 3:
             return libcoreir_c.COREValueStringGet(self.ptr).decode()
         raise NotImplementedError()
