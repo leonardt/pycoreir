@@ -78,6 +78,9 @@ libcoreir_c.COREPrintModule.argtypes = [COREModule_p]
 libcoreir_c.COREModuleNewDef.argtypes = [COREModule_p]
 libcoreir_c.COREModuleNewDef.restype = COREModuleDef_p
 
+libcoreir_c.COREModuleGetName.argtypes = [COREModule_p]
+libcoreir_c.COREModuleGetName.restype = ct.c_char_p
+
 libcoreir_c.COREModuleGetDef.argtypes = [COREModule_p]
 libcoreir_c.COREModuleGetDef.restype = COREModuleDef_p
 
