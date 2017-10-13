@@ -10,7 +10,7 @@
         "instances":{
           "lut0":{
             "modref":"ice40.SB_LUT4",
-            "modargs":{"LUT_INIT":[["BitVector",16],"1000100010001000"]}
+            "modargs":{"LUT_INIT":[["BitVector",16],34952]}
           }
         },
         "connections":[
