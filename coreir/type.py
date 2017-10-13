@@ -29,7 +29,7 @@ class Value(CoreIRType):
             return libcoreir_c.COREValueIntGet(self.ptr)
         elif type == 2:
             width = ct.c_int()
-            value = ct.c_int()
+            value = ct.c_uint64()
             libcoreir_c.COREValueBitVectorGet(self.ptr, ct.byref(width), ct.byref(value))
             return BitVector(width.value, value.value)
         elif type == 3:
