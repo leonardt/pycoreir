@@ -9,7 +9,7 @@ from coreir.module import Module, COREModule, COREModule_p, COREModuleDef, COREM
 from coreir.instantiable import Instantiable, COREInstantiable_p, Generator
 from coreir.namespace import CORENamespace, CORENamespace_p
 from coreir.type import COREType, COREType_p, CoreIRType, Params, Value, Values, COREValue, COREValue_p, Type
-from coreir.wireable import COREWireable_p
+from coreir.wireable import COREWireable_p, Wireable
 from coreir.type_gen import type_gen
 from collections import namedtuple
 
