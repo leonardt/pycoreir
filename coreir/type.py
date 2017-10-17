@@ -63,3 +63,22 @@ class Type(CoreIRType):
         if self.kind != "Array":  # Not a TK_Array
             raise Exception("`len` called on a {}".format(self.kind))
         return libcoreir_c.COREArrayTypeGetLen(self.ptr)
+
+
+class Record(Type):
+    def items(self):
+        keys = ct.POINTER(ct.c_char_p)()
+        values = ct.POINTER(COREType_p)()
+        size = ct.c_int()
+        libcoreir_c.CORERecordTypeGetItems(self.ptr, ct.byref(keys),
+                ct.byref(values), ct.byref(size))
+        retval = {}
+        for i in range(size.value):
+            retval[keys[i].decode()] = Type(values[i], self.context)
+        return retval.items()
+
+
+class NamedType(Type):
+    @property
+    def name(self):
+        return libcoreir_c.CORENamedTypeToString(self.ptr).decode()
