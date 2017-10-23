@@ -15,7 +15,6 @@ class COREModuleDef(ct.Structure):
 
 COREModuleDef_p = ct.POINTER(COREModuleDef)
 
-
 class ModuleDef(CoreIRType):
     def add_module_instance(self, name, module, config=None):
         if config==None:
@@ -93,6 +92,11 @@ class Module(CoreIRType):
 
     def print_(self):  # _ because print is a keyword in py2
         libcoreir_c.COREPrintModule(self.ptr)
+
+    @property
+    def name(self):
+        return libcoreir_c.COREModuleGetName(self.ptr).decode()
+
 
 
 class COREDirectedInstance(ct.Structure):

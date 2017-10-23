@@ -4,16 +4,16 @@
     "modules":{
       "add8":{
         "type":["Record",{
-          "out":["Array",9,"Bit"],
+          "in1":["Array",8,"BitIn"],
           "in2":["Array",8,"BitIn"],
-          "in1":["Array",8,"BitIn"]
+          "out":["Array",9,"Bit"]
         }],
         "modparams":{"init":"Int"}
       },
       "multiply_by_2":{
         "type":["Record",{
-          "output":["Array",9,"Bit"],
-          "input":["Array",8,"BitIn"]
+          "input":["Array",8,"BitIn"],
+          "output":["Array",9,"Bit"]
         }],
         "instances":{
           "adder":{
