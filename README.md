@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/leonardt/pycoreir.svg?branch=master)](https://travis-ci.org/leonardt/pycoreir)
 
-Python bindings for [coreir](https://github.com/rdaly525/coreir)
+Ultralight Python bindings for [coreir](https://github.com/rdaly525/coreir) using ctypes.
 
 ```
 pip install coreir
