@@ -24,7 +24,7 @@ def test_save_module():
     )
     add8_inst = module_def.add_module_instance("adder", add8,
             c.new_values({"init":5}))
-    assert add8_inst.module_name == "add8"
+    assert add8_inst.module.name == "add8"
     assert add8_inst.config["init"].value == 5
     add8_in1 = add8_inst.select("in1")
     add8_in2 = add8_inst.select("in2")
@@ -75,7 +75,7 @@ def test_module_def_instances():
     assert not len(pointers_expected), "Missing pointers {}".format(pointers_expected)
 
     assert_pointers_equal(instances[0].module_def.ptr, module_def.ptr)
-    assert_pointers_equal(instances[0].module.ptr, module.ptr)
+    assert_pointers_equal(instances[0].module.ptr, add8.ptr)
 
 def test_module_def_select():
     c = coreir.Context()
