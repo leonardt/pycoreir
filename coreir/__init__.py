@@ -8,8 +8,8 @@ from coreir.module import Module, COREModule, COREModule_p, COREModuleDef, COREM
         COREDirectedInstance_p, COREDirectedConnection_p, COREDirectedModule_p
 from coreir.instantiable import Instantiable, COREInstantiable_p, Generator
 from coreir.namespace import CORENamespace, CORENamespace_p
-from coreir.type import COREType, COREType_p, CoreIRType, Params, Value, Values, COREValue, COREValue_p, Type
-from coreir.wireable import COREWireable_p
+from coreir.type import COREType, COREType_p, CoreIRType, Params, Value, Values, COREValue, COREValue_p, Type, NamedType
+from coreir.wireable import COREWireable_p, Wireable
 from coreir.type_gen import type_gen
 from collections import namedtuple
 
@@ -77,6 +77,9 @@ libcoreir_c.COREPrintModule.argtypes = [COREModule_p]
 
 libcoreir_c.COREModuleNewDef.argtypes = [COREModule_p]
 libcoreir_c.COREModuleNewDef.restype = COREModuleDef_p
+
+libcoreir_c.COREModuleGetName.argtypes = [COREModule_p]
+libcoreir_c.COREModuleGetName.restype = ct.c_char_p
 
 libcoreir_c.COREModuleGetDef.argtypes = [COREModule_p]
 libcoreir_c.COREModuleGetDef.restype = COREModuleDef_p
@@ -243,3 +246,8 @@ libcoreir_c.COREInstantiableGetName.restype = ct.c_char_p
 
 libcoreir_c.COREInstantiableGetKind.argtypes = [COREInstantiable_p]
 libcoreir_c.COREInstantiableGetKind.restype = ct.c_int
+
+libcoreir_c.CORERecordTypeGetItems.argtypes = [COREType_p, ct.POINTER(ct.POINTER(ct.c_char_p)), ct.POINTER(ct.POINTER(COREType_p)), ct.POINTER(ct.c_int)]
+
+libcoreir_c.CORENamedTypeToString.argtypes = [COREType_p]
+libcoreir_c.CORENamedTypeToString.restype = ct.c_char_p
