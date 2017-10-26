@@ -4,21 +4,11 @@ from coreir.lib import libcoreir_c
 import coreir.module
 import coreir.context
 
-def make_cpath(self, path):
-    arr_type = ct.c_char_p * len(path)
-    carr = arr_type()
-    for i in range(0, len(path)):
-        carr[i] = ct.c_char_p(path[i].encode())
-
-    return carr
+def make_cpath(path):
+    return (ct.c_char_p * len(path))(*(p.encode() for p in path))
 
 def make_bool_arr(val):
-    bool_arr_t = ct.c_bool * len(val)
-    bool_arr = bool_arr_t()
-    for i in range(0, len(val)):
-        bool_arr[i] = ct.c_bool(val[i])
-
-    return bool_arr
+    return (ct.c_bool * len(val))(*(ct.c_bool(v) for v in val))
 
 class CORESimulatorState(ct.Structure):
     pass
@@ -32,19 +22,33 @@ CORESimValue_p = ct.POINTER(CORESimValue)
 
 class SimulatorState(CoreIRType):
     def __init__(self, module):
-        self.state = libcoreir_c.CORENewSimulatorState(module)
+        self.state = libcoreir_c.CORENewSimulatorState(module.ptr)
+
+    def __del__(self):
+        libcoreir_c.COREDeleteSimulatorState(self.state)
 
     def get_value(self, path):
         cpath = make_cpath(path)
-        val = libcoreir_c.CORESimGetValue(self.state, ct.byref(cpath[0]), len(cpath))
+        val = libcoreir_c.CORESimGetValue(self.state, cpath, len(cpath))
         val_len = libcoreir_c.CORESimValueGetLength(val)
-        return [libcoreir_c.CORESimValueGetBit(val, i).value for i in range(0, val)]
+        return [libcoreir_c.CORESimValueGetBit(val, i) for i in range(0, val_len)]
+
+    def set_main_clock(self, path):
+        cpath = make_cpath(path)
+        libcoreir_c.CORESimSetMainClock(self.state, cpath, len(cpath))
+
+    def set_clock_value(self, path, lastval, curval):
+        cpath = make_cpath(path)
+        assert(isinstance(lastval, bool) and isinstance(curval, bool))
+        libcoreir_c.CORESimSetClock(self.state, cpath, len(cpath), lastval, curval)
 
     def set_value(self, path, new_val):
         cpath = make_cpath(path)
+        if isinstance(new_val, bool):
+            new_val = [new_val]
         bool_arr = make_bool_arr(new_val)
         
-        libcoreir_c.CORESimSetValue(self.state, ct.byref(cpath), len(cpath), ct.byref(bool_arr))
+        libcoreir_c.CORESimSetValue(self.state, cpath, len(cpath), bool_arr, len(new_val))
     
     def step(self):
         libcoreir_c.CORESimStepMainClock(self.state)
@@ -61,4 +65,4 @@ class SimulatorState(CoreIRType):
     def set_watchpoint(self, path, val):
         cpath = make_cpath(path)
         bool_arr = make_bool_arr(val)
-        libcoreir_c.CORESimSetWatchPoint(self.state, ct.byref(cpath), len(cpath), ct.byref(bool_arr))
+        libcoreir_c.CORESimSetWatchPoint(self.state, cpath, len(cpath), bool_arr, len(val))
