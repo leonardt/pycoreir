@@ -55,23 +55,10 @@ class Instance(Wireable):
         self.config = LazyDict(self, Value, libcoreir_c.COREGetModArg,
                 libcoreir_c.COREHasModArg)
 
-    #TODO This is actually getting the instanitable which could be a generator
     @property
-    def module_name(self):
-        name = libcoreir_c.COREGetInstantiableRefName(self.ptr)
-        return name.decode()
-
-    @property
-    def generator_args(self):
-        num_args = ct.c_int()
-        names = ct.POINTER(ct.c_char_p)()
-        args = ct.POINTER(COREValue_p)()
-        libcoreir_c.COREInstanceGetGenValues(self.ptr, ct.byref(names),
-                ct.byref(args), ct.byref(num_args))
-        ret = {}
-        for i in range(num_args.value):
-            ret[names[i].decode()] = Value(args[i], self.context)
-        return ret
+    def module(self):
+        module = libcoreir_c.COREGetModuleRef(self.ptr)
+        return coreir.module.Module(module, self.context)
 
 
 
