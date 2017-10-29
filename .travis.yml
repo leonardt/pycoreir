@@ -12,7 +12,7 @@ addons:
 before_install:
     - mkdir deps
     - cd deps
-    - git clone -b rinst https://github.com/rdaly525/coreir.git
+    - git clone -b dev https://github.com/rdaly525/coreir.git
     - cd coreir
     - export COREIRCONFIG="g++-4.9"
     - export COREIR=$PWD
