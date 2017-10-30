@@ -22,6 +22,9 @@ before_install:
 script:
     - pip install -e .
     - pytest -s tests/
+    - cd libcoreir-python
+    - make test
+    - PYTHONPATH=test ./build/testPythonTypegen
 compiler:
     - gcc
 os:
