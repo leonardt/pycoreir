@@ -271,6 +271,9 @@ libcoreir_c.CORESimSetClock.restype = None
 libcoreir_c.CORESimSetMainClock.argtypes = [CORESimulatorState_p, ct.POINTER(ct.c_char_p), ct.c_int]
 libcoreir_c.CORESimSetMainClock.restype = None
 
+libcoreir_c.CORESimGetClockCycles.argtypes = [CORESimulatorState_p, ct.POINTER(ct.c_char_p), ct.c_int]
+libcoreir_c.CORESimGetClockCycles.restype = ct.c_int
+
 libcoreir_c.CORESimSetValue.argtypes = [CORESimulatorState_p, ct.POINTER(ct.c_char_p), ct.c_int, ct.POINTER(ct.c_bool), ct.c_int]
 libcoreir_c.CORESimSetValue.restype = None
 
