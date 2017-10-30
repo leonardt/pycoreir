@@ -230,6 +230,9 @@ libcoreir_c.CORETypeGetSize.restype = ct.c_uint
 libcoreir_c.COREModuleGetGenArgs.argtypes = [COREModule_p, ct.POINTER(ct.POINTER(ct.c_char_p)), ct.POINTER(ct.POINTER(COREValue_p)), ct.POINTER(ct.c_int)]
 libcoreir_c.COREModuleGetGenArgs.restype = None
 
+libcoreir_c.COREModuleIsGenerated.argtypes = [COREModule_p]
+libcoreir_c.COREModuleIsGenerated.restype = ct.c_bool
+
 libcoreir_c.CORENamespaceGetGenerator.argtypes = [CORENamespace_p, ct.c_char_p]
 libcoreir_c.CORENamespaceGetGenerator.restype = COREGenerator_p
 
