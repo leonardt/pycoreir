@@ -1,6 +1,5 @@
 language: python
 python:
-    - '2.7'
     - '3.4'
     - '3.5'
 addons:
@@ -23,7 +22,7 @@ script:
     - pip install -e .
     - pytest -s tests/
     - cd libcoreir-python
-    - make test
+    - make test CXX=g++-4.9
     - PYTHONPATH=test ./build/testPythonTypegen
 compiler:
     - gcc

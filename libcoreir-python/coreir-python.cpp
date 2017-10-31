@@ -33,7 +33,7 @@ CoreIR::Type* CoreIR::TypeGenFromPython::createType(Context* c, Values values) {
         type_ptr = (Type *) PyLong_AsVoidPtr(value_object);
         Py_DECREF(value_object);
       }
-      for (int i = 0; i < values.size(); i++) {
+      for (uint i = 0; i < values.size(); i++) {
         free(names[i]);
       }
       free(names);
