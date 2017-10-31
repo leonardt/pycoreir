@@ -17,7 +17,7 @@ PYTHON_CONFIG ?= python-config
 PYTHONHOME = $(shell $(PYTHON_CONFIG) --prefix)
 override CXXFLAGS += $(shell $(PYTHON_CONFIG) --includes) -DCOREIR_INCLUDE_PYTHON_TYPEGEN -DPYTHON_HOME="L\"$(PYTHONHOME)\""
 PYTHON_LIBS = $(PYTHONHOME)/lib
-LDFLAGS += -L $(PYTHON_LIBS) $(shell $(PYTHON_CONFIG) --libs)
+override LDFLAGS += -L $(PYTHON_LIBS) $(shell $(PYTHON_CONFIG) --libs)
 DYLDFLAGS = -Wl,-rpath,$(PYTHON_LIBS)
 
 clean:
