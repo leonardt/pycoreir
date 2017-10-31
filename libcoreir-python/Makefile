@@ -44,4 +44,4 @@ uninstall:
 	-rm $(prefix)/lib/libcoreir-python.$(TARGET)
 
 test: build/libcoreir-python.$(TARGET) test/pythonTypegen.cpp
-	$(CXX) $(CXXFLAGS) -o build/testPythonTypegen test/pythonTypegen.cpp -L ./build/ -lcoreir -lcoreir-python
+	$(CXX) $(CXXFLAGS) -o build/testPythonTypegen test/pythonTypegen.cpp -L ./build/ -lcoreir -lcoreir-python $(LDFLAGS)
