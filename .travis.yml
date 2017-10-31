@@ -15,6 +15,7 @@ addons:
         - ubuntu-toolchain-r-test
     packages:
         - g++-4.9
+
 before_install:
     - mkdir deps
     - cd deps
@@ -29,6 +30,7 @@ script:
     - pip install -e .
     - pytest -s tests/
     - cd libcoreir-python
+    - sudo make install CXX=4++-4.9
       # Append test directory to PYTHONPATH because that's where the test
       # `add.py` module with a typegen is
     - PYTHONPATH=test make test CXX=g++-4.9
