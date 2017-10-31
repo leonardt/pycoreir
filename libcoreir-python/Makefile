@@ -11,7 +11,7 @@ endif
 CXX ?= g++
 
 override CXXFLAGS += -std=c++11 -Wall -fPIC -Werror -I./include/
-LDFLAGS = -lcoreir
+override LDFLAGS += -lcoreir
 
 PYTHON_CONFIG ?= python-config
 PYTHONHOME = $(shell $(PYTHON_CONFIG) --prefix)

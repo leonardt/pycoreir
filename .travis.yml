@@ -35,7 +35,7 @@ script:
     - pip install -e .
     - pytest -s tests/
     - cd libcoreir-python
-    - make install CXX=g++-4.9 prefix=$TRAVIS_BUILD_DIR/deps CXXFLAGS=-I$TRAVIS_BUILD_DIR/deps/include
+    - make install CXX=g++-4.9 prefix=$TRAVIS_BUILD_DIR/deps CXXFLAGS=-I$TRAVIS_BUILD_DIR/deps/include LDFLAGS=-L$TRAVIS_BUILD_DIR/deps/lib
       # Append test directory to PYTHONPATH because that's where the test
       # `add.py` module with a typegen is
     - PYTHONPATH=test make test CXX=g++-4.9 CXXFLAGS=-I$TRAVIS_BUILD_DIR/deps/include
