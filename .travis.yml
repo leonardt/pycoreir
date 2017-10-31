@@ -22,8 +22,9 @@ script:
     - pip install -e .
     - pytest -s tests/
     - cd libcoreir-python
-    - make test CXX=g++-4.9
-    - PYTHONPATH=test ./build/testPythonTypegen
+      # Append test directory to PYTHONPATH because that's where the test
+      # `add.py` module with a typegen is
+    - PYTHONPATH=test make test CXX=g++-4.9
 compiler:
     - gcc
 os:

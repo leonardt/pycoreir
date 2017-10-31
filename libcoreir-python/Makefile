@@ -18,7 +18,7 @@ PYTHONHOME = $(shell $(PYTHON_CONFIG) --prefix)
 CXXFLAGS += $(shell $(PYTHON_CONFIG) --includes) -DCOREIR_INCLUDE_PYTHON_TYPEGEN -DPYTHON_HOME="L\"$(PYTHONHOME)\""
 PYTHON_LIBS = $(PYTHONHOME)/lib
 LDFLAGS += -L $(PYTHON_LIBS) $(shell $(PYTHON_CONFIG) --libs)
-# DYLDFLAGS = -Wl,-rpath,$(PYTHON_LIBS)
+DYLDFLAGS = -Wl,-rpath,$(PYTHON_LIBS)
 
 build: build/libcoreir-python.o
 	$(MAKE) build/libcoreir-python.$(TARGET)
@@ -44,4 +44,5 @@ uninstall:
 	-rm $(prefix)/lib/libcoreir-python.$(TARGET)
 
 test: build/libcoreir-python.$(TARGET) test/pythonTypegen.cpp
-	$(CXX) $(CXXFLAGS) -o build/testPythonTypegen test/pythonTypegen.cpp -L ./build/ -lcoreir -lcoreir-python $(LDFLAGS)
+	$(CXX) $(CXXFLAGS) -o build/testPythonTypegen test/pythonTypegen.cpp -L ./build/ -lcoreir -lcoreir-python $(LDFLAGS) $(DYLDFLAGS)
+	./build/testPythonTypegen
