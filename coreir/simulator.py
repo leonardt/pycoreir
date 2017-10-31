@@ -42,6 +42,10 @@ class SimulatorState(CoreIRType):
         assert(isinstance(lastval, bool) and isinstance(curval, bool))
         libcoreir_c.CORESimSetClock(self.state, cpath, len(cpath), lastval, curval)
 
+    def get_clock_cycles(self, path):
+        cpath = make_cpath(path)
+        return libcoreir_c.CORESimGetClockCycles(self.state, cpath, len(cpath))
+
     def set_value(self, path, new_val):
         cpath = make_cpath(path)
         if isinstance(new_val, bool):
