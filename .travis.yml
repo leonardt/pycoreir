@@ -31,15 +31,14 @@ before_install:
     - cd ..
     - export PATH=$TRAVIS_BUILD_DIR/deps/bin:$PATH
     - export LD_LIBRARY_PATH=$TRAVIS_BUILD_DIR/deps/lib:$LD_LIBRARY_PATH
-    - export CXX_INCLUDE_PATH=$TRAVIS_BUILD_DIR/deps/include:$CXX_INCLUDE_PATH
 script:
     - pip install -e .
     - pytest -s tests/
     - cd libcoreir-python
-    - make install CXX=g++-4.9 prefix=$TRAVIS_BUILD_DIR/deps
+    - make install CXX=g++-4.9 prefix=$TRAVIS_BUILD_DIR/deps CXXFLAGS=-I$TRAVIS_BUILD_DIR/deps/include
       # Append test directory to PYTHONPATH because that's where the test
       # `add.py` module with a typegen is
-    - PYTHONPATH=test make test CXX=g++-4.9
+    - PYTHONPATH=test make test CXX=g++-4.9 CXXFLAGS=-I$TRAVIS_BUILD_DIR/deps/include
 compiler:
     - gcc
 os:

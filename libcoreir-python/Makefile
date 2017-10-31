@@ -8,9 +8,9 @@ TARGET = dylib
 prefix?=/usr/local
 endif
 
-CXX = g++
+CXX ?= g++
 
-CXXFLAGS = -std=c++11 -Wall -fPIC -Werror -I./include/
+CXXFLAGS += -std=c++11 -Wall -fPIC -Werror -I./include/
 LDFLAGS = -lcoreir
 
 PYTHON_CONFIG ?= python-config
