@@ -10,7 +10,7 @@ endif
 
 CXX ?= g++
 
-CXXFLAGS += -std=c++11 -Wall -fPIC -Werror -I./include/
+override CXXFLAGS += -std=c++11 -Wall -fPIC -Werror -I./include/
 LDFLAGS = -lcoreir
 
 PYTHON_CONFIG ?= python-config
