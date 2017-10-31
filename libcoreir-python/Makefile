@@ -30,7 +30,7 @@ build/libcoreir-python.dylib: build/libcoreir-python.o
 	$(CXX) $(LDFLAGS) $(DYLDFLAGS) -dynamiclib -o $@ $^
 
 build/libcoreir-python.o: coreir-python.cpp
-	$(CXX) $(CXXFLAGS) $(INCS) -c -o $@ $<
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
 .PHONY: install
 install: build/libcoreir-python.$(TARGET)

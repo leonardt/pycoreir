@@ -18,19 +18,23 @@ addons:
 
 before_install:
     - mkdir deps
+    - mkdir deps/bin
+    - mkdir deps/lib
     - cd deps
     - git clone -b dev https://github.com/rdaly525/coreir.git
     - cd coreir
     - export COREIRCONFIG="g++-4.9"
     - export COREIR=$PWD
-    - sudo make install -j 2
+    - make install prefix=$TRAVIS_BUILD_DIR/deps
     - cd ..
     - cd ..
+    - export PATH=$TRAVIS_BUILD_DIR/deps/bin:$PATH
+    - export LD_LIBRARY_PATH=$TRAVIS_BUILD_DIR/deps/lib:$LD_LIBRARY_PATH
 script:
     - pip install -e .
     - pytest -s tests/
     - cd libcoreir-python
-    - sudo make install CXX=g++-4.9
+    - make install CXX=g++-4.9 prefix=$TRAVIS_BUILD_DIR/deps
       # Append test directory to PYTHONPATH because that's where the test
       # `add.py` module with a typegen is
     - PYTHONPATH=test make test CXX=g++-4.9
