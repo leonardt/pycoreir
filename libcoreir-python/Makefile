@@ -20,9 +20,6 @@ PYTHON_LIBS = $(PYTHONHOME)/lib
 LDFLAGS += -L $(PYTHON_LIBS) $(shell $(PYTHON_CONFIG) --libs)
 DYLDFLAGS = -Wl,-rpath,$(PYTHON_LIBS)
 
-build: build/libcoreir-python.o
-	$(MAKE) build/libcoreir-python.$(TARGET)
-
 clean:
 	rm -rf build/*
 
@@ -36,7 +33,7 @@ build/libcoreir-python.o: coreir-python.cpp
 	$(CXX) $(CXXFLAGS) $(INCS) -c -o $@ $<
 
 .PHONY: install
-install: build
+install: build/libcoreir-python.$(TARGET)
 	install libcoreir-python $(prefix)/lib
 
 .PHONY: uninstall
