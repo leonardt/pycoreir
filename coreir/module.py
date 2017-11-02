@@ -2,8 +2,11 @@ import ctypes as ct
 from coreir.type import CoreIRType, Values
 from coreir.lib import libcoreir_c
 from coreir.wireable import Instance, Interface
+from coreir.type import COREValue_p, Value
 import coreir.wireable
 
+class NotAGeneratorException(Exception):
+    pass
 
 class COREModule(ct.Structure):
     pass
@@ -96,6 +99,24 @@ class Module(CoreIRType):
     @property
     def name(self):
         return libcoreir_c.COREModuleGetName(self.ptr).decode()
+
+    @property
+    def generated(self):
+        return libcoreir_c.COREModuleIsGenerated(self.ptr)
+
+    @property
+    def generator_args(self):
+        if not self.generated:
+            raise NotAGeneratorException("Cannot call generator_args on non-generated module")
+        num_args = ct.c_int()
+        names = ct.POINTER(ct.c_char_p)()
+        args = ct.POINTER(COREValue_p)()
+        libcoreir_c.COREModuleGetGenArgs(self.ptr, ct.byref(names),
+                ct.byref(args), ct.byref(num_args))
+        ret = {}
+        for i in range(num_args.value):
+            ret[names[i].decode()] = Value(args[i], self.context)
+        return ret
 
 
 

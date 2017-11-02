@@ -6,11 +6,12 @@ from coreir.lib import load_shared_lib, libcoreir_c
 from coreir.context import COREContext, COREContext_p, Context, COREMapKind, COREMapKind_STR2PARAM_MAP, BitVector
 from coreir.module import Module, COREModule, COREModule_p, COREModuleDef, COREModuleDef_p, ModuleDef, Module, \
         COREDirectedInstance_p, COREDirectedConnection_p, COREDirectedModule_p
-from coreir.instantiable import Instantiable, COREInstantiable_p, Generator
+from coreir.generator import COREGenerator, COREGenerator_p
 from coreir.namespace import CORENamespace, CORENamespace_p
 from coreir.type import COREType, COREType_p, CoreIRType, Params, Value, Values, COREValue, COREValue_p, Type, NamedType
 from coreir.wireable import COREWireable_p, Wireable
 from coreir.type_gen import type_gen
+from coreir.simulator import SimulatorState, CORESimulatorState_p, CORESimValue_p
 from collections import namedtuple
 
 class COREConnection(ct.Structure):
@@ -40,6 +41,9 @@ libcoreir_c.COREContextString.restype = COREType_p
 
 libcoreir_c.COREContextCoreIRType.argstypes = [COREContext_p]
 libcoreir_c.COREContextCoreIRType.restype = COREType_p
+
+libcoreir_c.COREContextRunPasses.argstypes = [COREContext_p, ct.POINTER(ct.c_char_p), ct.c_int]
+libcoreir_c.COREContextRunPasses.restype = ct.c_bool
 
 libcoreir_c.COREPrintErrors.argtypes = [COREContext_p]
 
@@ -81,13 +85,16 @@ libcoreir_c.COREModuleNewDef.restype = COREModuleDef_p
 libcoreir_c.COREModuleGetName.argtypes = [COREModule_p]
 libcoreir_c.COREModuleGetName.restype = ct.c_char_p
 
+libcoreir_c.COREGeneratorGetName.argtypes = [COREGenerator_p]
+libcoreir_c.COREGeneratorGetName.restype = ct.c_char_p
+
 libcoreir_c.COREModuleGetDef.argtypes = [COREModule_p]
 libcoreir_c.COREModuleGetDef.restype = COREModuleDef_p
 
 libcoreir_c.COREModuleDefAddModuleInstance.argtypes = [COREModuleDef_p, ct.c_char_p, COREModule_p, ct.c_void_p]
 libcoreir_c.COREModuleDefAddModuleInstance.restype = COREWireable_p
 
-libcoreir_c.COREModuleDefAddGeneratorInstance.argtypes = [COREModuleDef_p, ct.c_char_p, COREInstantiable_p, ct.c_void_p, ct.c_void_p]
+libcoreir_c.COREModuleDefAddGeneratorInstance.argtypes = [COREModuleDef_p, ct.c_char_p, COREGenerator_p, ct.c_void_p, ct.c_void_p]
 libcoreir_c.COREModuleDefAddGeneratorInstance.restype = COREWireable_p
 
 libcoreir_c.COREModuleDefGetInterface.argtypes = [COREModuleDef_p]
@@ -105,8 +112,8 @@ libcoreir_c.COREModuleDefInstancesIterNext.restype = COREWireable_p
 libcoreir_c.COREModuleGetDirectedModule.argtypes = [COREModule_p]
 libcoreir_c.COREModuleGetDirectedModule.restype = COREDirectedModule_p
 
-libcoreir_c.COREGetInstantiableRefName.argtypes = [COREWireable_p]
-libcoreir_c.COREGetInstantiableRefName.restype = ct.c_char_p
+libcoreir_c.COREGetModuleRef.argtypes = [COREWireable_p]
+libcoreir_c.COREGetModuleRef.restype = COREModule_p
 
 libcoreir_c.COREGetModArg.argtypes = [COREWireable_p, ct.c_char_p]
 libcoreir_c.COREGetModArg.restype = COREValue_p
@@ -220,17 +227,14 @@ libcoreir_c.COREGetTypeKind.restype = ct.c_int # CORETypeKind is an enum
 libcoreir_c.CORETypeGetSize.argtypes = [COREType_p]
 libcoreir_c.CORETypeGetSize.restype = ct.c_uint
 
-libcoreir_c.COREInstanceGetGenValues.argtypes = [COREWireable_p, ct.POINTER(ct.POINTER(ct.c_char_p)), ct.POINTER(ct.POINTER(COREValue_p)), ct.POINTER(ct.c_int)]
-libcoreir_c.COREInstanceGetGenValues.restype = None
+libcoreir_c.COREModuleGetGenArgs.argtypes = [COREModule_p, ct.POINTER(ct.POINTER(ct.c_char_p)), ct.POINTER(ct.POINTER(COREValue_p)), ct.POINTER(ct.c_int)]
+libcoreir_c.COREModuleGetGenArgs.restype = None
 
-libcoreir_c.CORENamespaceGetInstantiable.argtypes = [CORENamespace_p, ct.c_char_p]
-libcoreir_c.CORENamespaceGetInstantiable.restype = COREInstantiable_p
-
-libcoreir_c.CORENamespaceHasInstantiable.argtypes = [CORENamespace_p, ct.c_char_p]
-libcoreir_c.CORENamespaceHasInstantiable.restype = ct.c_bool
+libcoreir_c.COREModuleIsGenerated.argtypes = [COREModule_p]
+libcoreir_c.COREModuleIsGenerated.restype = ct.c_bool
 
 libcoreir_c.CORENamespaceGetGenerator.argtypes = [CORENamespace_p, ct.c_char_p]
-libcoreir_c.CORENamespaceGetGenerator.restype = COREInstantiable_p
+libcoreir_c.CORENamespaceGetGenerator.restype = COREGenerator_p
 
 libcoreir_c.CORENamespaceHasGenerator.argtypes = [CORENamespace_p, ct.c_char_p]
 libcoreir_c.CORENamespaceHasGenerator.restype = ct.c_bool
@@ -241,13 +245,52 @@ libcoreir_c.CORENamespaceGetModule.restype = COREModule_p
 libcoreir_c.CORENamespaceHasModule.argtypes = [CORENamespace_p, ct.c_char_p]
 libcoreir_c.CORENamespaceHasModule.restype = ct.c_bool
 
-libcoreir_c.COREInstantiableGetName.argtypes = [COREInstantiable_p]
-libcoreir_c.COREInstantiableGetName.restype = ct.c_char_p
-
-libcoreir_c.COREInstantiableGetKind.argtypes = [COREInstantiable_p]
-libcoreir_c.COREInstantiableGetKind.restype = ct.c_int
+libcoreir_c.COREGeneratorGetName.argtypes = [COREGenerator_p]
+libcoreir_c.COREGeneratorGetName.restype = ct.c_char_p
 
 libcoreir_c.CORERecordTypeGetItems.argtypes = [COREType_p, ct.POINTER(ct.POINTER(ct.c_char_p)), ct.POINTER(ct.POINTER(COREType_p)), ct.POINTER(ct.c_int)]
 
 libcoreir_c.CORENamedTypeToString.argtypes = [COREType_p]
 libcoreir_c.CORENamedTypeToString.restype = ct.c_char_p
+
+libcoreir_c.CORESimValueGetBit.argtypes = [CORESimValue_p, ct.c_int]
+libcoreir_c.CORESimValueGetBit.restype = ct.c_bool
+
+libcoreir_c.CORESimValueGetLength.argtypes = [CORESimValue_p]
+libcoreir_c.CORESimValueGetLength.restype = ct.c_int
+
+libcoreir_c.CORENewSimulatorState.argtypes = [COREModule_p]
+libcoreir_c.CORENewSimulatorState.restype = CORESimulatorState_p
+
+libcoreir_c.COREDeleteSimulatorState.argtypes = [CORESimulatorState_p]
+libcoreir_c.COREDeleteSimulatorState.restype = None
+
+libcoreir_c.CORESimGetValue.argtypes = [CORESimulatorState_p, ct.POINTER(ct.c_char_p), ct.c_int]
+libcoreir_c.CORESimGetValue.restype = CORESimValue_p
+
+libcoreir_c.CORESimSetClock.argtypes = [CORESimulatorState_p, ct.POINTER(ct.c_char_p), ct.c_int, ct.c_bool, ct.c_bool]
+libcoreir_c.CORESimSetClock.restype = None
+
+libcoreir_c.CORESimSetMainClock.argtypes = [CORESimulatorState_p, ct.POINTER(ct.c_char_p), ct.c_int]
+libcoreir_c.CORESimSetMainClock.restype = None
+
+libcoreir_c.CORESimGetClockCycles.argtypes = [CORESimulatorState_p, ct.POINTER(ct.c_char_p), ct.c_int]
+libcoreir_c.CORESimGetClockCycles.restype = ct.c_int
+
+libcoreir_c.CORESimSetValue.argtypes = [CORESimulatorState_p, ct.POINTER(ct.c_char_p), ct.c_int, ct.POINTER(ct.c_bool), ct.c_int]
+libcoreir_c.CORESimSetValue.restype = None
+
+libcoreir_c.CORESimStepMainClock.argtypes = [CORESimulatorState_p]
+libcoreir_c.CORESimStepMainClock.restype = None
+
+libcoreir_c.CORESimRun.argtypes = [CORESimulatorState_p]
+libcoreir_c.CORESimRun.restype = None
+
+libcoreir_c.CORESimExecute.argtypes = [CORESimulatorState_p]
+libcoreir_c.CORESimExecute.restype = None
+
+libcoreir_c.CORESimRewind.argtypes = [CORESimulatorState_p, ct.c_int]
+libcoreir_c.CORESimRewind.restype = ct.c_bool
+
+libcoreir_c.CORESimSetWatchPoint.argtypes = [CORESimulatorState_p, ct.POINTER(ct.c_char_p), ct.c_int, ct.POINTER(ct.c_bool), ct.c_int]
+libcoreir_c.CORESimSetWatchPoint.restype = None
