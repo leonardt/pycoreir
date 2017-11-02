@@ -39,6 +39,7 @@ script:
       # Append test directory to PYTHONPATH because that's where the test
       # `add.py` module with a typegen is
     - PYTHONPATH=$TRAVIS_BUILD_DIR:test make test CXX=g++-4.9 CXXFLAGS=-I$TRAVIS_BUILD_DIR/deps/include LDFLAGS=-L$TRAVIS_BUILD_DIR/deps/lib
+    - cd ..
 compiler:
     - gcc
 os:
