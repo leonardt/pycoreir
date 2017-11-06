@@ -16,7 +16,8 @@ else
     wget https://github.com/rdaly525/coreir/releases/download/v0.0.2/coreir.tar.gz;
     mkdir coreir_release;
     tar -xf coreir.tar.gz -C coreir_release --strip-components 1;
-    export PATH=$TRAVIS_BUILD_DIR/coreir_release/bin:$PATH;
-    export LD_LIBRARY_PATH=$TRAVIS_BUILD_DIR/coreir_release/lib:$LD_LIBRARY_PATH;
+    cd coreir_release;
+    make install prefix=$TRAVIS_BUILD_DIR/deps;
+    cd ..
     pip install coreir;
 fi
