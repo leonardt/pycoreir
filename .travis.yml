@@ -21,16 +21,10 @@ before_install:
     - mkdir deps/bin
     - mkdir deps/lib
     - mkdir deps/include
-    - cd deps
-    - git clone https://github.com/rdaly525/coreir.git
-    - cd coreir
-    - export COREIRCONFIG="g++-4.9"
-    - export COREIR=$PWD
-    - make install prefix=$TRAVIS_BUILD_DIR/deps
-    - cd ..
-    - cd ..
     - export PATH=$TRAVIS_BUILD_DIR/deps/bin:$PATH
     - export LD_LIBRARY_PATH=$TRAVIS_BUILD_DIR/deps/lib:$LD_LIBRARY_PATH
+
+    - source .travis/install_coreir.sh
 script:
     - pip install -e .
     - pytest -s tests/
