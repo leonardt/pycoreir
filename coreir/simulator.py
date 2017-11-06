@@ -77,3 +77,9 @@ class SimulatorState(CoreIRType):
         cpath = make_charptr_arr(path)
         bool_arr = make_bool_arr(val)
         libcoreir_c.CORESimSetWatchPoint(self.state, cpath, len(cpath), bool_arr, len(val))
+
+    def set_watchpoint_by_original_name(self, insts, ports, val):
+        cinsts = make_charptr_arr(insts)
+        cports = make_charptr_arr(ports)
+        bool_arr = make_bool_arr(val)
+        libcoreir_c.CORESimSetWatchPointByOriginalName(self.state, cinsts, len(cinsts), cports, len(cports), bool_arr, len(val))
