@@ -3,9 +3,6 @@
 set -e
 
 if [ "$TRAVIS_BRANCH" != "master" ]; then
-    sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
-    sudo apt-get update
-    sudo apt-get install g++-4.9
     cd deps;
     git clone -b dev https://github.com/rdaly525/coreir.git;
     cd coreir;
