@@ -300,3 +300,7 @@ libcoreir_c.CORESimSetWatchPoint.restype = None
 
 libcoreir_c.CORESimSetWatchPointByOriginalName.argtypes = [CORESimulatorState_p, ct.POINTER(ct.c_char_p), ct.c_int, ct.POINTER(ct.c_char_p), ct.c_int, ct.POINTER(ct.c_bool), ct.c_int]
 libcoreir_c.CORESimSetWatchPointByOriginalName.restype = None
+
+libcoreir_c.COREInstanceGetInstname.argtypes = [COREWireable_p]
+libcoreir_c.COREInstanceGetInstname.restype = ct.c_char_p
+
