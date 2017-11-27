@@ -80,6 +80,8 @@ class Module(CoreIRType):
 
     @property
     def definition(self):
+        if not libcoreir_c.COREModuleHasDef(self.ptr):
+            return None
         return ModuleDef(libcoreir_c.COREModuleGetDef(self.ptr),self.context)
 
     @definition.setter

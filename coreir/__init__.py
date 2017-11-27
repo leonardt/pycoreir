@@ -75,6 +75,9 @@ libcoreir_c.COREGetNamespace.restype = CORENamespace_p
 libcoreir_c.CORENewModule.argtypes = [CORENamespace_p, ct.c_char_p, COREType_p, ct.c_void_p]
 libcoreir_c.CORENewModule.restype = COREModule_p
 
+libcoreir_c.COREModuleHasDef.argtypes = [COREModule_p]
+libcoreir_c.COREModuleHasDef.restype = ct.c_bool
+
 libcoreir_c.COREModuleSetDef.argtypes = [COREModule_p, COREModuleDef_p]
 
 libcoreir_c.COREPrintModule.argtypes = [COREModule_p]
