@@ -60,6 +60,12 @@ class Instance(Wireable):
         module = libcoreir_c.COREGetModuleRef(self.ptr)
         return coreir.module.Module(module, self.context)
 
+    def __str__(self):
+        return f"{self.module.name}.{self.name}"
+
+    @property
+    def name(self):
+        return libcoreir_c.COREInstanceGetInstname(self.ptr).decode()
 
 
 class Interface(Wireable):
