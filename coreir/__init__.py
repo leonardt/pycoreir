@@ -88,6 +88,9 @@ libcoreir_c.COREModuleNewDef.restype = COREModuleDef_p
 libcoreir_c.COREModuleGetName.argtypes = [COREModule_p]
 libcoreir_c.COREModuleGetName.restype = ct.c_char_p
 
+libcoreir_c.COREModuleGetType.argtypes = [COREModule_p]
+libcoreir_c.COREModuleGetType.restype = COREType_p
+
 libcoreir_c.COREGeneratorGetName.argtypes = [COREGenerator_p]
 libcoreir_c.COREGeneratorGetName.restype = ct.c_char_p
 

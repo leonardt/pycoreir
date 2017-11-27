@@ -2,7 +2,7 @@ import ctypes as ct
 from coreir.type import CoreIRType, Values
 from coreir.lib import libcoreir_c
 from coreir.wireable import Instance, Interface
-from coreir.type import COREValue_p, Value
+from coreir.type import COREValue_p, Value, Record
 import coreir.wireable
 
 class NotAGeneratorException(Exception):
@@ -119,6 +119,10 @@ class Module(CoreIRType):
         for i in range(num_args.value):
             ret[names[i].decode()] = Value(args[i], self.context)
         return ret
+
+    @property
+    def type(self):
+        return Record(libcoreir_c.COREModuleGetType(self.ptr), self.context)
 
 
 

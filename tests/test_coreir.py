@@ -23,6 +23,12 @@ def test_save_module():
         }),
         configparams
     )
+    for port, type_ in add8.type.items():
+        assert type_.kind == "Array"
+        if port in ["in1", "in2"]:
+            assert len(type_) == 8
+        else:
+            assert len(type_) == 9
     add8_inst = module_def.add_module_instance("adder", add8,
             c.new_values({"init":5}))
     assert add8_inst.module.name == "add8"
