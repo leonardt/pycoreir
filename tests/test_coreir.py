@@ -50,6 +50,7 @@ def test_save_module():
     mod_def.print_()
     module_def.print_()
     print("=====================")
+    c.run_passes(['printer'])
 
 
 def test_module_def_instances():
@@ -127,6 +128,7 @@ def test_wireable():
 
     wireable = module_def.select("self")
     assert get_pointer_addr(wireable.select("input").ptr) == get_pointer_addr(_input.ptr)
+
 
 def test_module_def_connections():
     c = coreir.Context()
