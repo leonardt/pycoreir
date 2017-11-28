@@ -312,3 +312,6 @@ libcoreir_c.CORESimSetWatchPointByOriginalName.restype = None
 
 libcoreir_c.COREInstanceGetInstname.argtypes = [COREWireable_p]
 libcoreir_c.COREInstanceGetInstname.restype = ct.c_char_p
+
+libcoreir_c.CORETypeIsInput.argtypes = [COREType_p]
+libcoreir_c.CORETypeIsInput.restype = ct.c_bool

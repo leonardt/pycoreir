@@ -59,6 +59,9 @@ class Type(CoreIRType):
             4: "Named"
         }[kind]
 
+    def is_input(self):
+        return libcoreir_c.CORETypeIsInput(self.ptr)
+
     def __len__(self):
         if self.kind != "Array":  # Not a TK_Array
             raise Exception("`len` called on a {}".format(self.kind))
