@@ -27,13 +27,10 @@ class SimulatorState(CoreIRType):
     def __del__(self):
         libcoreir_c.COREDeleteSimulatorState(self.state)
 
-    def get_value(self, path):
-        cpath = make_charptr_arr(path)
-        val = libcoreir_c.CORESimGetValue(self.state, cpath, len(cpath))
-        val_len = libcoreir_c.CORESimValueGetLength(val)
-        return [libcoreir_c.CORESimValueGetBit(val, i) for i in range(0, val_len)]
+    def reset_circuit(self):
+        libcoreir_c.CORESimResetCircuit(self.state)
 
-    def get_value_by_original_name(self, inst_path, port_selects):
+    def get_value(self, inst_path, port_selects):
         cinst_path = make_charptr_arr(inst_path)
         cport_selects = make_charptr_arr(port_selects)
         val = libcoreir_c.CORESimGetValueByOriginalName(self.state, cinst_path, len(cinst_path), cport_selects, len(cport_selects))
@@ -58,7 +55,7 @@ class SimulatorState(CoreIRType):
         if isinstance(new_val, bool):
             new_val = [new_val]
         bool_arr = make_bool_arr(new_val)
-        
+       
         libcoreir_c.CORESimSetValue(self.state, cpath, len(cpath), bool_arr, len(new_val))
     
     def step(self):
@@ -67,19 +64,22 @@ class SimulatorState(CoreIRType):
     def run(self):
         libcoreir_c.CORESimRun(self.state)
 
+    def run_half_cycle(self):
+        libcoreir_c.CORESimRunHalfCycle(self.state)
+
     def execute(self):
         libcoreir_c.CORESimExecute(self.state)
 
     def rewind(self, num_halfsteps):
-        return libcoreir_c.CORESimRewind(self.state, ct.c_int(num_halfsteps)).value
+        return libcoreir_c.CORESimRewind(self.state, ct.c_int(num_halfsteps))
 
-    def set_watchpoint(self, path, val):
-        cpath = make_charptr_arr(path)
-        bool_arr = make_bool_arr(val)
-        libcoreir_c.CORESimSetWatchPoint(self.state, cpath, len(cpath), bool_arr, len(val))
-
-    def set_watchpoint_by_original_name(self, insts, ports, val):
+    def set_watchpoint(self, insts, ports, val):
         cinsts = make_charptr_arr(insts)
         cports = make_charptr_arr(ports)
         bool_arr = make_bool_arr(val)
         libcoreir_c.CORESimSetWatchPointByOriginalName(self.state, cinsts, len(cinsts), cports, len(cports), bool_arr, len(val))
+
+    def delete_watchpoint(self, insts, ports):
+        cinsts = make_charptr_arr(insts)
+        cports = make_charptr_arr(ports)
+        libcoreir_c.CORESimDeleteWatchPointByOriginalName(self.state, cinsts, len(cinsts), cports, len(cports))

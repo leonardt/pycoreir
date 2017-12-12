@@ -12,6 +12,7 @@ def test_save_module():
     module_typ = c.Record({"input": c.Array(8, c.BitIn()), "output": c.Array(9, c.Bit())})
     module = c.global_namespace.new_module("multiply_by_2", module_typ)
     module.print_()
+    assert module.definition is None, "Should not have a definition"
     module_def = module.new_definition()
     configparams = c.newParams({"init":c.Int()})
     add8 = c.global_namespace.new_module("add8",
@@ -22,6 +23,12 @@ def test_save_module():
         }),
         configparams
     )
+    for port, type_ in add8.type.items():
+        assert type_.kind == "Array"
+        if port in ["in1", "in2"]:
+            assert len(type_) == 8
+        else:
+            assert len(type_) == 9
     add8_inst = module_def.add_module_instance("adder", add8,
             c.new_values({"init":5}))
     assert add8_inst.module.name == "add8"
@@ -42,6 +49,7 @@ def test_save_module():
     module_def.connect(_input, add8_in2)
     module_def.connect(output, add8_out)
     module.definition = module_def
+    assert module.definition is not None, "Should have a definition"
     module.print_()
     module.save_to_file("_python_test_output.json")
     mod = c.load_from_file("_python_test_output.json")
@@ -50,6 +58,7 @@ def test_save_module():
     mod_def.print_()
     module_def.print_()
     print("=====================")
+    c.run_passes(['printer'])
 
 
 def test_module_def_instances():
@@ -127,6 +136,7 @@ def test_wireable():
 
     wireable = module_def.select("self")
     assert get_pointer_addr(wireable.select("input").ptr) == get_pointer_addr(_input.ptr)
+
 
 def test_module_def_connections():
     c = coreir.Context()
