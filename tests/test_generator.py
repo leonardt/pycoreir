@@ -21,3 +21,5 @@ def test_add():
     assert 'width' in coreir_add.params
     assert isinstance(coreir_add.params['width'], ValueType)
     assert coreir_add.params['width'].kind == int
+
+test_add()
