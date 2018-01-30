@@ -21,5 +21,11 @@ def test_add():
     assert 'width' in coreir_add.params
     assert isinstance(coreir_add.params['width'], ValueType)
     assert coreir_add.params['width'].kind == int
-
-test_add()
+    add16 = coreir_add(width=16)
+    assert add16.name == "add"
+    assert add16.generated == True
+    assert isinstance(add16.type, coreir.Record)
+    add16.type.print_()
+    for arg in ['in0', 'in1', 'out']:
+        assert add16.type[arg].kind == "Array"
+        assert len(add16.type[arg]) == 16

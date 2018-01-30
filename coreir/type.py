@@ -86,6 +86,17 @@ class Type(CoreIRType):
 
 
 class Record(Type):
+    def __getitem__(self, key):
+        keys = ct.POINTER(ct.c_char_p)()
+        values = ct.POINTER(COREType_p)()
+        size = ct.c_int()
+        libcoreir_c.CORERecordTypeGetItems(self.ptr, ct.byref(keys),
+                ct.byref(values), ct.byref(size))
+        for i in range(size.value):
+            if keys[i].decode() == key:
+                return Type(values[i], self.context)
+        raise KeyError(f"key={key} not found")
+
     def items(self):
         keys = ct.POINTER(ct.c_char_p)()
         values = ct.POINTER(COREType_p)()

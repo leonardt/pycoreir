@@ -2,6 +2,7 @@ import ctypes as ct
 from coreir.type import CoreIRType
 from coreir.lib import libcoreir_c
 from coreir.type import COREValueType_p, ValueType
+from coreir.module import Module
 
 
 class COREGenerator(ct.Structure):
@@ -26,3 +27,16 @@ class Generator(CoreIRType):
         for i in range(num_params.value):
             ret[names[i].decode()] = ValueType(params[i], self.context)
         return ret
+
+    def __call__(self, *args, **kwargs):
+        assert len(args) == 0, "TODO: Try mapping args by order, for now require explicit kwargs"
+        gen_args = {}
+        for key, value in kwargs.items():
+            if key not in self.params:
+                raise KeyError(f"key={key} not in params={coreir_add.params.keys()}")
+            if not isinstance(value, self.params[key].kind):
+                raise ValueError(f"Arg(name={key}, value={value}) does not match expected type {coreir_add.params[key].kind}")
+            gen_args[key] = value
+        gen_args = self.context.new_values(gen_args)
+        return Module(libcoreir_c.COREGeneratorGetModule(self.ptr, gen_args.ptr), self.context)
+
