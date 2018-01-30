@@ -13,6 +13,23 @@ COREType_p = ct.POINTER(COREType)
 class Params(CoreIRType):
     pass
 
+class COREValueType(ct.Structure):
+  pass
+
+COREValueType_p = ct.POINTER(COREValueType)
+
+class ValueType(CoreIRType):
+    @property
+    def kind(self):
+        return {
+            # Defined in ir/valuetype.h
+            0: bool,
+            1: int,
+            2: BitVector,
+            3: str,
+            4: CoreIRType
+        }[libcoreir_c.COREValueTypeGetKind(self.ptr)]
+
 class COREValue(ct.Structure):
   pass
 

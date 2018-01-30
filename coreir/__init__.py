@@ -8,7 +8,7 @@ from coreir.module import Module, COREModule, COREModule_p, COREModuleDef, COREM
         COREDirectedInstance_p, COREDirectedConnection_p, COREDirectedModule_p
 from coreir.generator import COREGenerator, COREGenerator_p
 from coreir.namespace import CORENamespace, CORENamespace_p
-from coreir.type import COREType, COREType_p, CoreIRType, Params, Value, Values, COREValue, COREValue_p, Type, NamedType
+from coreir.type import COREType, COREType_p, CoreIRType, Params, Value, Values, COREValue, COREValue_p, Type, NamedType, COREValueType_p
 from coreir.wireable import COREWireable_p, Wireable
 from coreir.type_gen import type_gen
 from coreir.simulator import SimulatorState, CORESimulatorState_p, CORESimValue_p
@@ -253,6 +253,9 @@ libcoreir_c.CORENamespaceHasModule.restype = ct.c_bool
 
 libcoreir_c.COREGeneratorGetName.argtypes = [COREGenerator_p]
 libcoreir_c.COREGeneratorGetName.restype = ct.c_char_p
+
+libcoreir_c.COREGeneratorGetGenParams.argtypes = [COREGenerator_p, ct.POINTER(ct.POINTER(ct.c_char_p)), ct.POINTER(ct.POINTER(COREValueType_p)), ct.POINTER(ct.c_int)]
+libcoreir_c.COREGeneratorGetGenParams.restype = None
 
 libcoreir_c.CORERecordTypeGetItems.argtypes = [COREType_p, ct.POINTER(ct.POINTER(ct.c_char_p)), ct.POINTER(ct.POINTER(COREType_p)), ct.POINTER(ct.c_int)]
 
