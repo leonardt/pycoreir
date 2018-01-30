@@ -6,7 +6,7 @@ from coreir.lib import load_shared_lib, libcoreir_c
 from coreir.context import COREContext, COREContext_p, Context, COREMapKind, COREMapKind_STR2PARAM_MAP, BitVector
 from coreir.module import Module, COREModule, COREModule_p, COREModuleDef, COREModuleDef_p, ModuleDef, Module, \
         COREDirectedInstance_p, COREDirectedConnection_p, COREDirectedModule_p
-from coreir.generator import COREGenerator, COREGenerator_p
+from coreir.generator import COREGenerator, COREGenerator_p, Generator
 from coreir.namespace import CORENamespace, CORENamespace_p
 from coreir.type import COREType, COREType_p, CoreIRType, Params, Value, Values, COREValue, COREValue_p, Type, NamedType
 from coreir.wireable import COREWireable_p, Wireable
