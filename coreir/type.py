@@ -1,3 +1,4 @@
+import coreir
 import ctypes as ct
 from coreir.base import CoreIRType
 from coreir.lib import libcoreir_c
@@ -27,7 +28,8 @@ class ValueType(CoreIRType):
             1: int,
             2: BitVector,
             3: str,
-            4: CoreIRType
+            4: CoreIRType,
+            5: coreir.Module,
         }[libcoreir_c.COREValueTypeGetKind(self.ptr)]
 
 class COREValue(ct.Structure):
