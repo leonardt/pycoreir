@@ -32,11 +32,12 @@ def test_add():
         assert len(add16.type[arg]) == 16
 
 def test_map_mulby2():
-    c = coreir.Context()
+    c = context
     width = 8
     parallelInputs = 4
     module_typ = c.Record({"in": c.Array(width, c.BitIn()), "out": c.Array(width, c.Bit())})
     mulBy2 = c.global_namespace.new_module("mulBy2", module_typ)
+    mulBy2.print_()
     mulBy2Def = mulBy2.new_definition()
 
     coreir_mul = import_("coreir", "mul")
@@ -49,6 +50,7 @@ def test_map_mulby2():
     two = mulBy2Def.add_generator_instance("two", const_instantiable, gen_args, config_args)
     mulBy2Def.connect(two.select("out"), mul_inst.select("in1"));
     mulBy2Def.connect(mul_inst.select("out"), mulBy2Def.interface.select("out"))
+    mulBy2.definition = mulBy2Def
 
     mapNParams = c.new_values({"width": width, "parallelOperators": parallelInputs, "operator": mulBy2})
 
@@ -69,3 +71,6 @@ def test_map_mulby2():
     with open(os.path.join(dir_path, "mapN_test.json"), "r") as actual:
         with open(os.path.join(dir_path, "mapN_test_gold.json"), "r") as gold:
             assert actual.read() == gold.read()
+
+if __name__ == "__main__":
+    test_map_mulby2()
