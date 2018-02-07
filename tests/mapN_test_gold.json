@@ -32,28 +32,7 @@
         "instances":{
           "mapMulBy2":{
             "genref":"aetherlinglib.mapN",
-            "genargs":{"operator":["Module",{
-        "type":["Record",{
-          "in":["Array",8,"BitIn"],
-          "out":["Array",8,"Bit"]
-        }],
-        "instances":{
-          "mul":{
-            "genref":"coreir.mul",
-            "genargs":{"width":["Int",8]}
-          },
-          "two":{
-            "genref":"coreir.const",
-            "genargs":{"width":["Int",8]},
-            "modargs":{"value":[["BitVector",8],8]}
-          }
-        },
-        "connections":[
-          ["mul.in0","self.in"],
-          ["mul.in1","two.out"],
-          ["mul.out","self.out"]
-        ]
-      }], "parallelOperators":["Int",4], "width":["Int",8]}
+            "genargs":{"operator":["Module","global.mulBy2"], "parallelOperators":["Int",4], "width":["Int",8]}
           }
         },
         "connections":[
