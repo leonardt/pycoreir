@@ -1,0 +1,20 @@
+{"top":"global.test_module",
+"namespaces":{
+  "global":{
+    "modules":{
+      "mulBy2":{
+        "type":["Record",{
+          "in":["Array",8,"BitIn"],
+          "out":["Array",8,"Bit"]
+        }]
+      },
+      "test_module":{
+        "type":["Record",{
+          "in":["Array",4,["Array",8,"BitIn"]],
+          "out":["Array",8,"Bit"]
+        }]
+      }
+    }
+  }
+}
+}

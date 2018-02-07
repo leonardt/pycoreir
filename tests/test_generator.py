@@ -1,5 +1,6 @@
 import coreir
 from coreir.type import ValueType
+import os
 
 context = coreir.Context()
 
@@ -60,4 +61,9 @@ def test_map_mulby2():
     mapMulBy2 = test_module_def.add_module_instance("mapMulBy2", mapMod)
     test_module_def.connect(test_module_def.interface.select("in"), mapMulBy2.select("in"));
     test_module_def.connect(mapMulBy2.select("out"), test_module_def.interface.select("out"));
-    test_module_def.print_()
+    # test_module_def.print_()
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    test_module.save_to_file(os.path.join(dir_path, "mapN_test.json"))
+    with open(os.path.join(dir_path, "mapN_test.json"), "r") as actual:
+        with open(os.path.join(dir_path, "mapN_test_gold.json"), "r") as gold:
+            assert actual.read() == gold.read()
