@@ -53,7 +53,7 @@ def test_map_mulby2():
     mapNParams = c.new_values({"width": width, "parallelOperators": parallelInputs, "operator": mulBy2})
 
     test_module_typ = c.Record({"in": c.Array(parallelInputs, c.Array(width,
-        c.BitIn())), "out": c.Array(width, c.Bit())})
+        c.BitIn())), "out": c.Array(parallelInputs, c.Array(width, c.Bit()))})
     test_module = c.global_namespace.new_module("test_module", test_module_typ)
     test_module_def = test_module.new_definition()
     mapN = import_("aetherlinglib", "mapN")
@@ -61,7 +61,9 @@ def test_map_mulby2():
     mapMulBy2 = test_module_def.add_module_instance("mapMulBy2", mapMod)
     test_module_def.connect(test_module_def.interface.select("in"), mapMulBy2.select("in"));
     test_module_def.connect(mapMulBy2.select("out"), test_module_def.interface.select("out"));
-    # test_module_def.print_()
+    test_module_def.print_()
+    test_module.definition = test_module_def
+    test_module.print_()
     dir_path = os.path.dirname(os.path.realpath(__file__))
     test_module.save_to_file(os.path.join(dir_path, "mapN_test.json"))
     with open(os.path.join(dir_path, "mapN_test.json"), "r") as actual:
