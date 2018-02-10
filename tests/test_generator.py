@@ -71,6 +71,8 @@ def test_map_mulby2():
     with open(os.path.join(dir_path, "mapN_test.json"), "r") as actual:
         with open(os.path.join(dir_path, "mapN_test_gold.json"), "r") as gold:
             assert actual.read() == gold.read()
+    mod = c.load_from_file(os.path.join(dir_path, "mapN_test.json"))
+    mod.print_()
 
 if __name__ == "__main__":
     test_map_mulby2()

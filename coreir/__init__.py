@@ -227,6 +227,9 @@ libcoreir_c.COREDirectedInstanceGetOutputs.restype = ct.POINTER(COREDirectedConn
 libcoreir_c.COREArrayTypeGetLen.argtypes = [COREType_p]
 libcoreir_c.COREArrayTypeGetLen.restype = ct.c_uint
 
+libcoreir_c.COREArrayTypeGetElemType.argtypes = [COREType_p]
+libcoreir_c.COREArrayTypeGetElemType.restype = COREType_p
+
 libcoreir_c.COREGetTypeKind.argtypes = [COREType_p]
 libcoreir_c.COREGetTypeKind.restype = ct.c_int # CORETypeKind is an enum
 

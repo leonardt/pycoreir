@@ -81,6 +81,12 @@ class Type(CoreIRType):
     def is_input(self):
         return libcoreir_c.CORETypeIsInput(self.ptr)
 
+    @property
+    def element_type(self):
+        if self.kind != "Array":  # Not a TK_Array
+            raise Exception("`element_type` called on a {}".format(self.kind))
+        return Type(libcoreir_c.COREArrayTypeGetElemType(self.ptr), self.context)
+
     def __len__(self):
         if self.kind != "Array":  # Not a TK_Array
             raise Exception("`len` called on a {}".format(self.kind))
