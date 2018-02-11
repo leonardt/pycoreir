@@ -101,6 +101,9 @@ class Context:
             elif isinstance(v, BitVector):
                 args.append(libcoreir_c.COREValueBitVector(self.context,
                     v.width, v.val))
+            elif isinstance(v, coreir.Module):
+                args.append(libcoreir_c.COREValueModule(self.context,
+                    v.ptr))
             else:
                 raise NotImplementedError()
 

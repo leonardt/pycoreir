@@ -13,7 +13,7 @@ if [ "$TRAVIS_BRANCH" != "master" ]; then
     cd ..;
     pip install git+git://github.com/leonardt/pycoreir.git@dev;
 else
-    wget https://github.com/rdaly525/coreir/releases/download/v0.0.7/coreir.tar.gz;
+    wget https://github.com/rdaly525/coreir/releases/download/v0.0.8/coreir.tar.gz;
     mkdir coreir_release;
     tar -xf coreir.tar.gz -C coreir_release --strip-components 1;
     cd coreir_release;

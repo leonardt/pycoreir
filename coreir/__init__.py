@@ -8,7 +8,7 @@ from coreir.module import Module, COREModule, COREModule_p, COREModuleDef, COREM
         COREDirectedInstance_p, COREDirectedConnection_p, COREDirectedModule_p
 from coreir.generator import COREGenerator, COREGenerator_p, Generator
 from coreir.namespace import CORENamespace, CORENamespace_p
-from coreir.type import COREType, COREType_p, CoreIRType, Params, Value, Values, COREValue, COREValue_p, Type, NamedType
+from coreir.type import COREType, COREType_p, CoreIRType, Params, Value, Values, COREValue, COREValue_p, Type, NamedType, COREValueType_p, Record
 from coreir.wireable import COREWireable_p, Wireable
 from coreir.type_gen import type_gen
 from coreir.simulator import SimulatorState, CORESimulatorState_p, CORESimValue_p
@@ -91,9 +91,6 @@ libcoreir_c.COREModuleGetName.restype = ct.c_char_p
 libcoreir_c.COREModuleGetType.argtypes = [COREModule_p]
 libcoreir_c.COREModuleGetType.restype = COREType_p
 
-libcoreir_c.COREGeneratorGetName.argtypes = [COREGenerator_p]
-libcoreir_c.COREGeneratorGetName.restype = ct.c_char_p
-
 libcoreir_c.COREModuleGetDef.argtypes = [COREModule_p]
 libcoreir_c.COREModuleGetDef.restype = COREModuleDef_p
 
@@ -153,6 +150,9 @@ libcoreir_c.COREValueBool.restype = COREValue_p
 
 libcoreir_c.COREValueBitVector.argtypes = [COREContext_p, ct.c_int, ct.c_uint64]
 libcoreir_c.COREValueBitVector.restype = COREValue_p
+
+libcoreir_c.COREValueModule.argtypes = [COREContext_p, COREModule_p]
+libcoreir_c.COREValueModule.restype = COREValue_p
 
 libcoreir_c.COREModuleDefGetConnections.argtypes = [COREModuleDef_p, ct.POINTER(ct.c_int)]
 libcoreir_c.COREModuleDefGetConnections.restype = ct.POINTER(COREConnection_p)
@@ -227,6 +227,9 @@ libcoreir_c.COREDirectedInstanceGetOutputs.restype = ct.POINTER(COREDirectedConn
 libcoreir_c.COREArrayTypeGetLen.argtypes = [COREType_p]
 libcoreir_c.COREArrayTypeGetLen.restype = ct.c_uint
 
+libcoreir_c.COREArrayTypeGetElemType.argtypes = [COREType_p]
+libcoreir_c.COREArrayTypeGetElemType.restype = COREType_p
+
 libcoreir_c.COREGetTypeKind.argtypes = [COREType_p]
 libcoreir_c.COREGetTypeKind.restype = ct.c_int # CORETypeKind is an enum
 
@@ -253,6 +256,12 @@ libcoreir_c.CORENamespaceHasModule.restype = ct.c_bool
 
 libcoreir_c.COREGeneratorGetName.argtypes = [COREGenerator_p]
 libcoreir_c.COREGeneratorGetName.restype = ct.c_char_p
+
+libcoreir_c.COREGeneratorGetGenParams.argtypes = [COREGenerator_p, ct.POINTER(ct.POINTER(ct.c_char_p)), ct.POINTER(ct.POINTER(COREValueType_p)), ct.POINTER(ct.c_int)]
+libcoreir_c.COREGeneratorGetGenParams.restype = None
+
+libcoreir_c.COREGeneratorGetModule.argtypes = [COREGenerator_p, ct.c_void_p]
+libcoreir_c.COREGeneratorGetModule.restype = COREModule_p
 
 libcoreir_c.CORERecordTypeGetItems.argtypes = [COREType_p, ct.POINTER(ct.POINTER(ct.c_char_p)), ct.POINTER(ct.POINTER(COREType_p)), ct.POINTER(ct.c_int)]
 
