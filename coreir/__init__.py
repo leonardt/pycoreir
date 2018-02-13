@@ -170,8 +170,8 @@ libcoreir_c.COREPrintModuleDef.argtypes = [COREModuleDef_p]
 libcoreir_c.COREWireableGetConnectedWireables.argtypes = [COREWireable_p, ct.POINTER(ct.c_int)]
 libcoreir_c.COREWireableGetConnectedWireables.restype = ct.POINTER(COREWireable_p)
 
-libcoreir_c.COREWireableGetModuleDef.argtypes = [COREWireable_p]
-libcoreir_c.COREWireableGetModuleDef.restype = COREModuleDef_p
+libcoreir_c.COREWireableGetContainer.argtypes = [COREWireable_p]
+libcoreir_c.COREWireableGetContainer.restype = COREModuleDef_p
 
 libcoreir_c.COREWireableSelect.argtypes = [COREWireable_p, ct.c_char_p]
 libcoreir_c.COREWireableSelect.restype = COREWireable_p

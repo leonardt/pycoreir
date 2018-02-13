@@ -31,7 +31,7 @@ class Wireable(CoreIRType):
 
     @property
     def module_def(self):
-        return coreir.module.ModuleDef(libcoreir_c.COREWireableGetModuleDef(self.ptr),self.context)
+        return coreir.module.ModuleDef(libcoreir_c.COREWireableGetContainer(self.ptr),self.context)
 
     @property
     def module(self):
