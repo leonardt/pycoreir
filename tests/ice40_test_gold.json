@@ -3,14 +3,14 @@
   "global":{
     "modules":{
       "test_module":{
-        "type":["Record",{
-          "I":["Array",4,"BitIn"],
-          "O":"Bit"
-        }],
+        "type":["Record",[
+          ["I",["Array",4,"BitIn"]],
+          ["O","Bit"]
+        ]],
         "instances":{
           "lut0":{
             "modref":"ice40.SB_LUT4",
-            "modargs":{"LUT_INIT":[["BitVector",16],34952]}
+            "modargs":{"LUT_INIT":[["BitVector",16],"16'h8888"]}
           }
         },
         "connections":[
