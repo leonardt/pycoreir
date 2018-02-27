@@ -5,11 +5,7 @@ CoreIR::Type* CoreIR::TypeGenFromPython::createType(Context* c, Values values) {
   Type* type_ptr = NULL;
   wchar_t python_home[] = PYTHON_HOME;
   Py_SetPythonHome(python_home);
-  if (!Py_IsInitialized()) {
-    wchar_t python_home[] = PYTHON_HOME;
-    Py_SetPythonHome(python_home);
-    Py_Initialize();
-  }
+  Py_Initialize();
   PyObject *py_module = PyImport_ImportModule(moduleName.c_str());
   if (py_module != NULL) {
     Py_INCREF(py_module);
@@ -65,11 +61,9 @@ CoreIR::Type* CoreIR::TypeGenFromPython::createType(Context* c, Values values) {
 
 CoreIR::ModuleDefGenFun CoreIR::ModuleDefGenFunFromPython(std::string moduleName, std::string functionName) {
   return [=](Context* c, Values genargs, ModuleDef* def) {
-    if (!Py_IsInitialized()) {
-      wchar_t python_home[] = PYTHON_HOME;
-      Py_SetPythonHome(python_home);
-      Py_Initialize();
-    }
+    wchar_t python_home[] = PYTHON_HOME;
+    Py_SetPythonHome(python_home);
+    Py_Initialize();
     PyObject *py_module = PyImport_ImportModule(moduleName.c_str());
     if (py_module != NULL) {
       Py_INCREF(py_module);
