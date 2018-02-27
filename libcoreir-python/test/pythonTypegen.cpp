@@ -70,5 +70,28 @@ int main() {
   c->runPasses({"rungenerators","flatten"});
   add4->print();
 
+  TypeGen* double_typegen = new TypeGenFromPython(g, "double_type", {{"width",
+          c->Int()}}, "add", "double_type_gen");
+  g->addTypeGen(double_typegen);
+
+  Generator* doubleGen =
+      g->newGeneratorDecl("double",g->getTypeGen("double_type"),{{"width", c->Int()}});
+  
+  doubleGen->setGeneratorDefFromFun(ModuleDefGenFunFromPython("add", "double"));
+  Type* doubleType = c->Record({
+    {"in",c->BitIn()->Arr(13)},
+    {"out",c->Bit()->Arr(13)}
+  });
+  Module* doubleMod = g->newModuleDecl("Double",doubleType);
+  ModuleDef* doubleDef = doubleMod->newModuleDef();
+    doubleDef->addInstance("double",doubleGen,{{"width",Const::make(c,13)}});
+    doubleDef->connect("self.in","double.I");
+    doubleDef->connect("double.O","self.out");
+  doubleMod->setDef(doubleDef);
+  doubleMod->print();
+  
+  c->runPasses({"rungenerators","flatten"});
+  doubleMod->print();
+
   deleteContext(c);
 }

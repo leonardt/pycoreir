@@ -36,3 +36,22 @@ def add_generator(context, values, module_def):
                                addN_1.select("in").select(str(i)))
         module_def.connect(addN_0.select("out"), join_inst.select("in0"))
         module_def.connect(addN_1.select("out"), join_inst.select("in1"))
+
+@coreir.type_gen
+def double_type_gen(context, values):
+    width = values['width'].value
+    return context.Record({
+        "I": context.Array(width, context.BitIn()),
+        "O": context.Array(width, context.Bit())
+    })
+
+@coreir.generator_
+def double(context, values, module_def):
+    import magma
+    width = values['width'].value
+    doubleT = magma.Bits(width)
+    double = magma.DefineCircuit("double", "I", magma.In(doubleT), "O", magma.Out(doubleT))
+    shift_amount = 2
+    output = magma.concat(double.I[shift_amount:width], magma.bits(0, shift_amount))
+    magma.wire(output, double.O)
+    magma.backend.coreir_.CoreIRBackend(context).compile_definition_to_module_definition(double, module_def)
