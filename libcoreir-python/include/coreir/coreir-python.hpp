@@ -19,6 +19,8 @@ namespace CoreIR {
         std::string toString() const override {return name; }
         void print() const override {}//TODO
     };
+
+    ModuleDefGenFun ModuleDefGenFunFromPython(std::string moduleName, std::string functionName);
 }
 
 #endif //COREIR_PYTHON_HPP_
