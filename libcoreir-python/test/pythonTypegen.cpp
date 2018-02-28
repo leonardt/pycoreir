@@ -7,6 +7,7 @@ using namespace CoreIR;
 
 int main() {
   
+  pythonInitialize();
   // New context
   Context* c = newContext();
   
@@ -24,28 +25,28 @@ int main() {
   addN->setGeneratorDefFromFun(ModuleDefGenFunFromPython("add", "add_generator"));
   
   // Define Add12 Module
-  // Type* add12Type = c->Record({
-  //   {"in8",c->BitIn()->Arr(13)->Arr(8)},
-  //   {"in4",c->BitIn()->Arr(13)->Arr(4)},
-  //   {"out",c->Bit()->Arr(13)}
-  // });
+  Type* add12Type = c->Record({
+    {"in8",c->BitIn()->Arr(13)->Arr(8)},
+    {"in4",c->BitIn()->Arr(13)->Arr(4)},
+    {"out",c->Bit()->Arr(13)}
+  });
 
-  // Namespace* coreir = c->getNamespace("coreir");
-  // Module* add12 = g->newModuleDecl("Add12",add12Type);
-  // ModuleDef* def = add12->newModuleDef();
-  //   def->addInstance("add8_upper",addN,{{"width",Const::make(c,13)},{"N",Const::make(c,8)}});
-  //   def->addInstance("add4_lower",addN,{{"width",Const::make(c,13)},{"N",Const::make(c,4)}});
-  //   def->addInstance("add2_join",coreir->getGenerator("add"),{{"width",Const::make(c,13)}});
-  //   def->connect("self.in8","add8_upper.in");
-  //   def->connect("self.in4","add4_lower.in");
-  //   def->connect("add8_upper.out","add2_join.in0");
-  //   def->connect("add4_lower.out","add2_join.in1");
-  //   def->connect("add2_join.out","self.out");
-  // add12->setDef(def);
-  // add12->print();
-  // 
-  // c->runPasses({"rungenerators","flatten"});
-  // add12->print();
+  Namespace* coreir = c->getNamespace("coreir");
+  Module* add12 = g->newModuleDecl("Add12",add12Type);
+  ModuleDef* add12Def = add12->newModuleDef();
+    add12Def->addInstance("add8_upper",addN,{{"width",Const::make(c,13)},{"N",Const::make(c,8)}});
+    add12Def->addInstance("add4_lower",addN,{{"width",Const::make(c,13)},{"N",Const::make(c,4)}});
+    add12Def->addInstance("add2_join",coreir->getGenerator("add"),{{"width",Const::make(c,13)}});
+    add12Def->connect("self.in8","add8_upper.in");
+    add12Def->connect("self.in4","add4_lower.in");
+    add12Def->connect("add8_upper.out","add2_join.in0");
+    add12Def->connect("add4_lower.out","add2_join.in1");
+    add12Def->connect("add2_join.out","self.out");
+  add12->setDef(add12Def);
+  add12->print();
+  
+  c->runPasses({"rungenerators","flatten"});
+  add12->print();
 
   // Define Add4 Module
   Type* add4Type = c->Record({
@@ -53,7 +54,6 @@ int main() {
     {"in1",c->BitIn()->Arr(13)->Arr(2)},
     {"out",c->Bit()->Arr(13)}
   });
-  Namespace* coreir = c->getNamespace("coreir");
   Module* add4 = g->newModuleDecl("Add4",add4Type);
   ModuleDef* def = add4->newModuleDef();
     def->addInstance("add2_upper",addN,{{"width",Const::make(c,13)},{"N",Const::make(c,2)}});
@@ -94,4 +94,5 @@ int main() {
   doubleMod->print();
 
   deleteContext(c);
+  pythonFinalize();
 }

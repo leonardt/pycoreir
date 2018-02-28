@@ -4,6 +4,8 @@
 #include "coreir/ir/typegen.h"
 #include <Python.h>
 namespace CoreIR {
+    void pythonInitialize();
+    void pythonFinalize();
 
     class TypeGenFromPython : public TypeGen {
       std::string moduleName;

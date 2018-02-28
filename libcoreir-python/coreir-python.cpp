@@ -1,11 +1,22 @@
 #include "coreir/coreir-python.hpp"
 
+static PyGILState_STATE gstate;
+
+void CoreIR::pythonInitialize() {
+    wchar_t python_home[] = PYTHON_HOME;
+    Py_SetPythonHome(python_home);
+    Py_Initialize();
+    PyEval_InitThreads();
+}
+
+void CoreIR::pythonFinalize() {
+    gstate = PyGILState_Ensure();
+    Py_Finalize();
+}
 
 CoreIR::Type* CoreIR::TypeGenFromPython::createType(Context* c, Values values) {
+  gstate = PyGILState_Ensure();
   Type* type_ptr = NULL;
-  wchar_t python_home[] = PYTHON_HOME;
-  Py_SetPythonHome(python_home);
-  Py_Initialize();
   PyObject *py_module = PyImport_ImportModule(moduleName.c_str());
   if (py_module != NULL) {
     Py_INCREF(py_module);
@@ -49,8 +60,7 @@ CoreIR::Type* CoreIR::TypeGenFromPython::createType(Context* c, Values values) {
     std::cerr << "Failed to load " << moduleName << std::endl;
     ASSERT(0, "Failed to load module");
   }
-
-  Py_Finalize();
+  PyGILState_Release(gstate);
 
   // FIXME: Can we free char** names and Value** values_ptrs because
   // they are no longer used since the interpreter's been finalized?
@@ -61,9 +71,7 @@ CoreIR::Type* CoreIR::TypeGenFromPython::createType(Context* c, Values values) {
 
 CoreIR::ModuleDefGenFun CoreIR::ModuleDefGenFunFromPython(std::string moduleName, std::string functionName) {
   return [=](Context* c, Values genargs, ModuleDef* def) {
-    wchar_t python_home[] = PYTHON_HOME;
-    Py_SetPythonHome(python_home);
-    Py_Initialize();
+    gstate = PyGILState_Ensure();
     PyObject *py_module = PyImport_ImportModule(moduleName.c_str());
     if (py_module != NULL) {
       Py_INCREF(py_module);
@@ -104,7 +112,8 @@ CoreIR::ModuleDefGenFun CoreIR::ModuleDefGenFunFromPython(std::string moduleName
       std::cerr << "Failed to load " << moduleName << std::endl;
       ASSERT(0, "Failed to load module");
     }
+    PyGILState_Release(gstate);
 
-    Py_Finalize();
+
   };
 }

@@ -26,16 +26,17 @@ def add_generator(context, values, module_def):
     else:
         # FIXME: Recursion means c++ -> python -> c++ -> python which then
         # causes a segfault, GIL?
-        subAdd = context.global_namespace.generators["addN"](width=width, N=N // 2)
-        addN_0 = module_def.add_module_instance("addN_0", subAdd)
-        addN_1 = module_def.add_module_instance("addN_1", subAdd)
+        subAdd = context.global_namespace.generators["addN"]
+        addN_0 = module_def.add_generator_instance("addN_0", subAdd, {"width": width, "N": N // 2})
+        addN_1 = module_def.add_generator_instance("addN_1", subAdd, {"width": width, "N": N // 2})
         for i in range(0, N//2):
             module_def.connect(module_def.interface.select("in").select(str(i)),
                                addN_0.select("in").select(str(i)))
-            module_def.connect(module_def.interface.select("in").select(str(i)),
+            module_def.connect(module_def.interface.select("in").select(str(i + N // 2)),
                                addN_1.select("in").select(str(i)))
         module_def.connect(addN_0.select("out"), join_inst.select("in0"))
         module_def.connect(addN_1.select("out"), join_inst.select("in1"))
+    module_def.print_()
 
 @coreir.type_gen
 def double_type_gen(context, values):
