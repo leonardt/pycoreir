@@ -130,7 +130,7 @@ class Context:
         func.restype = CORENamespace_p
         return Namespace(func(self.context), self)
 
-    def enSymtable(self):
+    def enable_symbol_table(self):
         libcoreir_c.COREEnSymtable(self.context)
 
     def get_namespace(self,name):
