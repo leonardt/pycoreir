@@ -34,7 +34,7 @@ def test_add():
 def test_map_mulby2():
     c = context
     width = 8
-    parallelInputs = 4
+    numInputs = 4
     module_typ = c.Record({"in": c.Array(width, c.BitIn()), "out": c.Array(width, c.Bit())})
     mulBy2 = c.global_namespace.new_module("mulBy2", module_typ)
     mulBy2.print_()
@@ -52,14 +52,14 @@ def test_map_mulby2():
     mulBy2Def.connect(mul_inst.select("out"), mulBy2Def.interface.select("out"))
     mulBy2.definition = mulBy2Def
 
-    mapNParams = c.new_values({"width": width, "parallelOperators": parallelInputs, "operator": mulBy2})
+    mapParallelParams = c.new_values({"numInputs": numInputs, "operator": mulBy2})
 
-    test_module_typ = c.Record({"in": c.Array(parallelInputs, c.Array(width,
-        c.BitIn())), "out": c.Array(parallelInputs, c.Array(width, c.Bit()))})
+    test_module_typ = c.Record({"in": c.Array(numInputs, c.Array(width,
+        c.BitIn())), "out": c.Array(numInputs, c.Array(width, c.Bit()))})
     test_module = c.global_namespace.new_module("test_module", test_module_typ)
     test_module_def = test_module.new_definition()
-    mapN = import_("aetherlinglib", "mapN")
-    mapMod = mapN(width=width, parallelOperators=parallelInputs, operator=mulBy2)
+    mapParallel = import_("aetherlinglib", "mapParallel")
+    mapMod = mapParallel(numInputs=numInputs, operator=mulBy2)
     mapMulBy2 = test_module_def.add_module_instance("mapMulBy2", mapMod)
     test_module_def.connect(test_module_def.interface.select("in"), mapMulBy2.select("in"));
     test_module_def.connect(mapMulBy2.select("out"), test_module_def.interface.select("out"));
@@ -67,11 +67,11 @@ def test_map_mulby2():
     test_module.definition = test_module_def
     test_module.print_()
     dir_path = os.path.dirname(os.path.realpath(__file__))
-    test_module.save_to_file(os.path.join(dir_path, "mapN_test.json"))
-    with open(os.path.join(dir_path, "mapN_test.json"), "r") as actual:
-        with open(os.path.join(dir_path, "mapN_test_gold.json"), "r") as gold:
+    test_module.save_to_file(os.path.join(dir_path, "mapParallel_test.json"))
+    with open(os.path.join(dir_path, "mapParallel_test.json"), "r") as actual:
+        with open(os.path.join(dir_path, "mapParallel_test_gold.json"), "r") as gold:
             assert actual.read() == gold.read()
-    mod = c.load_from_file(os.path.join(dir_path, "mapN_test.json"))
+    mod = c.load_from_file(os.path.join(dir_path, "mapParallel_test.json"))
     mod.print_()
 
 if __name__ == "__main__":

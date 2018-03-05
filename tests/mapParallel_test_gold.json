@@ -31,8 +31,8 @@
         ]],
         "instances":{
           "mapMulBy2":{
-            "genref":"aetherlinglib.mapN",
-            "genargs":{"operator":["Module","global.mulBy2"], "parallelOperators":["Int",4], "width":["Int",8]}
+            "genref":"aetherlinglib.mapParallel",
+            "genargs":{"numInputs":["Int",4], "operator":["Module","global.mulBy2"]}
           }
         },
         "connections":[
