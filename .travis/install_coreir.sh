@@ -2,7 +2,7 @@
 
 set -e
 
-if [ "$TRAVIS_BRANCH" != "master" ] || [ "$TRAVIS_PULL_REQUEST_BRANCH" == "dev" ]; then
+if [ "$TRAVIS_BRANCH" != "master" ]; then
     cd deps;
     git clone -b dev https://github.com/rdaly525/coreir.git;
     cd coreir;
