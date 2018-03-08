@@ -1,42 +1,36 @@
 language: python
-
 python:
-    - '3.6'
-
+- '3.6'
 sudo: false
-
 cache:
-    apt: true
-
+  apt: true
 addons:
   apt:
     sources:
-        - ubuntu-toolchain-r-test
+    - ubuntu-toolchain-r-test
     packages:
-        - g++-4.9
-
+    - g++-4.9
 before_install:
-    - mkdir deps
-    - mkdir deps/bin
-    - mkdir deps/lib
-    - mkdir deps/include
-    - export PATH=$TRAVIS_BUILD_DIR/deps/bin:$PATH
-    - export LD_LIBRARY_PATH=$TRAVIS_BUILD_DIR/deps/lib:$LD_LIBRARY_PATH
-
-    - source .travis/install_coreir.sh
+- mkdir deps
+- mkdir deps/bin
+- mkdir deps/lib
+- mkdir deps/include
+- export PATH=$TRAVIS_BUILD_DIR/deps/bin:$PATH
+- export LD_LIBRARY_PATH=$TRAVIS_BUILD_DIR/deps/lib:$LD_LIBRARY_PATH
+- source .travis/install_coreir.sh
 script:
-    - pip install -e .
-    - pytest -s tests/
-    - cd libcoreir-python
-    - make install CXX=g++-4.9 prefix=$TRAVIS_BUILD_DIR/deps CXXFLAGS=-I$TRAVIS_BUILD_DIR/deps/include LDFLAGS=-L$TRAVIS_BUILD_DIR/deps/lib
-      # Append test directory to PYTHONPATH because that's where the test
-      # `add.py` module with a typegen is
-    - PYTHONPATH=$TRAVIS_BUILD_DIR:test make test CXX=g++-4.9 CXXFLAGS=-I$TRAVIS_BUILD_DIR/deps/include LDFLAGS=-L$TRAVIS_BUILD_DIR/deps/lib
-    - cd ..
+- pip install -e .
+- pytest -s tests/
+- cd libcoreir-python
+- make install CXX=g++-4.9 prefix=$TRAVIS_BUILD_DIR/deps CXXFLAGS=-I$TRAVIS_BUILD_DIR/deps/include
+  LDFLAGS=-L$TRAVIS_BUILD_DIR/deps/lib
+- PYTHONPATH=$TRAVIS_BUILD_DIR:test make test CXX=g++-4.9 CXXFLAGS=-I$TRAVIS_BUILD_DIR/deps/include
+  LDFLAGS=-L$TRAVIS_BUILD_DIR/deps/lib
+- cd ..
 compiler:
-    - gcc
+- gcc
 os:
-    - linux
+- linux
 deploy:
   provider: pypi
   user: leonardt
@@ -45,3 +39,7 @@ deploy:
   on:
     tags: true
     branch: master
+notifications:
+  slack:
+    rooms:
+      secure: vYqmNj2HcykuryVM6+KYnkT6XoAGhV+W90ln/hVrniUeGutZ5R/fxlF8T8zOtmM/CxcqPbsa/awusSiX77Xegrf8gEcdUy6Jmvlz68F89wmkua4RuMoUnymRoNNE+YE1jrNO/39X+gDSEbYlCob5TtWXBAlGDfIJ8rjaP9LJV1Y6lDvJeCp/k9RcJDs9OlPaGP237pWJUIKEN1BnGyAFSQbbdLF+mTg7BcZr5pT9iuNQAyjrZcle/DPdLg5V+C4IQCkA8lXnI2ushuL3xmrjQ4TBvUNrGojKTTir3fXkeU+Zed2jukvRVKjDyiKV2gWr1tqM3Nl3U7JIkJpTu6HxwRI16l2M35eE/1kmJ817AEc/2RepI6tPEYi3aLtAbLldltuYiiUvDVsf9sMS8ireqoHXEaPJD6IkrMp4Tm9TO/b267fC3lvrRYd927NjKlV0Pk/ZgcPKoNjP8aPxj2+FvoPlExdjEvwHFxWpTRzqnHJudYeKScFzSlFAW+vMIpNZ2JMBwcKL2ENwBIGX5T8mkkvKJcZGUS1Sv1sIqVaPuINW058a4ARSl/JHkE6KUW+452uOfWMhz+XD4NjOaAWK9So9Zw8g+x52+F5k4mlK7bkosqpkQ6uWYtHM42Wz2OYz2rL4S2EtetJf4/vLRAgzhRdmo9RDrYPRtInW8jcm7nM=
