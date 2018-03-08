@@ -3,18 +3,18 @@
   "global":{
     "modules":{
       "add8":{
-        "type":["Record",{
-          "in1":["Array",8,"BitIn"],
-          "in2":["Array",8,"BitIn"],
-          "out":["Array",9,"Bit"]
-        }],
+        "type":["Record",[
+          ["in1",["Array",8,"BitIn"]],
+          ["in2",["Array",8,"BitIn"]],
+          ["out",["Array",9,"Bit"]]
+        ]],
         "modparams":{"init":"Int"}
       },
       "multiply_by_2":{
-        "type":["Record",{
-          "input":["Array",8,"BitIn"],
-          "output":["Array",9,"Bit"]
-        }],
+        "type":["Record",[
+          ["input",["Array",8,"BitIn"]],
+          ["output",["Array",9,"Bit"]]
+        ]],
         "instances":{
           "adder":{
             "modref":"global.add8",

@@ -29,6 +29,8 @@ class ModuleDef(CoreIRType):
     def add_generator_instance(self, name, generator, genargs, config=None):
         if config is None:
             config = self.context.new_values()
+        if isinstance(genargs, dict):
+            genargs = self.context.new_values(genargs)
         assert isinstance(genargs, Values)
         assert isinstance(config, Values)
         return Instance(libcoreir_c.COREModuleDefAddGeneratorInstance(self.ptr, str.encode(name), generator.ptr, genargs.ptr, config.ptr), self.context)

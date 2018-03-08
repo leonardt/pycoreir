@@ -33,10 +33,9 @@ class Generator(CoreIRType):
         gen_args = {}
         for key, value in kwargs.items():
             if key not in self.params:
-                raise KeyError(f"key={key} not in params={coreir_add.params.keys()}")
+                raise KeyError(f"key={key} not in params={self.params.keys()}")
             if not isinstance(value, self.params[key].kind):
-                raise ValueError(f"Arg(name={key}, value={value}) does not match expected type {coreir_add.params[key].kind}")
+                raise ValueError(f"Arg(name={key}, value={value}) does not match expected type {self.params[key].kind}")
             gen_args[key] = value
         gen_args = self.context.new_values(gen_args)
         return Module(libcoreir_c.COREGeneratorGetModule(self.ptr, gen_args.ptr), self.context)
-
