@@ -1,32 +1,5 @@
 import coreir
-#
-# seq to int
-#
-def seq2int(l):
-    n = len(l)
-
-    i = 0
-    for j in range(n):
-        if l[j]:
-            i |= 1 << j
-    return i
-
-
-#
-# int to seq
-#
-def int2seq(i, n=0):
-    # if isinstance(i, StringTypes):
-    #     i = ord(i)
-
-    # find minimum number of bits needed for i
-    if n == 0:
-        j = i
-        while j:
-            n += 1
-            j >>= 1
-
-    return [1 if i & (1 << j) else 0 for j in range(n)]
+from bit_vector import BitVector
 
 context = coreir.Context()
 
@@ -68,7 +41,9 @@ def test_primitive(primitive):
 
     a = 3
     b = 5
-    sim_add16.set_value(["self.in0"], int2seq(a, 16))
-    sim_add16.set_value(["self.in1"], int2seq(b, 16))
+    a = BitVector(a, 16)
+    b = BitVector(b, 16)
+    sim_add16.set_value(["self.in0"], a.as_bool_list())
+    sim_add16.set_value(["self.in1"], b.as_bool_list())
     sim_add16.execute()
-    assert seq2int(sim_add16.get_value(["self"], ["out"])) == a + b
+    assert sim_add16.get_value(["self"], ["out"]) == (a + b).as_bool_list()
