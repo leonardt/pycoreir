@@ -17,7 +17,7 @@ def import_(lib, name):
 
 unary_primitives = [
     ("not", operator.invert),
-    # ("neg", operator.neg),
+    ("neg", operator.neg),
 ]
 
 binary_primitives = [
