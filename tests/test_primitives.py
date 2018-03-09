@@ -160,3 +160,18 @@ def test_comparison_primitive(comparison_primitive, width, input0, input1):
     sim_primitive16.set_value(["self.in1"], b.as_bool_list())
     sim_primitive16.execute()
     assert BitVector(sim_primitive16.get_value(["self"], ["out"])) == primitive_op(a, b)
+
+# TODO: mux
+# TODO: reg
+# TODO: regrst
+# TODO: const
+# TODO: term
+# TODO: slice
+# TODO: concat
+
+# TODO: corebit
+# TODO: and, or, xor
+# TODO: wire, not
+# TODO: mux
+# TODO: const
+# TODO: term
