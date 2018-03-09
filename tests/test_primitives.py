@@ -15,6 +15,11 @@ def import_(lib, name):
     lib = get_lib(lib, context)
     return lib.generators[name], context
 
+unary_primitives = [
+    ("not", operator.invert),
+    # ("neg", operator.neg),
+]
+
 binary_primitives = [
     ("and", operator.and_),
     ("or", operator.or_),
@@ -40,6 +45,8 @@ comparison_primitives = [
 def pytest_generate_tests(metafunc):
     if 'binary_primitive' in metafunc.fixturenames:
         metafunc.parametrize("binary_primitive", binary_primitives)
+    if 'unary_primitive' in metafunc.fixturenames:
+        metafunc.parametrize("unary_primitive", unary_primitives)
     if 'comparison_primitive' in metafunc.fixturenames:
         metafunc.parametrize("comparison_primitive", comparison_primitives)
     if 'width' in metafunc.fixturenames:
@@ -49,6 +56,28 @@ def pytest_generate_tests(metafunc):
     if 'input1' in metafunc.fixturenames:
         metafunc.parametrize("input1", range(16))
 
+def test_unary_primitive(unary_primitive, width, input0):
+
+    primitive_name, primitive_op = unary_primitive
+    coreir_primitive, context = import_("coreir", primitive_name)
+    primitive16 = coreir_primitive(width=width)
+    module_typ = context.Record({
+        "in": context.Array(width, context.BitIn()),
+        "out": context.Array(width, context.Bit())
+    })
+    module = context.global_namespace.new_module(f"test_{primitive_name}", module_typ)
+    module_def = module.new_definition()
+    primitive16_inst = module_def.add_module_instance(f"{primitive_name}_inst", primitive16)
+    interface = module_def.interface
+    module_def.connect(interface.select("in"), primitive16_inst.select("in"))
+    module_def.connect(interface.select("out"), primitive16_inst.select("out"))
+    module.definition = module_def
+    sim_primitive16 = coreir.SimulatorState(module)
+
+    a = BitVector(input0, 16)
+    sim_primitive16.set_value(["self.in"], a.as_bool_list())
+    sim_primitive16.execute()
+    assert BitVector(sim_primitive16.get_value(["self"], ["out"])) == primitive_op(a)
 
 def test_binary_primitive(binary_primitive, width, input0, input1):
 
