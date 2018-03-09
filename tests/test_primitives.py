@@ -20,6 +20,8 @@ unary_primitives = [
     # ("neg", operator.neg),
 ]
 
+#TODO andr, orr, xorr
+
 binary_primitives = [
     ("and", operator.and_),
     ("or", operator.or_),
@@ -29,6 +31,14 @@ binary_primitives = [
     ("mul", operator.mul),
     ("shl", operator.lshift),
     ("lshr", operator.rshift),
+]
+
+signed_binary_primitives = [
+    ("udiv", operator.truediv, False),
+    # TODO: ("urem", operator.and_, False),
+    ("sdiv", operator.truediv, True),
+    # TODO: ("srem", operator.and_, True),
+    # TODO: ("smod", operator.mod, True),
 ]
 
 comparison_primitives = [
@@ -45,6 +55,8 @@ comparison_primitives = [
 def pytest_generate_tests(metafunc):
     if 'binary_primitive' in metafunc.fixturenames:
         metafunc.parametrize("binary_primitive", binary_primitives)
+    if 'signed_binary_primitive' in metafunc.fixturenames:
+        metafunc.parametrize("signed_binary_primitive", signed_binary_primitives)
     if 'unary_primitive' in metafunc.fixturenames:
         metafunc.parametrize("unary_primitive", unary_primitives)
     if 'comparison_primitive' in metafunc.fixturenames:
@@ -105,6 +117,33 @@ def test_binary_primitive(binary_primitive, width, input0, input1):
     sim_primitive16.set_value(["self.in1"], b.as_bool_list())
     sim_primitive16.execute()
     assert BitVector(sim_primitive16.get_value(["self"], ["out"])) == primitive_op(a, b)
+
+def test_signed_binary_primitive(signed_binary_primitive, width, input0, input1):
+
+    primitive_name, primitive_op, signed = signed_binary_primitive
+    coreir_primitive, context = import_("coreir", primitive_name)
+    primitive16 = coreir_primitive(width=width)
+    module_typ = context.Record({
+        "in0": context.Array(width, context.BitIn()),
+        "in1": context.Array(width, context.BitIn()),
+        "out": context.Array(width, context.Bit())
+    })
+    module = context.global_namespace.new_module(f"test_{primitive_name}", module_typ)
+    module_def = module.new_definition()
+    primitive16_inst = module_def.add_module_instance(f"{primitive_name}_inst", primitive16)
+    interface = module_def.interface
+    module_def.connect(interface.select("in0"), primitive16_inst.select("in0"))
+    module_def.connect(interface.select("in1"), primitive16_inst.select("in1"))
+    module_def.connect(interface.select("out"), primitive16_inst.select("out"))
+    module.definition = module_def
+    sim_primitive16 = coreir.SimulatorState(module)
+
+    a = BitVector(input0, 16, signed=signed)
+    b = BitVector(input1, 16, signed=signed)
+    sim_primitive16.set_value(["self.in0"], a.as_bool_list())
+    sim_primitive16.set_value(["self.in1"], b.as_bool_list())
+    sim_primitive16.execute()
+    assert BitVector(sim_primitive16.get_value(["self"], ["out"]), signed=signed) == primitive_op(a, b)
 
 def test_eq(width, input0, input1):
 
