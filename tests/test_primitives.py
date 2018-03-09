@@ -9,6 +9,8 @@ binary_primitives = [
     ("add", operator.add),
     ("sub", operator.sub),
     ("mul", operator.mul),
+    ("shl", operator.lshift),
+    ("lshr", operator.rshift),
 ]
 
 def pytest_generate_tests(metafunc):
