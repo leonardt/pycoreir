@@ -154,6 +154,9 @@ libcoreir_c.COREValueBitVector.restype = COREValue_p
 libcoreir_c.COREValueModule.argtypes = [COREContext_p, COREModule_p]
 libcoreir_c.COREValueModule.restype = COREValue_p
 
+libcoreir_c.COREValueCoreIRType.argtypes = [COREContext_p, COREType_p]
+libcoreir_c.COREValueCoreIRType.restype = COREValue_p
+
 libcoreir_c.COREModuleDefGetConnections.argtypes = [COREModuleDef_p, ct.POINTER(ct.c_int)]
 libcoreir_c.COREModuleDefGetConnections.restype = ct.POINTER(COREConnection_p)
 

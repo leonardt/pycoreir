@@ -1,5 +1,5 @@
 import ctypes as ct
-from coreir.type import COREType_p, Type, Params, COREValue_p, Values, BitVector
+from coreir.type import COREType_p, Type, Params, COREValue_p, Values, BitVector, Record
 from coreir.generator import Generator
 from coreir.namespace import Namespace, CORENamespace_p
 from coreir.lib import libcoreir_c, load_shared_lib
@@ -109,6 +109,9 @@ class Context:
             elif isinstance(v, coreir.Module):
                 args.append(libcoreir_c.COREValueModule(self.context,
                     v.ptr))
+            elif isinstance(v, coreir.Type):
+                args.append(libcoreir_c.COREValueCoreIRType(self.context,
+                    v.ptr))
             else:
                 raise NotImplementedError()
 
@@ -153,6 +156,18 @@ class Context:
 
     def import_generator(self, lib: str, name: str) -> Generator:
         return self.get_lib(lib).generators[name]
+
+    def give_coreir_module_definition(self, module):
+        # only add the definition if haven't already done so
+        if module.definition is not None:
+            return
+        newdef = module.new_definition()
+        instance = newdef.add_module_instance(module.name + "_inst", module)
+        args = Record(instance.type.ptr, self)
+        def_interface = newdef.interface
+        for arg in args.items():
+            newdef.connect(def_interface.select(arg[0]), instance.select(arg[0]))
+        module.definition = newdef
 
     def run_passes(self, passes):
         pass_arr = (ct.c_char_p * len(passes))(*(p.encode() for p in passes))
