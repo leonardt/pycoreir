@@ -1,8 +1,13 @@
 import ctypes as ct
-from coreir.type import COREType_p, Type, Params, COREValue_p, Values, BitVector
+from coreir.type import COREType_p, Type, Params, COREValue_p, Values, BitVector, Record
+from coreir.generator import Generator
 from coreir.namespace import Namespace, CORENamespace_p
 from coreir.lib import libcoreir_c, load_shared_lib
 import coreir.module
+try:
+    from functools import lru_cache
+except ImportError:
+    from backports.functools_lru_cache import lru_cache
 
 class COREContext(ct.Structure):
     pass
@@ -104,6 +109,9 @@ class Context:
             elif isinstance(v, coreir.Module):
                 args.append(libcoreir_c.COREValueModule(self.context,
                     v.ptr))
+            elif isinstance(v, coreir.Type):
+                args.append(libcoreir_c.COREValueCoreIRType(self.context,
+                    v.ptr))
             else:
                 raise NotImplementedError()
 
@@ -136,6 +144,30 @@ class Context:
     def get_namespace(self,name):
       ns = libcoreir_c.COREGetNamespace(self.context,ct.c_char_p(str.encode(name)))
       return Namespace(ns,self)
+
+    @lru_cache(maxsize=None)
+    def get_lib(self, lib):
+        if lib in {"coreir", "mantle", "corebit"}:
+            return self.get_namespace(lib)
+        elif lib == "global":
+            return self.global_namespace
+        else:
+            return self.load_library(lib)
+
+    def import_generator(self, lib: str, name: str) -> Generator:
+        return self.get_lib(lib).generators[name]
+
+    def give_coreir_module_definition(self, module):
+        # only add the definition if haven't already done so
+        if module.definition is not None:
+            return
+        newdef = module.new_definition()
+        instance = newdef.add_module_instance(module.name + "_inst", module)
+        args = Record(instance.type.ptr, self)
+        def_interface = newdef.interface
+        for arg in args.items():
+            newdef.connect(def_interface.select(arg[0]), instance.select(arg[0]))
+        module.definition = newdef
 
     def run_passes(self, passes):
         pass_arr = (ct.c_char_p * len(passes))(*(p.encode() for p in passes))
