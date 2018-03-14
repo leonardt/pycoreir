@@ -173,6 +173,13 @@ class Context:
         pass_arr = (ct.c_char_p * len(passes))(*(p.encode() for p in passes))
         return libcoreir_c.COREContextRunPasses(self.context, pass_arr, ct.c_int(len(passes)))
 
+    def run_passes_namespaced(self, passes, namespaces):
+        pass_arr = (ct.c_char_p * len(passes))(*(p.encode() for p in passes))
+        namespaces_arr = (ct.c_char_p * len(namespaces))(*(n.encode() for n in namespaces))
+        return libcoreir_c.COREContextRunPasses(self.context,
+                                                pass_arr, ct.c_int(len(passes)),
+                                                namespaces_arr, ct.c_int(len(namespaces)))
+
     def __del__(self):
         if not self.external_ptr:
             libcoreir_c.COREDeleteContext(self.context)
