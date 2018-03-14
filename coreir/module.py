@@ -78,6 +78,8 @@ class Module(CoreIRType):
 
     @property
     def directed_module(self):
+        if not libcoreir_c.COREModuleHasDef(self.ptr):
+            return None
         return DirectedModule(libcoreir_c.COREModuleGetDirectedModule(self.ptr), self.context)
 
     @property
