@@ -158,6 +158,8 @@ class Context:
         return self.get_lib(lib).generators[name]
 
     def run_passes(self, passes, namespaces = ["global"]):
+        for ns in namespaces:
+            self.get_lib(ns)
         pass_arr = (ct.c_char_p * len(passes))(*(p.encode() for p in passes))
         namespaces_arr = (ct.c_char_p * len(namespaces))(*(n.encode() for n in namespaces))
         return libcoreir_c.COREContextRunPasses(self.context,
