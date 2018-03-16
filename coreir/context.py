@@ -157,21 +157,12 @@ class Context:
     def import_generator(self, lib: str, name: str) -> Generator:
         return self.get_lib(lib).generators[name]
 
-    def give_coreir_module_definition(self, module):
-        # only add the definition if haven't already done so
-        if module.definition is not None:
-            return
-        newdef = module.new_definition()
-        instance = newdef.add_module_instance(module.name + "_inst", module)
-        args = Record(instance.type.ptr, self)
-        def_interface = newdef.interface
-        for arg in args.items():
-            newdef.connect(def_interface.select(arg[0]), instance.select(arg[0]))
-        module.definition = newdef
-
-    def run_passes(self, passes):
+    def run_passes(self, passes, namespaces = ["global"]):
         pass_arr = (ct.c_char_p * len(passes))(*(p.encode() for p in passes))
-        return libcoreir_c.COREContextRunPasses(self.context, pass_arr, ct.c_int(len(passes)))
+        namespaces_arr = (ct.c_char_p * len(namespaces))(*(n.encode() for n in namespaces))
+        return libcoreir_c.COREContextRunPasses(self.context,
+                                                pass_arr, ct.c_int(len(passes)),
+                                                namespaces_arr, ct.c_int(len(namespaces)))
 
     def __del__(self):
         if not self.external_ptr:
