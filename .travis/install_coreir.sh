@@ -12,7 +12,7 @@ if [ "$TRAVIS_BRANCH" != "master" ]; then
     cd ..;
     cd ..;
 else
-    wget https://github.com/rdaly525/coreir/releases/download/v0.0.9/coreir.tar.gz;
+    wget https://github.com/rdaly525/coreir/releases/download/v0.0.10/coreir.tar.gz;
     mkdir coreir_release;
     tar -xf coreir.tar.gz -C coreir_release --strip-components 1;
     cd coreir_release;

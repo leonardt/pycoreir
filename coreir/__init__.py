@@ -42,8 +42,10 @@ libcoreir_c.COREContextString.restype = COREType_p
 libcoreir_c.COREContextCoreIRType.argstypes = [COREContext_p]
 libcoreir_c.COREContextCoreIRType.restype = COREType_p
 
-libcoreir_c.COREContextRunPasses.argstypes = [COREContext_p, ct.POINTER(ct.c_char_p), ct.c_int]
+libcoreir_c.COREContextRunPasses.argstypes = [COREContext_p, ct.POINTER(ct.c_char_p), ct.c_int,
+                                                        ct.POINTER(ct.c_char_p), ct.c_int]
 libcoreir_c.COREContextRunPasses.restype = ct.c_bool
+
 
 libcoreir_c.COREPrintErrors.argtypes = [COREContext_p]
 
@@ -153,6 +155,9 @@ libcoreir_c.COREValueBitVector.restype = COREValue_p
 
 libcoreir_c.COREValueModule.argtypes = [COREContext_p, COREModule_p]
 libcoreir_c.COREValueModule.restype = COREValue_p
+
+libcoreir_c.COREValueCoreIRType.argtypes = [COREContext_p, COREType_p]
+libcoreir_c.COREValueCoreIRType.restype = COREValue_p
 
 libcoreir_c.COREModuleDefGetConnections.argtypes = [COREModuleDef_p, ct.POINTER(ct.c_int)]
 libcoreir_c.COREModuleDefGetConnections.restype = ct.POINTER(COREConnection_p)
