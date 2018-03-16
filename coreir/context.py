@@ -157,11 +157,7 @@ class Context:
     def import_generator(self, lib: str, name: str) -> Generator:
         return self.get_lib(lib).generators[name]
 
-    def run_passes(self, passes):
-        pass_arr = (ct.c_char_p * len(passes))(*(p.encode() for p in passes))
-        return libcoreir_c.COREContextRunPasses(self.context, pass_arr, ct.c_int(len(passes)))
-
-    def run_passes_namespaced(self, passes, namespaces):
+    def run_passes(self, passes, namespaces = ["global"]):
         pass_arr = (ct.c_char_p * len(passes))(*(p.encode() for p in passes))
         namespaces_arr = (ct.c_char_p * len(namespaces))(*(n.encode() for n in namespaces))
         return libcoreir_c.COREContextRunPasses(self.context,

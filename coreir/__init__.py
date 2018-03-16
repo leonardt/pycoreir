@@ -42,12 +42,9 @@ libcoreir_c.COREContextString.restype = COREType_p
 libcoreir_c.COREContextCoreIRType.argstypes = [COREContext_p]
 libcoreir_c.COREContextCoreIRType.restype = COREType_p
 
-libcoreir_c.COREContextRunPasses.argstypes = [COREContext_p, ct.POINTER(ct.c_char_p), ct.c_int]
-libcoreir_c.COREContextRunPasses.restype = ct.c_bool
-
-libcoreir_c.COREContextRunPassesNamespaced.argstypes = [COREContext_p, ct.POINTER(ct.c_char_p), ct.c_int,
+libcoreir_c.COREContextRunPasses.argstypes = [COREContext_p, ct.POINTER(ct.c_char_p), ct.c_int,
                                                         ct.POINTER(ct.c_char_p), ct.c_int]
-libcoreir_c.COREContextRunPassesNamespaced.restype = ct.c_bool
+libcoreir_c.COREContextRunPasses.restype = ct.c_bool
 
 
 libcoreir_c.COREPrintErrors.argtypes = [COREContext_p]
