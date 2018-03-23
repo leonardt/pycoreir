@@ -47,7 +47,7 @@ class Value(CoreIRType):
         # type enum values defined in include/coreir-c/coreir-args.h
         if type == 0:
             return libcoreir_c.COREValueBoolGet(self.ptr)
-        if type == 1:
+        elif type == 1:
             return libcoreir_c.COREValueIntGet(self.ptr)
         elif type == 2:
             if libcoreir_c.COREValueBitVectorIsBinary(self.ptr):
