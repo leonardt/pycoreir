@@ -31,6 +31,7 @@ def test_save_module():
             assert len(type_) == 9
     add8_inst = module_def.add_module_instance("adder", add8,
             c.new_values({"init":5}))
+    assert add8_inst.module.namespace.name == "global"
     assert add8_inst.module.name == "add8"
     assert add8_inst.config["init"].value == 5
     add8_in1 = add8_inst.select("in1")

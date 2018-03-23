@@ -2,6 +2,7 @@ from ctypes import cdll
 import ctypes as ct
 import platform
 import os
+from coreir.global_value import COREGlobalValue_p
 from coreir.lib import load_shared_lib, libcoreir_c
 from coreir.context import COREContext, COREContext_p, Context, COREMapKind, COREMapKind_STR2PARAM_MAP, BitVector
 from coreir.module import Module, COREModule, COREModule_p, COREModuleDef, COREModuleDef_p, ModuleDef, Module, \
@@ -329,3 +330,6 @@ libcoreir_c.COREInstanceGetInstname.restype = ct.c_char_p
 
 libcoreir_c.CORETypeIsInput.argtypes = [COREType_p]
 libcoreir_c.CORETypeIsInput.restype = ct.c_bool
+
+libcoreir_c.COREGlobalValueGetNamespace.argtypes = [COREGlobalValue_p]
+libcoreir_c.COREGlobalValueGetNamespace.restype = CORENamespace_p
