@@ -1,9 +1,9 @@
 import ctypes as ct
 from coreir.type import CoreIRType, Type, Params
-from coreir.module import Module
+from coreir.module import Module, COREModule_p
 from coreir.lib import libcoreir_c
 from coreir.util import LazyDict
-from coreir.generator import Generator
+from coreir.generator import Generator, COREGenerator_p
 
 class CORENamespace(ct.Structure):
     pass
@@ -14,12 +14,14 @@ CORENamespace_p = ct.POINTER(CORENamespace)
 class Namespace(CoreIRType):
     def __init__(self, ptr, context):
         super(Namespace, self).__init__(ptr, context)
-        self.generators = LazyDict(self, Generator,
+        self.generators = LazyDict(self, Generator, COREGenerator_p,
                 libcoreir_c.CORENamespaceGetGenerator,
-                libcoreir_c.CORENamespaceHasGenerator)
-        self.modules = LazyDict(self, Module,
+                libcoreir_c.CORENamespaceHasGenerator,
+                libcoreir_c.CORENamespaceGetGenerators)
+        self.modules = LazyDict(self, Module, COREModule_p,
                 libcoreir_c.CORENamespaceGetModule,
-                libcoreir_c.CORENamespaceHasModule)
+                libcoreir_c.CORENamespaceHasModule,
+                libcoreir_c.CORENamespaceGetModules)
 
     @property
     def name(self):

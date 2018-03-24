@@ -124,6 +124,9 @@ libcoreir_c.COREGetModuleRef.restype = COREModule_p
 libcoreir_c.COREGetModArg.argtypes = [COREWireable_p, ct.c_char_p]
 libcoreir_c.COREGetModArg.restype = COREValue_p
 
+libcoreir_c.COREGetModArgs.argtypes = [COREWireable_p, ct.POINTER(ct.POINTER(ct.c_char_p)), ct.POINTER(ct.POINTER(COREValue_p))]
+libcoreir_c.COREGetModArgs.restype = None
+
 libcoreir_c.COREHasModArg.argtypes = [COREWireable_p, ct.c_char_p]
 libcoreir_c.COREHasModArg.restype = ct.c_bool
 
@@ -251,11 +254,17 @@ libcoreir_c.COREModuleIsGenerated.restype = ct.c_bool
 libcoreir_c.CORENamespaceGetGenerator.argtypes = [CORENamespace_p, ct.c_char_p]
 libcoreir_c.CORENamespaceGetGenerator.restype = COREGenerator_p
 
+libcoreir_c.CORENamespaceGetGenerators.argtypes = [CORENamespace_p, ct.POINTER(ct.POINTER(ct.c_char_p)), ct.POINTER(ct.POINTER(COREGenerator_p))]
+libcoreir_c.CORENamespaceGetGenerators.restype = None
+
 libcoreir_c.CORENamespaceHasGenerator.argtypes = [CORENamespace_p, ct.c_char_p]
 libcoreir_c.CORENamespaceHasGenerator.restype = ct.c_bool
 
 libcoreir_c.CORENamespaceGetModule.argtypes = [CORENamespace_p, ct.c_char_p]
 libcoreir_c.CORENamespaceGetModule.restype = COREModule_p
+
+libcoreir_c.CORENamespaceGetModules.argtypes = [CORENamespace_p, ct.POINTER(ct.POINTER(ct.c_char_p)), ct.POINTER(ct.POINTER(COREModule_p))]
+libcoreir_c.CORENamespaceGetModules.restype = None
 
 libcoreir_c.CORENamespaceHasModule.argtypes = [CORENamespace_p, ct.c_char_p]
 libcoreir_c.CORENamespaceHasModule.restype = ct.c_bool

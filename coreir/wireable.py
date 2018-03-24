@@ -52,8 +52,8 @@ class Select(Wireable):
 class Instance(Wireable):
     def __init__(self, ptr, context):
         super(Instance, self).__init__(ptr, context)
-        self.config = LazyDict(self, Value, libcoreir_c.COREGetModArg,
-                libcoreir_c.COREHasModArg)
+        self.config = LazyDict(self, Value, COREValue_p, libcoreir_c.COREGetModArg,
+                libcoreir_c.COREHasModArg, libcoreir_c.COREGetModArgs)
 
     @property
     def module(self):
