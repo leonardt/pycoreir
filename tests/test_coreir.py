@@ -14,7 +14,7 @@ def test_save_module():
     module.print_()
     assert module.definition is None, "Should not have a definition"
     module_def = module.new_definition()
-    configparams = c.newParams({"init":c.Int()})
+    configparams = c.newParams({"init":c.Int(), "test_param0": c.Int(), "test_param1": c.Int()})
     add8 = c.global_namespace.new_module("add8",
         c.Record({
             "in1": c.Array(8, c.BitIn()),
@@ -30,10 +30,16 @@ def test_save_module():
         else:
             assert len(type_) == 9
     add8_inst = module_def.add_module_instance("adder", add8,
-            c.new_values({"init":5}))
+        c.new_values({"init":5, "test_param0": 1, "test_param1": 0}))
     assert add8_inst.module.namespace.name == "global"
     assert add8_inst.module.name == "add8"
     assert add8_inst.config["init"].value == 5
+    expected = {"init": 5, "test_param0": 1, "test_param1": 0}
+    assert len(add8_inst.config) == len(expected)
+    for key, value in add8_inst.config.items():
+        assert key in expected and expected[key] == value.value
+        del expected[key]
+    assert not expected, "Should be empty"
     add8_in1 = add8_inst.select("in1")
     add8_in2 = add8_inst.select("in2")
     add8_out = add8_inst.select("out")
