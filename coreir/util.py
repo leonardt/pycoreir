@@ -36,7 +36,8 @@ class LazyDict(Mapping):
         _dict = {}
         for i in range(0, size.value):
             _dict[c_keys[i].decode()] = self.return_type(c_values[i], self.parent.context)
-        libcoreir_c.COREFree(c_keys, c_values)
+        libcoreir_c.COREFree(c_keys)
+        libcoreir_c.COREFree(c_values)
         return iter(_dict)
 
     def __len__(self):
