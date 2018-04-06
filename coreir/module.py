@@ -1,4 +1,5 @@
 import ctypes as ct
+from coreir.global_value import GlobalValue, COREGlobalValue
 from coreir.type import CoreIRType, Values
 from coreir.lib import libcoreir_c
 from coreir.wireable import Instance, Interface
@@ -8,7 +9,7 @@ import coreir.wireable
 class NotAGeneratorException(Exception):
     pass
 
-class COREModule(ct.Structure):
+class COREModule(COREGlobalValue):
     pass
 
 COREModule_p = ct.POINTER(COREModule)
@@ -72,7 +73,7 @@ class ModuleDef(CoreIRType):
         libcoreir_c.COREPrintModuleDef(self.ptr)
 
 
-class Module(CoreIRType):
+class Module(GlobalValue):
     def new_definition(self):
         return ModuleDef(libcoreir_c.COREModuleNewDef(self.ptr),self.context)
 

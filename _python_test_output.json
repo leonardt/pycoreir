@@ -8,7 +8,7 @@
           ["in2",["Array",8,"BitIn"]],
           ["out",["Array",9,"Bit"]]
         ]],
-        "modparams":{"init":"Int"}
+        "modparams":{"init":"Int", "test_param0":"Int", "test_param1":"Int"}
       },
       "multiply_by_2":{
         "type":["Record",[
@@ -18,7 +18,7 @@
         "instances":{
           "adder":{
             "modref":"global.add8",
-            "modargs":{"init":["Int",5]}
+            "modargs":{"init":["Int",5], "test_param0":["Int",1], "test_param1":["Int",0]}
           }
         },
         "connections":[
