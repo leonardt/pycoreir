@@ -51,10 +51,16 @@ class Value(CoreIRType):
             return libcoreir_c.COREValueIntGet(self.ptr)
         elif type == 2:
             if libcoreir_c.COREValueBitVectorIsBinary(self.ptr):
+                from math import ceil
                 width = ct.c_int()
-                value = ct.c_uint64()
-                libcoreir_c.COREValueBitVectorGet(self.ptr, ct.byref(width), ct.byref(value))
-                return BitVector(width.value, value.value)
+
+                libcoreir_c.COREValueBitVectorGetWidth(self.ptr, ct.byref(width))
+                value_str = ct.create_string_buffer(str(width.value) + "'h" + "0"*ceil(width.value/16))
+                libcoreir_c.COREValueBitVectorGetString(self.ptr, value_str)
+                prefix, value = value_str.value.split("'h")
+                value = int(value, 16)
+
+                return BitVector(width.value, value)
             else:
                 width = ct.c_int()
                 libcoreir_c.COREValueBitVectorGetWidth(self.ptr, ct.byref(width))
