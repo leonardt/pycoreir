@@ -29,13 +29,14 @@ class LazyDict(Mapping):
                    self.parent.context)
 
     def __iter__(self):
-        c_keys = ct.POINTER(ct.c_char_p)()
+        c_keys = ct.POINTER(ct.POINTER(ct.c_char))()
         c_values = ct.POINTER(self.core_return_type)()
         size = ct.c_int()
         self.iter_function(self.parent.ptr, ct.byref(c_keys), ct.byref(c_values), ct.byref(size))
         _dict = {}
         for i in range(0, size.value):
-            _dict[c_keys[i].decode()] = self.return_type(c_values[i], self.parent.context)
+            _dict[ct.cast(c_keys[i], ct.c_char_p).value.decode()] = self.return_type(c_values[i], self.parent.context)
+            libcoreir_c.COREFree(c_keys[i])
         libcoreir_c.COREFree(c_keys)
         libcoreir_c.COREFree(c_values)
         return iter(_dict)
