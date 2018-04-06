@@ -39,7 +39,8 @@ CoreIR::Type* CoreIR::TypeGenFromPython::createType(Context* c, Values values) {
               (void *) c, (void *) names, (void *) values_ptrs, size);
       if (!value_object) {
         if (PyErr_Occurred()) PyErr_Print();
-        std::cerr << "Error calling typegen function " << functionName << std::endl;
+        std::cerr << "Error calling typegen function `" << functionName << "`" << std::endl;
+        exit(1);
       } else {
         type_ptr = (Type *) PyLong_AsVoidPtr(value_object);
         Py_DECREF(value_object);
@@ -52,13 +53,14 @@ CoreIR::Type* CoreIR::TypeGenFromPython::createType(Context* c, Values values) {
       Py_DECREF(py_typeGenFunc);
     } else {
       if (PyErr_Occurred()) PyErr_Print();
-      std::cerr << "Cannot find function " << functionName << std::endl;
+      std::cerr << "Cannot find function `" << functionName << "`" << std::endl;
+      exit(1);
     }
     Py_DECREF(py_module);
   } else {
     PyErr_Print();
-    std::cerr << "Failed to load " << moduleName << std::endl;
-    ASSERT(0, "Failed to load module");
+    std::cerr << "Failed to load module `" << moduleName << "`" << std::endl;
+    exit(1);
   }
   PyGILState_Release(gstate);
 
@@ -94,7 +96,8 @@ CoreIR::ModuleDefGenFun CoreIR::ModuleDefGenFunFromPython(std::string moduleName
                 (void *) c, (void *) names, (void *) values_ptrs, size, (void *) def);
         if (PyErr_Occurred()) {
             PyErr_Print();
-            std::cerr << "Error calling generator function " << functionName << std::endl;
+            std::cerr << "Error calling generator function `" << functionName << "`" << std::endl;
+            exit(1);
         }
         for (uint i = 0; i < genargs.size(); i++) {
           free(names[i]);
@@ -104,16 +107,15 @@ CoreIR::ModuleDefGenFun CoreIR::ModuleDefGenFunFromPython(std::string moduleName
         Py_DECREF(py_moduleDefGenFunc);
       } else {
         if (PyErr_Occurred()) PyErr_Print();
-        std::cerr << "Cannot find function " << functionName << std::endl;
+        std::cerr << "Cannot find function `" << functionName << "`" << std::endl;
+        exit(1);
       }
       Py_DECREF(py_module);
     } else {
       PyErr_Print();
-      std::cerr << "Failed to load " << moduleName << std::endl;
-      ASSERT(0, "Failed to load module");
+      std::cerr << "Failed to load `" << moduleName << "`" << std::endl;
+      exit(1);
     }
     PyGILState_Release(gstate);
-
-
   };
 }
