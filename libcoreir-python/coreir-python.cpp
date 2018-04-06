@@ -5,6 +5,8 @@ static PyGILState_STATE gstate;
 void CoreIR::pythonInitialize() {
     wchar_t python_home[] = PYTHON_HOME;
     Py_SetPythonHome(python_home);
+    wchar_t python_executable[] = PYTHON_EXECUTABLE;
+    Py_SetProgramName(python_executable);
     Py_Initialize();
     PyEval_InitThreads();
 }
