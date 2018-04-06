@@ -14,9 +14,8 @@ override CXXFLAGS += -std=c++11 -Wall -fPIC -Werror -I./include/
 override LDFLAGS += -lcoreir
 
 PYTHON_CONFIG ?= python-config
-PYTHON_PREFIX=$(shell $(PYTHON_CONFIG) --prefix)
-PYTHONHOME ?= $(PYTHON_PREFIX)
-override CXXFLAGS += $(shell $(PYTHON_CONFIG) --includes) -DPYTHON_HOME="L\"$(PYTHONHOME)\"" -DPYTHON_EXECUTABLE="L\"$(shell which python)\""
+PYTHON_PREFIX = $(shell $(PYTHON_CONFIG) --prefix)
+override CXXFLAGS += $(shell $(PYTHON_CONFIG) --includes) -DPYTHON_HOME="L\"$(PYTHON_PREFIX)\""
 PYTHON_LIBS = $(PYTHON_PREFIX)/lib
 override LDFLAGS += -L $(PYTHON_LIBS) $(shell $(PYTHON_CONFIG) --libs)
 DYLDFLAGS = -Wl,-rpath,$(PYTHON_LIBS)

@@ -3,10 +3,17 @@
 static PyGILState_STATE gstate;
 
 void CoreIR::pythonInitialize() {
-    wchar_t python_home[] = PYTHON_HOME;
-    Py_SetPythonHome(python_home);
-    wchar_t python_executable[] = PYTHON_EXECUTABLE;
-    Py_SetProgramName(python_executable);
+    char *virtual_env = std::getenv("VIRTUAL_ENV");
+    if (virtual_env != NULL) {
+        int len = strlen(virtual_env) + 1;
+        std::wstring w_virtual_env(len, L'#');
+        mbstowcs(&w_virtual_env[0], virtual_env, len);
+        wchar_t *python_home = (wchar_t *) w_virtual_env.c_str();
+        Py_SetPythonHome(python_home);
+    } else {
+        wchar_t python_home[] = PYTHON_HOME;
+        Py_SetPythonHome(python_home);
+    }
     Py_Initialize();
     PyEval_InitThreads();
 }
