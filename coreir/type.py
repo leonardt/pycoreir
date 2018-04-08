@@ -68,9 +68,9 @@ class Values(CoreIRType):
 
 def getPyCoreIRType(ptr, context):
     kind = libcoreir_c.COREGetTypeKind(ptr)
-    if (kind == "Record"):
+    if (kind == 3):
         return Record(ptr, context)
-    elif (kind == "Named"):
+    elif (kind == 4):
         return NamedType(ptr, context)
     else:
         # don't need to handle arrays, bit, and bitin separately as they all
