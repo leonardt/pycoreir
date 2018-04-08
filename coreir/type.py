@@ -121,7 +121,15 @@ class Record(Type):
                 ct.byref(values), ct.byref(size))
         retval = {}
         for i in range(size.value):
-            retval[keys[i].decode()] = Type(values[i], self.context)
+            uncastedType = Type(values[i], self.context)
+            if (uncastedType.kind == "Record"):
+                retval[keys[i].decode()] = Record(values[i], self.context)
+            elif (uncastedType.kind == "Named"):
+                retval[keys[i].decode()] = NamedType(values[i], self.context)
+            else:
+                # don't need to handle arrays, bit, and bitin separately as they all
+                # don't subclass the CoreIR Type class
+                retval[keys[i].decode()] = Type(values[i], self.context)
         return retval.items()
 
 
