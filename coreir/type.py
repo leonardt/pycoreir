@@ -66,6 +66,17 @@ class Value(CoreIRType):
 class Values(CoreIRType):
     pass
 
+def getPyCoreIRType(ptr, context):
+    kind = libcoreir_c.COREGetTypeKind(ptr)
+    if (kind == "Record"):
+        return Record(ptr, context)
+    elif (kind == "Named"):
+        return NamedType(ptr, context)
+    else:
+        # don't need to handle arrays, bit, and bitin separately as they all
+        # don't subclass the CoreIR Type class
+        return Type(ptr, context)
+
 class Type(CoreIRType):
     def print_(self):  # _ because print is a keyword in py2
         libcoreir_c.COREPrintType(self.ptr)
@@ -93,7 +104,8 @@ class Type(CoreIRType):
     def element_type(self):
         if self.kind != "Array":  # Not a TK_Array
             raise Exception("`element_type` called on a {}".format(self.kind))
-        return Type(libcoreir_c.COREArrayTypeGetElemType(self.ptr), self.context)
+        return getPyCoreIRType(libcoreir_c.COREArrayTypeGetElemType(self.ptr),
+                               self.context)
 
     def __len__(self):
         if self.kind != "Array":  # Not a TK_Array
@@ -121,15 +133,7 @@ class Record(Type):
                 ct.byref(values), ct.byref(size))
         retval = {}
         for i in range(size.value):
-            uncastedType = Type(values[i], self.context)
-            if (uncastedType.kind == "Record"):
-                retval[keys[i].decode()] = Record(values[i], self.context)
-            elif (uncastedType.kind == "Named"):
-                retval[keys[i].decode()] = NamedType(values[i], self.context)
-            else:
-                # don't need to handle arrays, bit, and bitin separately as they all
-                # don't subclass the CoreIR Type class
-                retval[keys[i].decode()] = Type(values[i], self.context)
+            retval[keys[i].decode()] = getPyCoreIRType(values[i], self.context)
         return retval.items()
 
 
