@@ -1,8 +1,9 @@
 import ctypes as ct
-from coreir.type import COREType_p, Type, Params, COREValue_p, Values, BitVector, Record
+from coreir.type import COREType_p, Type, Params, COREValue_p, Values, Record
 from coreir.generator import Generator
 from coreir.namespace import Namespace, CORENamespace_p
 from coreir.lib import libcoreir_c, load_shared_lib
+from bit_vector import BitVector
 import coreir.module
 try:
     from functools import lru_cache
@@ -104,7 +105,7 @@ class Context:
             elif type(v) is bool:
                 args.append(libcoreir_c.COREValueBool(self.context, ct.c_bool(v)))
             elif isinstance(v, BitVector):
-                hex_string = "{0:d}'h{1:x}".format(v.width, v.val)
+                hex_string = "{0:d}'h{1:x}".format(len(v), v.as_int())
                 args.append(libcoreir_c.COREValueBitVectorString(self.context,
                     hex_string.encode()))
             elif isinstance(v, coreir.Module):

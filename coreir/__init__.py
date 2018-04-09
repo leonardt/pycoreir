@@ -4,7 +4,7 @@ import platform
 import os
 from coreir.global_value import COREGlobalValue_p
 from coreir.lib import load_shared_lib, libcoreir_c
-from coreir.context import COREContext, COREContext_p, Context, COREMapKind, COREMapKind_STR2PARAM_MAP, BitVector
+from coreir.context import COREContext, COREContext_p, Context, COREMapKind, COREMapKind_STR2PARAM_MAP
 from coreir.module import Module, COREModule, COREModule_p, COREModuleDef, COREModuleDef_p, ModuleDef, Module, \
         COREDirectedInstance_p, COREDirectedConnection_p, COREDirectedModule_p
 from coreir.generator import COREGenerator, COREGenerator_p, Generator
