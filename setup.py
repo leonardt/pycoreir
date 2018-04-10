@@ -13,7 +13,7 @@ for item in parse_requirements("requirements.txt", session=False):
 
 setup(
     name='coreir',
-    version='0.16-alpha',
+    version='0.18-alpha',
     description='Python bindings for CoreIR',
     packages=["coreir"],
     license='BSD License',
