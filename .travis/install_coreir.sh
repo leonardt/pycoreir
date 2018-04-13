@@ -12,7 +12,8 @@ if [ "$TRAVIS_BRANCH" != "master" ]; then
     cd ..;
     cd ..;
 else
-    wget https://github.com/rdaly525/coreir/releases/download/v0.0.10/coreir.tar.gz;
+    # based on https://gist.github.com/steinwaywhw/a4cd19cda655b8249d908261a62687f8
+    curl -s -L https://github.com/rdaly525/coreir/releases/latest | grep "href.*coreir.tar.gz" | cut -d \" -f 2 | xargs -I {} wget https://github.com"{}"
     mkdir coreir_release;
     tar -xf coreir.tar.gz -C coreir_release --strip-components 1;
     cd coreir_release;
