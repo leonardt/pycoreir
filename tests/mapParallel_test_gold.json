@@ -19,8 +19,8 @@
           }
         },
         "connections":[
-          ["mul.in0","self.in"],
-          ["mul.in1","two.out"],
+          ["self.in","mul.in0"],
+          ["two.out","mul.in1"],
           ["mul.out","self.out"]
         ]
       },
@@ -36,7 +36,7 @@
           }
         },
         "connections":[
-          ["mapMulBy2.in","self.in"],
+          ["self.in","mapMulBy2.in"],
           ["mapMulBy2.out","self.out"]
         ]
       }
