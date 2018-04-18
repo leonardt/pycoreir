@@ -19,9 +19,9 @@
           }
         },
         "connections":[
-          ["self.out","mul.out"],
           ["self.in","mul.in0"],
-          ["two.out","mul.in1"]
+          ["two.out","mul.in1"],
+          ["self.out","mul.out"]
         ]
       },
       "test_module":{
@@ -36,8 +36,8 @@
           }
         },
         "connections":[
-          ["self.out","mapMulBy2.out"],
-          ["self.in","mapMulBy2.in"]
+          ["self.in","mapMulBy2.in"],
+          ["self.out","mapMulBy2.out"]
         ]
       }
     }
