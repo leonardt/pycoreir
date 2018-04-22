@@ -8,6 +8,5 @@ setup(
     license='BSD License',
     url='https://github.com/leonardt/pycoreir',
     author='Leonard Truong',
-    author_email='lenny@cs.stanford.edu',
-    install_requires=["bit_vector"]
+    author_email='lenny@cs.stanford.edu'
 )
