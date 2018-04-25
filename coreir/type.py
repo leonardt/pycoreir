@@ -51,11 +51,10 @@ class Value(CoreIRType):
                 width = ct.c_int()
 
                 libcoreir_c.COREValueBitVectorGetWidth(self.ptr, ct.byref(width))
-                value_str = ct.create_string_buffer((str(width.value) + "'h" + "0"*ceil(width.value/16)).encode())
+                value_str = ct.create_string_buffer((str(width.value) + "'h" + "0"*ceil(width.value/4)).encode())
                 libcoreir_c.COREValueBitVectorGetString(self.ptr, value_str)
                 prefix, value = value_str.value.split(b"'h")
                 value = int(value, 16)
-
                 return BitVector(value, num_bits=width.value)
             else:
                 width = ct.c_int()
