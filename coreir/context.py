@@ -115,7 +115,7 @@ class Context:
                 args.append(libcoreir_c.COREValueCoreIRType(self.context,
                     v.ptr))
             else:
-                raise NotImplementedError()
+                raise NotImplementedError(v, type(v))
 
         keys = (ct.c_char_p * len(fields))(*(str.encode(key) for key in fields.keys()))
         values = (COREValue_p * len(fields))(*(arg for arg in args))
