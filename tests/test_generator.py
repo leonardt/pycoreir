@@ -1,5 +1,6 @@
 import coreir
 from coreir.type import ValueType
+from bit_vector import BitVector
 import os
 
 context = coreir.Context()
@@ -46,7 +47,7 @@ def test_map_mulby2():
     mulBy2Def.connect(mulBy2Def.interface.select("in"), mul_inst.select("in0"))
     const_instantiable = c.get_namespace("coreir").generators["const"]
     gen_args = c.new_values({"width": width})
-    config_args = c.new_values({"value": coreir.BitVector(width, 8)})
+    config_args = c.new_values({"value": BitVector(8, num_bits=8)})
     two = mulBy2Def.add_generator_instance("two", const_instantiable, gen_args, config_args)
     mulBy2Def.connect(two.select("out"), mul_inst.select("in1"));
     mulBy2Def.connect(mul_inst.select("out"), mulBy2Def.interface.select("out"))

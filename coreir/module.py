@@ -21,6 +21,9 @@ COREModuleDef_p = ct.POINTER(COREModuleDef)
 
 class ModuleDef(CoreIRType):
     def add_module_instance(self, name, module, config=None):
+        if module.context != self.context:
+            raise Exception("Wiring the instance of {} in the module {} bug as different "
+                            "CoreIR contexts".format(module.name, self.module.name))
         if config==None:
             config = self.context.new_values()
         assert isinstance(module, Module)

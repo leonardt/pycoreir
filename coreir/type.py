@@ -3,11 +3,7 @@ import ctypes as ct
 from coreir.base import CoreIRType
 from coreir.lib import libcoreir_c
 from collections import namedtuple
-
-class BitVector:
-    def __init__(self, width=None, val=None):
-        self.width = width
-        self.val = val
+from bit_vector import BitVector
 
 class COREType(ct.Structure):
     pass
@@ -51,20 +47,36 @@ class Value(CoreIRType):
             return libcoreir_c.COREValueIntGet(self.ptr)
         elif type == 2:
             if libcoreir_c.COREValueBitVectorIsBinary(self.ptr):
+                from math import ceil
                 width = ct.c_int()
-                value = ct.c_uint64()
-                libcoreir_c.COREValueBitVectorGet(self.ptr, ct.byref(width), ct.byref(value))
-                return BitVector(width.value, value.value)
+
+                libcoreir_c.COREValueBitVectorGetWidth(self.ptr, ct.byref(width))
+                value_str = ct.create_string_buffer((str(width.value) + "'h" + "0"*ceil(width.value/4)).encode())
+                libcoreir_c.COREValueBitVectorGetString(self.ptr, value_str)
+                prefix, value = value_str.value.split(b"'h")
+                value = int(value, 16)
+                return BitVector(value, num_bits=width.value)
             else:
                 width = ct.c_int()
                 libcoreir_c.COREValueBitVectorGetWidth(self.ptr, ct.byref(width))
-                return BitVector(width.value)
+                return BitVector(None, num_bits=width.value)
         elif type == 3:
             return libcoreir_c.COREValueStringGet(self.ptr).decode()
         raise NotImplementedError()
 
 class Values(CoreIRType):
     pass
+
+def getPyCoreIRType(ptr, context):
+    kind = libcoreir_c.COREGetTypeKind(ptr)
+    if (kind == 3):
+        return Record(ptr, context)
+    elif (kind == 4):
+        return NamedType(ptr, context)
+    else:
+        # don't need to handle arrays, bit, and bitin separately as they all
+        # don't subclass the CoreIR Type class
+        return Type(ptr, context)
 
 class Type(CoreIRType):
     def print_(self):  # _ because print is a keyword in py2
@@ -93,7 +105,8 @@ class Type(CoreIRType):
     def element_type(self):
         if self.kind != "Array":  # Not a TK_Array
             raise Exception("`element_type` called on a {}".format(self.kind))
-        return Type(libcoreir_c.COREArrayTypeGetElemType(self.ptr), self.context)
+        return getPyCoreIRType(libcoreir_c.COREArrayTypeGetElemType(self.ptr),
+                               self.context)
 
     def __len__(self):
         if self.kind != "Array":  # Not a TK_Array
@@ -121,7 +134,7 @@ class Record(Type):
                 ct.byref(values), ct.byref(size))
         retval = {}
         for i in range(size.value):
-            retval[keys[i].decode()] = Type(values[i], self.context)
+            retval[keys[i].decode()] = getPyCoreIRType(values[i], self.context)
         return retval.items()
 
 

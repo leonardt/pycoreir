@@ -22,9 +22,9 @@
           }
         },
         "connections":[
-          ["adder.in1","self.input"],
-          ["adder.in2","self.input"],
-          ["adder.out","self.output"]
+          ["self.input","adder.in1"],
+          ["self.input","adder.in2"],
+          ["self.output","adder.out"]
         ]
       }
     }

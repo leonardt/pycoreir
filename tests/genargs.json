@@ -1,86 +1,21 @@
-{
-  "namespaces": {
-    "global": {
-      "modules": {
-        "ShiftRegister": {
-          "connections": [
-            [
-              "self.O",
-              "inst3.out"
-            ],
-            [
-              "self.I",
-              "inst0.in"
-            ],
-            [
-              "inst3.in",
-              "inst2.out"
-            ],
-            [
-              "inst2.in",
-              "inst1.out"
-            ],
-            [
-              "inst1.in",
-              "inst0.out"
-            ]
-          ],
-          "instances": {
-            "inst0": {
-              "genargs": {
-                "has_clr": ["Bool", false],
-                "has_en": ["Bool", false],
-                "has_rst": ["Bool", false],
-                "width": ["Int", 4]
-              },
-              "genref": "mantle.reg"
-            },
-            "inst1": {
-              "genargs": {
-                "has_clr": ["Bool", false],
-                "has_en": ["Bool", false],
-                "has_rst": ["Bool", false],
-                "width": ["Int", 4]
-              },
-              "genref": "mantle.reg"
-            },
-            "inst2": {
-              "genargs": {
-                "has_clr": ["Bool", false],
-                "has_en": ["Bool", false],
-                "has_rst": ["Bool", false],
-                "width": ["Int", 4]
-              },
-              "genref": "mantle.reg"
-            },
-            "inst3": {
-              "genargs": {
-                "has_clr": ["Bool", false],
-                "has_en": ["Bool", false],
-                "has_rst": ["Bool", false],
-                "width": ["Int", 4]
-              },
-              "genref": "mantle.reg"
-            }
-          },
-          "type": [
-            "Record",
-            [
-              ["I", [
-                "Array",
-                4,
-                "BitIn"
-              ]],
-              ["O", [
-                "Array",
-                4,
-                "Bit"
-              ]]
-            ]
-          ]
-        }
+{"top":"global.DesignTop",
+"namespaces":{
+  "global":{
+    "modules":{
+      "DesignTop":{
+        "type":["Record",[
+          ["in",["Record",[["arg_1",["Array",1,["Array",1,["Array",16,"BitIn"]]]]]]],
+          ["out",["Array",1,["Array",1,["Array",16,"Bit"]]]]
+        ]],
+        "instances":{
+          "lb_p4_clamped_stencil_update_stream":{
+            "genref":"commonlib.linebuffer2d",
+            "genargs":{"bitwidth":["Int",16], "image_width":["Int",10], "stencil_height":["Int",3], "stencil_width":["Int",1]}
+          }
+        },
+        "connections":[]
       }
     }
-  },
-  "top": "global.ShiftRegister"
+  }
+}
 }

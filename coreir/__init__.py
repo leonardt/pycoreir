@@ -4,7 +4,7 @@ import platform
 import os
 from coreir.global_value import COREGlobalValue_p
 from coreir.lib import load_shared_lib, libcoreir_c
-from coreir.context import COREContext, COREContext_p, Context, COREMapKind, COREMapKind_STR2PARAM_MAP, BitVector
+from coreir.context import COREContext, COREContext_p, Context, COREMapKind, COREMapKind_STR2PARAM_MAP
 from coreir.module import Module, COREModule, COREModule_p, COREModuleDef, COREModuleDef_p, ModuleDef, Module, \
         COREDirectedInstance_p, COREDirectedConnection_p, COREDirectedModule_p
 from coreir.generator import COREGenerator, COREGenerator_p, Generator
@@ -145,6 +145,9 @@ libcoreir_c.COREValueBoolGet.restype = ct.c_bool
 libcoreir_c.COREValueBitVectorGet.argtypes = [COREValue_p, ct.POINTER(ct.c_int), ct.POINTER(ct.c_uint64)]
 libcoreir_c.COREValueBitVectorGet.restype = None
 
+libcoreir_c.COREValueBitVectorGetWidth.argtypes = [COREValue_p, ct.POINTER(ct.c_int)]
+libcoreir_c.COREValueBitVectorGetWidth.restype = None
+
 libcoreir_c.COREValueInt.argtypes = [COREContext_p, ct.c_int]
 libcoreir_c.COREValueInt.restype = COREValue_p
 
@@ -156,6 +159,8 @@ libcoreir_c.COREValueBool.restype = COREValue_p
 
 libcoreir_c.COREValueBitVector.argtypes = [COREContext_p, ct.c_int, ct.c_uint64]
 libcoreir_c.COREValueBitVector.restype = COREValue_p
+libcoreir_c.COREValueBitVectorString.argtypes = [COREContext_p, ct.c_char_p]
+libcoreir_c.COREValueBitVectorString.restype = COREValue_p
 
 libcoreir_c.COREValueModule.argtypes = [COREContext_p, COREModule_p]
 libcoreir_c.COREValueModule.restype = COREValue_p
