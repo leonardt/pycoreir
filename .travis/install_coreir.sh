@@ -2,7 +2,7 @@
 
 set -e
 
-if [ "$TRAVIS_BRANCH" != "master" ] || [ -z "{$TRAVIS_TAG}"]; then
+if [ "$TRAVIS_BRANCH" != "master" ] && [ -z "{$TRAVIS_TAG}"]; then
     cd deps;
     git clone -b dev https://github.com/rdaly525/coreir.git;
     cd coreir;
