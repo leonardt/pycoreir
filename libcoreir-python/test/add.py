@@ -48,7 +48,7 @@ def double_type_gen(context, values):
 
 @coreir.generator_
 def double(context, values, module_def):
-    import magma
+    import magma.backend.coreir_
     width = values['width'].value
     doubleT = magma.Bits(width)
     double = magma.DefineCircuit("double", "I", magma.In(doubleT), "O", magma.Out(doubleT))
