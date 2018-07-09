@@ -196,4 +196,4 @@ def test_context():
     assert _type.kind == "Named"
 
 if __name__ == "__main__":
-    test_save_module()
+    test_module_def_instances()
