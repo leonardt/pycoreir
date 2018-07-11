@@ -12,13 +12,13 @@ namespace CoreIR {
       std::string functionName;
 
       protected :
+        virtual Type* createType(Values values) override;
+      public :
         TypeGenFromPython(Namespace* ns, std::string name, Params params,
                           std::string moduleName, std::string functionName, bool
                           flipped=false) :
             TypeGen(ns,name,params,flipped), moduleName(moduleName),
             functionName(functionName) {}
-        virtual Type* createType(Values values) override;
-      public :
         bool hasType(Values genargs) override;
         std::string toString() const override {return name; }
         static TypeGenFromPython* make(Namespace* ns, std::string name, Params genparams, std::string moduleName, std::string functionName, bool flipped=false);
