@@ -11,18 +11,20 @@ namespace CoreIR {
       std::string moduleName;
       std::string functionName;
 
-      public:
+      protected :
+        virtual Type* createType(Values values) override;
+      public :
         TypeGenFromPython(Namespace* ns, std::string name, Params params,
                           std::string moduleName, std::string functionName, bool
                           flipped=false) :
             TypeGen(ns,name,params,flipped), moduleName(moduleName),
             functionName(functionName) {}
-        Type* createType(Context* c, Values values) override;
+        bool hasType(Values genargs) override;
         std::string toString() const override {return name; }
-        void print() const override {}//TODO
+        static TypeGenFromPython* make(Namespace* ns, std::string name, Params genparams, std::string moduleName, std::string functionName, bool flipped=false);
+
     };
 
     ModuleDefGenFun ModuleDefGenFunFromPython(std::string moduleName, std::string functionName);
 }
-
 #endif //COREIR_PYTHON_HPP_

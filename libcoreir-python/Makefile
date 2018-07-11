@@ -36,6 +36,8 @@ build/libcoreir-python.o: coreir-python.cpp
 .PHONY: install
 install: build/libcoreir-python.$(TARGET)
 	install build/libcoreir-python.$(TARGET) $(prefix)/lib
+	install -d $(prefix)/include/coreir
+	install include/coreir/coreir-python.hpp $(prefix)/include/coreir
 
 .PHONY: uninstall
 uninstall:

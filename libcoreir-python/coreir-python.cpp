@@ -1,4 +1,5 @@
 #include "coreir/coreir-python.hpp"
+#include "coreir/ir/namespace.h"
 
 static PyGILState_STATE gstate;
 
@@ -16,7 +17,7 @@ void CoreIR::pythonFinalize() {
     Py_Finalize();
 }
 
-CoreIR::Type* CoreIR::TypeGenFromPython::createType(Context* c, Values values) {
+CoreIR::Type* CoreIR::TypeGenFromPython::createType(Values values) {
   gstate = PyGILState_Ensure();
   Type* type_ptr = NULL;
   PyObject *py_module = PyImport_ImportModule(moduleName.c_str());
@@ -37,6 +38,7 @@ CoreIR::Type* CoreIR::TypeGenFromPython::createType(Context* c, Values values) {
           count++;
       }
       char signature[] = "llli";
+      Context *c = ns->getContext();
       PyObject* value_object = PyObject_CallFunction(py_typeGenFunc, signature,
               (void *) c, (void *) names, (void *) values_ptrs, size);
       if (!value_object) {
@@ -120,4 +122,16 @@ CoreIR::ModuleDefGenFun CoreIR::ModuleDefGenFunFromPython(std::string moduleName
     }
     PyGILState_Release(gstate);
   };
+}
+
+CoreIR::TypeGenFromPython* CoreIR::TypeGenFromPython::make(CoreIR::Namespace* ns, std::string name, Params genparams, std::string moduleName, std::string functionName, bool flipped) {
+  
+  CoreIR::TypeGenFromPython* tg = new CoreIR::TypeGenFromPython(ns,name,genparams,moduleName,functionName,flipped);
+  ns->addTypeGen(tg);
+  return tg;
+
+}
+
+bool CoreIR::TypeGenFromPython::hasType(Values genargs) {
+    return true;
 }
