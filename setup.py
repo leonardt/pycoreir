@@ -9,5 +9,5 @@ setup(
     url='https://github.com/leonardt/pycoreir',
     author='Leonard Truong',
     author_email='lenny@cs.stanford.edu',
-    install_requires=["bit_vector"]
+    install_requires=["bit_vector==0.30a"]
 )
