@@ -105,7 +105,7 @@ class Context:
             elif type(v) is bool:
                 args.append(libcoreir_c.COREValueBool(self.context, ct.c_bool(v)))
             elif isinstance(v, BitVector):
-                hex_string = "{0:d}'h{1:x}".format(len(v), v.as_int())
+                hex_string = "{0:d}'h{1:x}".format(len(v), v.as_uint())
                 args.append(libcoreir_c.COREValueBitVectorString(self.context,
                     hex_string.encode()))
             elif isinstance(v, coreir.Module):
