@@ -41,6 +41,9 @@ class Wireable(CoreIRType):
     def type(self):
         return Type(libcoreir_c.COREWireableGetType(self.ptr), self.context)
 
+    def add_metadata(self, key, value):
+        libcoreir_c.COREWireableAddMetaDataStr(self.ptr, str.encode(key), str.encode(value))
+
 
 class Select(Wireable):
     pass
