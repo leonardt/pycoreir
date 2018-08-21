@@ -202,6 +202,9 @@ libcoreir_c.COREWireableGetType.restype = COREType_p
 libcoreir_c.COREModuleDefSelect.argtypes = [COREModuleDef_p, ct.c_char_p]
 libcoreir_c.COREModuleDefSelect.restype = COREWireable_p
 
+libcoreir_c.COREModuleDefCanSelect.argtypes = [COREModuleDef_p, ct.c_char_p]
+libcoreir_c.COREModuleDefCanSelect.restype = bool
+
 libcoreir_c.COREModuleDefGetModule.argtypes = [COREModuleDef_p]
 libcoreir_c.COREModuleDefGetModule.restype = COREModule_p
 

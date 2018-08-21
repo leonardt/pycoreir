@@ -6,6 +6,10 @@ from coreir.wireable import Instance, Interface
 from coreir.type import COREValue_p, Value, Record
 import coreir.wireable
 
+
+class SelectError(RuntimeError):
+    pass
+
 class NotAGeneratorException(Exception):
     pass
 
@@ -70,6 +74,8 @@ class ModuleDef(CoreIRType):
         libcoreir_c.COREModuleDefConnect(self.ptr, a.ptr, b.ptr)
 
     def select(self, field):
+        if not libcoreir_c.COREModuleDefCanSelect(self.ptr, str.encode(field)):
+            raise SelectError(f"Cannot select path {field}")
         return coreir.wireable.Wireable(libcoreir_c.COREModuleDefSelect(self.ptr, str.encode(field)),self.context)
 
     def print_(self):  # _ because print is a keyword in py2
@@ -172,7 +178,7 @@ class DirectedConnection(CoreIRType):
     @property
     def size(self):
         assert self.parent.sel(self.source).type.size == self.parent.sel(self.sink).type.size
-        return self.parent.sel(self.source).type.size 
+        return self.parent.sel(self.source).type.size
 
     @property
     def source(self):
