@@ -86,6 +86,14 @@ class Context:
             COREMapKind_STR2TYPE_ORDEREDMAP)
         return Type(libcoreir_c.CORERecord(self.context, record_params),self)
 
+    def Flip(self, typ):
+        return Type(
+            libcoreir_c.COREContextFlip(
+                self.context, typ.ptr
+            ),
+            self
+        )
+
     def newParams(self, fields={}):
         keys = (ct.c_char_p * len(fields))(*(str.encode(key) for key in fields.keys()))
         values = (COREType_p * len(fields))(*(value for value in fields.values()))

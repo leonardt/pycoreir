@@ -28,6 +28,9 @@ libcoreir_c.CORENewContext.restype = COREContext_p
 libcoreir_c.COREContextNamed.argtypes = [COREContext_p, ct.c_char_p, ct.c_char_p]
 libcoreir_c.COREContextNamed.restype = COREType_p
 
+libcoreir_c.COREContextFlip.argtypes = [COREContext_p, COREType_p]
+libcoreir_c.COREContextFlip.restype = COREType_p
+
 libcoreir_c.COREContextBool.argstypes = [COREContext_p]
 libcoreir_c.COREContextBool.restype = COREType_p
 
@@ -198,6 +201,9 @@ libcoreir_c.COREWireableGetSelectPath.restype = ct.POINTER(ct.c_char_p)
 
 libcoreir_c.COREWireableGetType.argtypes = [COREWireable_p]
 libcoreir_c.COREWireableGetType.restype = COREType_p
+
+libcoreir_c.COREWireableAddMetaDataStr.argtypes = [COREWireable_p, ct.c_char_p, ct.c_char_p]
+libcoreir_c.COREWireableAddMetaDataStr.restype = None
 
 libcoreir_c.COREModuleDefSelect.argtypes = [COREModuleDef_p, ct.c_char_p]
 libcoreir_c.COREModuleDefSelect.restype = COREWireable_p
