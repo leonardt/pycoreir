@@ -81,6 +81,9 @@ class ModuleDef(CoreIRType):
     def print_(self):  # _ because print is a keyword in py2
         libcoreir_c.COREPrintModuleDef(self.ptr)
 
+    def add_metadata(self, a, b, key, value):
+        libcoreir_c.COREModuleDefAddConnectionMetaDataStr(self.ptr, a.ptr, b.ptr, str.encode(key), str.encode(value))
+
 
 class Module(GlobalValue):
     def new_definition(self):

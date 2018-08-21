@@ -205,6 +205,9 @@ libcoreir_c.COREWireableGetType.restype = COREType_p
 libcoreir_c.COREWireableAddMetaDataStr.argtypes = [COREWireable_p, ct.c_char_p, ct.c_char_p]
 libcoreir_c.COREWireableAddMetaDataStr.restype = None
 
+libcoreir_c.COREModuleDefAddConnectionMetaDataStr.argtypes = [COREModuleDef_p, COREWireable_p, COREWireable_p, ct.c_char_p, ct.c_char_p]
+libcoreir_c.COREModuleDefAddConnectionMetaDataStr.restype = None
+
 libcoreir_c.COREModuleDefSelect.argtypes = [COREModuleDef_p, ct.c_char_p]
 libcoreir_c.COREModuleDefSelect.restype = COREWireable_p
 
