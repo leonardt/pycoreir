@@ -1,4 +1,4 @@
-from collections import Mapping
+from collections.abc import Mapping
 import ctypes as ct
 from .lib import libcoreir_c
 
