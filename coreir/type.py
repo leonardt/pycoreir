@@ -124,7 +124,7 @@ class Record(Type):
         for i in range(size.value):
             if keys[i].decode() == key:
                 return Type(values[i], self.context)
-        raise KeyError(f"key={key} not found")
+        raise KeyError("key={key} not found".format(key=key))
 
     def items(self):
         keys = ct.POINTER(ct.c_char_p)()
