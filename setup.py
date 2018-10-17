@@ -2,12 +2,12 @@ from setuptools import setup
 
 setup(
     name='coreir',
-    version='0.27-alpha',
+    version='0.28-alpha',
     description='Python bindings for CoreIR',
     packages=["coreir"],
     license='BSD License',
     url='https://github.com/leonardt/pycoreir',
     author='Leonard Truong',
     author_email='lenny@cs.stanford.edu',
-    install_requires=["bit_vector == 0.37a"]
+    install_requires=["bit_vector == 0.38a"]
 )
