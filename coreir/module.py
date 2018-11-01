@@ -138,6 +138,9 @@ class Module(GlobalValue):
     def type(self):
         return Record(libcoreir_c.COREModuleGetType(self.ptr), self.context)
 
+    def add_metadata(self, key, value):
+        libcoreir_c.COREModuleAddMetaDataStr(self.ptr, str.encode(key), str.encode(value))
+
 
 
 class COREDirectedInstance(ct.Structure):
