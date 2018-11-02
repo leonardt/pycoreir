@@ -75,7 +75,7 @@ class ModuleDef(CoreIRType):
 
     def select(self, field):
         if not libcoreir_c.COREModuleDefCanSelect(self.ptr, str.encode(field)):
-            raise SelectError(f"Cannot select path {field}")
+            raise SelectError("Cannot select path {field}".format(field=field))
         return coreir.wireable.Wireable(libcoreir_c.COREModuleDefSelect(self.ptr, str.encode(field)),self.context)
 
     def print_(self):  # _ because print is a keyword in py2

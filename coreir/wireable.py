@@ -64,7 +64,7 @@ class Instance(Wireable):
         return coreir.module.Module(module, self.context)
 
     def __str__(self):
-        return f"{self.module.name}.{self.name}"
+        return "{modulename}.{name}".format(modulename=self.module.name, name=self.name)
 
     @property
     def name(self):
