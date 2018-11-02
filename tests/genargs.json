@@ -1,19 +1,44 @@
-{"top":"global.DesignTop",
+{"top":"global.TestsCircuit_add_4_Bits_BitsType",
 "namespaces":{
   "global":{
     "modules":{
-      "DesignTop":{
+      "TestsCircuit_add_4_Bits_BitsType":{
         "type":["Record",[
-          ["in",["Record",[["arg_1",["Array",1,["Array",1,["Array",16,"BitIn"]]]]]]],
-          ["out",["Array",1,["Array",1,["Array",16,"Bit"]]]]
+          ["I0",["Array",4,"BitIn"]],
+          ["I1",["Array",4,"BitIn"]],
+          ["O0",["Array",4,"Bit"]],
+          ["O1",["Array",4,"Bit"]],
+          ["O2",["Array",4,"Bit"]]
         ]],
         "instances":{
-          "lb_p4_clamped_stencil_update_stream":{
-            "genref":"commonlib.linebuffer2d",
-            "genargs":{"bitwidth":["Int",16], "image_width":["Int",10], "stencil_height":["Int",3], "stencil_width":["Int",1]}
+          "const_0_4":{
+            "genref":"coreir.const",
+            "genargs":{"width":["Int",4]},
+            "modargs":{"value":[["BitVector",4],"4'h0"]}
+          },
+          "const_1_4":{
+            "genref":"coreir.const",
+            "genargs":{"width":["Int",4]},
+            "modargs":{"value":[["BitVector",4],"4'h1"]}
+          },
+          "inst0":{
+            "genref":"coreir.add",
+            "genargs":{"width":["Int",4]}
+          },
+          "inst1":{
+            "genref":"coreir.add",
+            "genargs":{"width":["Int",4]}
           }
         },
-        "connections":[]
+        "connections":[
+          ["self.O1","const_0_4.out"],
+          ["inst1.in1","const_1_4.out"],
+          ["self.I0","inst0.in0"],
+          ["self.I1","inst0.in1"],
+          ["self.O0","inst0.out"],
+          ["self.I0","inst1.in0"],
+          ["self.O2","inst1.out"]
+        ]
       }
     }
   }
