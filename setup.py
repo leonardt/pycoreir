@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='coreir',
-    version='0.29-alpha',
+    version='0.30-alpha',
     description='Python bindings for CoreIR',
     packages=["coreir"],
     license='BSD License',
