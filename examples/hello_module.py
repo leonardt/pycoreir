@@ -56,3 +56,7 @@ counter_definition.connect(
 counter.definition = counter_definition
 
 counter.print_()
+
+context.run_passes(["rungenerators"])
+
+context.print_()
