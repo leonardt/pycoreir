@@ -19,6 +19,7 @@ before_install:
 - source .travis/install_coreir.sh
 script:
 - pip install git+git://github.com/phanrahan/magma.git  # For libcoreir-python test
+- pip install git+git://github.com/leonardt/Pyverilog.git
 - pip install -e .
 - pytest -s tests/
 - cd libcoreir-python
