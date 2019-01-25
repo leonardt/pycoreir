@@ -361,5 +361,8 @@ libcoreir_c.COREInstanceGetInstname.restype = ct.c_char_p
 libcoreir_c.CORETypeIsInput.argtypes = [COREType_p]
 libcoreir_c.CORETypeIsInput.restype = ct.c_bool
 
+libcoreir_c.CORETypeIsOutput.argtypes = [COREType_p]
+libcoreir_c.CORETypeIsOutput.restype = ct.c_bool
+
 libcoreir_c.COREGlobalValueGetNamespace.argtypes = [COREGlobalValue_p]
 libcoreir_c.COREGlobalValueGetNamespace.restype = CORENamespace_p

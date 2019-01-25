@@ -101,6 +101,9 @@ class Type(CoreIRType):
     def is_input(self):
         return libcoreir_c.CORETypeIsInput(self.ptr)
 
+    def is_output(self):
+        return libcoreir_c.CORETypeIsOutput(self.ptr)
+
     @property
     def element_type(self):
         if self.kind != "Array":  # Not a TK_Array
