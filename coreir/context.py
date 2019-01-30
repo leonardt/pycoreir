@@ -2,7 +2,7 @@ import ctypes as ct
 from coreir.type import COREType_p, Type, Params, COREValue_p, Values, Record
 from coreir.generator import Generator
 from coreir.namespace import Namespace, CORENamespace_p
-from coreir.lib import libcoreir_c, load_shared_lib
+from coreir.lib import libcoreir_c, load_coreir_lib
 from bit_vector import BitVector
 import coreir.module
 try:
@@ -142,7 +142,7 @@ class Context:
         return coreir.module.Module(m,self)
 
     def load_library(self, name):
-        lib = load_shared_lib(name)
+        lib = load_coreir_lib(name)
         func = getattr(lib,"CORELoadLibrary_{}".format(name))
         func.argtypes = [COREContext_p]
         func.restype = CORENamespace_p
