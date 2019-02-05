@@ -2,6 +2,8 @@
 
 Ultralight Python bindings for [coreir](https://github.com/rdaly525/coreir) using ctypes.
 
+[CHANGELOG](./CHANGELOG.md)
+
 ```
 pip install coreir
 ```
