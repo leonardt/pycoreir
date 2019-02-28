@@ -3,7 +3,7 @@ from coreir.global_value import GlobalValue, COREGlobalValue
 from coreir.type import CoreIRType, Values
 from coreir.lib import libcoreir_c
 from coreir.wireable import Instance, Interface
-from coreir.type import COREValue_p, Value, Record
+from coreir.type import COREValue_p, COREValueType_p, Value, Record
 import coreir.wireable
 
 

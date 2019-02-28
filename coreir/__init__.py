@@ -78,6 +78,9 @@ libcoreir_c.COREGetGlobal.restype = CORENamespace_p
 libcoreir_c.COREGetNamespace.argtypes = [COREContext_p, ct.c_char_p]
 libcoreir_c.COREGetNamespace.restype = CORENamespace_p
 
+libcoreir_c.CORENewNamespace.argtypes = [COREContext_p, ct.c_char_p]
+libcoreir_c.CORENewNamespace.restype = CORENamespace_p
+
 libcoreir_c.CORENewModule.argtypes = [CORENamespace_p, ct.c_char_p, COREType_p, ct.c_void_p]
 libcoreir_c.CORENewModule.restype = COREModule_p
 
@@ -105,6 +108,9 @@ libcoreir_c.COREModuleDefAddModuleInstance.restype = COREWireable_p
 
 libcoreir_c.COREModuleDefAddGeneratorInstance.argtypes = [COREModuleDef_p, ct.c_char_p, COREGenerator_p, ct.c_void_p, ct.c_void_p]
 libcoreir_c.COREModuleDefAddGeneratorInstance.restype = COREWireable_p
+
+libcoreir_c.COREInlineInstance.argtypes = [COREWireable_p]
+libcoreir_c.COREInlineInstance.restype = ct.c_bool
 
 libcoreir_c.COREModuleDefGetInterface.argtypes = [COREModuleDef_p]
 libcoreir_c.COREModuleDefGetInterface.restype = COREWireable_p
