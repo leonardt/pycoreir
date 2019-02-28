@@ -6,9 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## 1.0.1 - 2019-02-28
+### Added
+- Added `inline_instance`, `Context.new_namespace`, and `Module.params` methods.
+  (https://github.com/leonardt/pycoreir/pull/70)
+ 
 ## 1.0.0 - 2019-02-04
 ### Added
 - Added `__hash__` and `__eq__` for CoreIRType based on the underlying C
   pointer value.
 
-[Unreleased]: https://github.com/leonardt/pycoreir/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/leonardt/pycoreir/compare/v1.0.1...HEAD
+[1.0.0]: https://github.com/leonardt/pycoreir/compare/v1.0.0...1.0.1
