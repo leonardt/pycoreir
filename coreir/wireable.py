@@ -72,7 +72,8 @@ class Instance(Wireable):
 
 
 def inline_instance(instance):
-    assert isinstance(instance,Instance)
+    if not isinstance(instance,Instance):
+        raise TypeError("Needs to be an Instance")
     return libcoreir_c.COREInlineInstance(instance.ptr)
 
 class Interface(Wireable):
