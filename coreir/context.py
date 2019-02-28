@@ -42,7 +42,6 @@ class NamedTypesDict:
         )
 
 
-
 class Context:
     def __init__(self, ptr=None):
         # FIXME: Rename this to ptr or context_ptr to be consistent with other
@@ -153,6 +152,10 @@ class Context:
 
     def get_namespace(self,name):
       ns = libcoreir_c.COREGetNamespace(self.context,ct.c_char_p(str.encode(name)))
+      return Namespace(ns,self)
+
+    def new_namespace(self,name):
+      ns = libcoreir_c.CORENewNamespace(self.context,ct.c_char_p(str.encode(name)))
       return Namespace(ns,self)
 
     @lru_cache(maxsize=None)

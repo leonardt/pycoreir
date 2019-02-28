@@ -21,7 +21,6 @@ def test_coreir():
     add8_inst = module_def.add_generator_instance("add8_inst", add_generator, context.new_values({"width": 8}))
     assert add8_inst.module.generator_args["width"].value == 8
 
-
 def test_ice40():
     context = coreir.Context()
     coreir_ice40 = context.load_library("ice40")
@@ -57,5 +56,15 @@ def test_ice40():
         with open(os.path.join(dir_path, "ice40_test_gold.json")) as gold:
             assert actual.read() == gold.read()
 
+def test_new_namespace():
+    context = coreir.Context()
+    foons = context.new_namespace("foo")
+    module_typ = context.Record({"input": context.Array(8, context.BitIn()), "output": context.Array(9, context.Bit())})
+    module = foons.new_module("bar", module_typ)
+    assert module.namespace == foons
+    assert module.params is not None
+
 if __name__ == "__main__":
     test_ice40()
+
+

@@ -3,7 +3,7 @@ from coreir.global_value import GlobalValue, COREGlobalValue
 from coreir.type import CoreIRType, Values
 from coreir.lib import libcoreir_c
 from coreir.wireable import Instance, Interface
-from coreir.type import COREValue_p, Value, Record
+from coreir.type import COREValue_p, COREValueType_p, Value, Record
 import coreir.wireable
 
 
@@ -136,6 +136,19 @@ class Module(GlobalValue):
         for i in range(num_args.value):
             ret[names[i].decode()] = Value(args[i], self.context)
         return ret
+    
+    #These are the module params
+    @property
+    def params(self):
+        num_params = ct.c_int()
+        names = ct.POINTER(ct.c_char_p)()
+        params = ct.POINTER(COREValueType_p)()
+        libcoreir_c.COREModuleGetModParams(self.ptr, ct.byref(names),
+                ct.byref(params), ct.byref(num_params))
+        ret = {}
+        for i in range(num_params.value):
+            ret[names[i].decode()] = ValueType(params[i], self.context)
+        return ret
 
     @property
     def type(self):
@@ -143,7 +156,6 @@ class Module(GlobalValue):
 
     def add_metadata(self, key, value):
         libcoreir_c.COREModuleAddMetaDataStr(self.ptr, str.encode(key), str.encode(value))
-
 
 
 class COREDirectedInstance(ct.Structure):

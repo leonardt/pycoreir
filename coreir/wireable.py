@@ -71,6 +71,11 @@ class Instance(Wireable):
         return libcoreir_c.COREInstanceGetInstname(self.ptr).decode()
 
 
+def inline_instance(instance):
+    if not isinstance(instance,Instance):
+        raise TypeError("Needs to be an Instance")
+    return libcoreir_c.COREInlineInstance(instance.ptr)
+
 class Interface(Wireable):
     pass
 
