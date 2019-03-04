@@ -2,7 +2,7 @@ import ctypes as ct
 from coreir.type import COREType_p, Type, Params, COREValue_p, Values, Record
 from coreir.generator import Generator
 from coreir.namespace import Namespace, CORENamespace_p
-from coreir.lib import libcoreir_c, load_coreir_lib
+from coreir.lib import libcoreir_c, load_coreir_lib, libcoreir_sim_c
 from bit_vector import BitVector
 import coreir.module
 try:
@@ -149,7 +149,7 @@ class Context:
         return Namespace(func(self.context), self)
 
     def enable_symbol_table(self):
-        libcoreir_c.COREEnSymtable(self.context)
+        libcoreir_sim_c.COREEnSymtable(self.context)
 
     def get_namespace(self,name):
       ns = libcoreir_c.COREGetNamespace(self.context,ct.c_char_p(str.encode(name)))
