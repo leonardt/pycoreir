@@ -3,7 +3,7 @@ import ctypes as ct
 from coreir.base import CoreIRType
 from coreir.lib import libcoreir_c
 from collections import namedtuple
-from bit_vector import BitVector
+from hwtypes import BitVector
 
 class COREType(ct.Structure):
     pass
@@ -55,11 +55,11 @@ class Value(CoreIRType):
                 libcoreir_c.COREValueBitVectorGetString(self.ptr, value_str)
                 prefix, value = value_str.value.split(b"'h")
                 value = int(value, 16)
-                return BitVector(value, num_bits=width.value)
+                return BitVector[width.value](value)
             else:
                 width = ct.c_int()
                 libcoreir_c.COREValueBitVectorGetWidth(self.ptr, ct.byref(width))
-                return BitVector(None, num_bits=width.value)
+                return BitVector[width.value](None)
         elif type == 3:
             return libcoreir_c.COREValueStringGet(self.ptr).decode()
         raise NotImplementedError()

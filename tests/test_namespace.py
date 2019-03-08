@@ -1,6 +1,6 @@
 import coreir
 from collections import OrderedDict
-from bit_vector import BitVector
+from hwtypes import BitVector
 import test_utils
 import os
 dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -44,7 +44,7 @@ def test_ice40():
     A2 = 0xF0F0
     A3 = 0xFF00
 
-    lut0 = module_def.add_module_instance("lut0", SB_LUT4, context.new_values({"LUT_INIT": BitVector(A0 & A1, num_bits=16)}))
+    lut0 = module_def.add_module_instance("lut0", SB_LUT4, context.new_values({"LUT_INIT": BitVector[16](A0 & A1)}))
     module_def.connect(module_def.select("self.I.0"), module_def.select("lut0.I0"))
     module_def.connect(module_def.select("self.I.1"), module_def.select("lut0.I1"))
     module_def.connect(module_def.select("self.I.2"), module_def.select("lut0.I2"))
