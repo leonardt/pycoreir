@@ -3,7 +3,7 @@ import platform
 import os
 
 
-def load_shared_lib(suffix):
+def load_shared_lib(lib):
     _system = platform.system()
     if _system == "Linux":
         shared_lib_ext = "so"
@@ -12,6 +12,12 @@ def load_shared_lib(suffix):
     else:
         raise NotImplementedError(_system)
 
-    return cdll.LoadLibrary('libcoreir-{}.{}'.format(suffix, shared_lib_ext))
+    return cdll.LoadLibrary("{}.{}".format(lib, shared_lib_ext))
 
-libcoreir_c = load_shared_lib("c")
+
+def load_coreir_lib(suffix):
+    return load_shared_lib('libcoreir-{}'.format(suffix))
+
+
+libcoreir_c = load_coreir_lib("c")
+libcoreir_sim_c = load_shared_lib("libcoreirsim-c")
