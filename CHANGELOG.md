@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## 2.0.0 - 2020-03-11
+### Changed
+- Changed dependency from bit_vector package to hwtypes package
+
 ## 1.0.2 - 2019-02-28
 ### Changed
 - Update simulator bindings for changes in the coreir API
