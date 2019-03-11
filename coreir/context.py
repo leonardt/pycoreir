@@ -3,7 +3,7 @@ from coreir.type import COREType_p, Type, Params, COREValue_p, Values, Record
 from coreir.generator import Generator
 from coreir.namespace import Namespace, CORENamespace_p
 from coreir.lib import libcoreir_c, load_coreir_lib, libcoreir_sim_c
-from bit_vector import BitVector
+from hwtypes import BitVector
 import coreir.module
 try:
     from functools import lru_cache
