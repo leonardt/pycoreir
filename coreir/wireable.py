@@ -76,15 +76,6 @@ def inline_instance(instance):
         raise TypeError("Needs to be an Instance")
     return libcoreir_c.COREInlineInstance(instance.ptr)
 
-def add_passthrough(wireable):
-    if not isinstance(wireable,Wireable):
-        raise TypeError("Needs to be an Instance")
-    return libcoreir_c.COREAddPassthrough(wireable.ptr)
-
-def remove_instance(instance):
-    if not isinstance(instance,Instance):
-        raise TypeError("Needs to be an Instance")
-    libcoreir_c.CORERemoveInstance(instance.ptr)
 
 class Interface(Wireable):
     pass
