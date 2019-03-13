@@ -10,13 +10,20 @@ from coreir.module import Module, COREModule, COREModule_p, COREModuleDef, COREM
 from coreir.generator import COREGenerator, COREGenerator_p, Generator
 from coreir.namespace import CORENamespace, CORENamespace_p
 from coreir.type import COREType, COREType_p, CoreIRType, Params, Value, Values, COREValue, COREValue_p, Type, NamedType, COREValueType_p, Record
-from coreir.wireable import COREWireable_p, Wireable, inline_instance
+from coreir.wireable import COREWireable_p, Wireable, inline_instance, add_passthrough, remove_instance
 from coreir.type_gen import type_gen, generator_
 from coreir.simulator import SimulatorState, CORESimulatorState_p, CORESimValue_p
 from collections import namedtuple
 
 class COREConnection(ct.Structure):
     pass
+
+def define_types(name,input_types,output_type=None):
+    assert hasattr(libcoreir_c,name)
+    fun = getattr(libcoreir_c,name)
+    fun.argtypes = input_types
+    if output_type is not None:
+        fun.restype = output_type
 
 COREConnection_p = ct.POINTER(COREConnection)
 
@@ -109,8 +116,9 @@ libcoreir_c.COREModuleDefAddModuleInstance.restype = COREWireable_p
 libcoreir_c.COREModuleDefAddGeneratorInstance.argtypes = [COREModuleDef_p, ct.c_char_p, COREGenerator_p, ct.c_void_p, ct.c_void_p]
 libcoreir_c.COREModuleDefAddGeneratorInstance.restype = COREWireable_p
 
-libcoreir_c.COREInlineInstance.argtypes = [COREWireable_p]
-libcoreir_c.COREInlineInstance.restype = ct.c_bool
+define_types("COREInlineInstance",[COREWireable_p],ct.c_bool)
+define_types("COREAddPassthrough",[COREWireable_p],COREWireable_p)
+define_types("CORERemoveInstance",[COREWireable_p])
 
 libcoreir_c.COREModuleDefGetInterface.argtypes = [COREModuleDef_p]
 libcoreir_c.COREModuleDefGetInterface.restype = COREWireable_p
