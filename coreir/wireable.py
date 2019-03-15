@@ -76,6 +76,7 @@ def inline_instance(instance):
         raise TypeError("Needs to be an Instance")
     return libcoreir_c.COREInlineInstance(instance.ptr)
 
+
 class Interface(Wireable):
     pass
 

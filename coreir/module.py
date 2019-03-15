@@ -2,7 +2,7 @@ import ctypes as ct
 from coreir.global_value import GlobalValue, COREGlobalValue
 from coreir.type import CoreIRType, Values
 from coreir.lib import libcoreir_c
-from coreir.wireable import Instance, Interface
+from coreir.wireable import Instance, Interface, Wireable
 from coreir.type import COREValue_p, COREValueType_p, Value, Record
 import coreir.wireable
 
@@ -73,6 +73,9 @@ class ModuleDef(CoreIRType):
     def connect(self, a, b):
         libcoreir_c.COREModuleDefConnect(self.ptr, a.ptr, b.ptr)
 
+    def disconnect(self, a, b):
+        libcoreir_c.COREModuleDefDisconnect(self.ptr, a.ptr, b.ptr)
+
     def select(self, field):
         if not libcoreir_c.COREModuleDefCanSelect(self.ptr, str.encode(field)):
             raise SelectError("Cannot select path {field}".format(field=field))
@@ -83,6 +86,17 @@ class ModuleDef(CoreIRType):
 
     def add_metadata(self, a, b, key, value):
         libcoreir_c.COREModuleDefAddConnectionMetaDataStr(self.ptr, a.ptr, b.ptr, str.encode(key), str.encode(value))
+
+    def add_passthrough(self,wireable):
+        if not isinstance(wireable,Wireable):
+            raise TypeError("Needs to be an Instance")
+        return Instance(libcoreir_c.COREAddPassthrough(wireable.ptr),self.context)
+
+    def remove_instance(self,instance):
+        if not isinstance(instance,Instance):
+            raise TypeError("Needs to be an Instance")
+        libcoreir_c.CORERemoveInstance(instance.ptr)
+
 
 
 class Module(GlobalValue):

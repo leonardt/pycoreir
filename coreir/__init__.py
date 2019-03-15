@@ -18,6 +18,13 @@ from collections import namedtuple
 class COREConnection(ct.Structure):
     pass
 
+def define_types(name,input_types,output_type=None):
+    assert hasattr(libcoreir_c,name)
+    fun = getattr(libcoreir_c,name)
+    fun.argtypes = input_types
+    if output_type is not None:
+        fun.restype = output_type
+
 COREConnection_p = ct.POINTER(COREConnection)
 
 libcoreir_c.CORENewMap.argtypes = [COREContext_p, ct.c_void_p, ct.c_void_p, ct.c_uint32, COREMapKind]
@@ -109,8 +116,9 @@ libcoreir_c.COREModuleDefAddModuleInstance.restype = COREWireable_p
 libcoreir_c.COREModuleDefAddGeneratorInstance.argtypes = [COREModuleDef_p, ct.c_char_p, COREGenerator_p, ct.c_void_p, ct.c_void_p]
 libcoreir_c.COREModuleDefAddGeneratorInstance.restype = COREWireable_p
 
-libcoreir_c.COREInlineInstance.argtypes = [COREWireable_p]
-libcoreir_c.COREInlineInstance.restype = ct.c_bool
+define_types("COREInlineInstance",[COREWireable_p],ct.c_bool)
+define_types("COREAddPassthrough",[COREWireable_p],COREWireable_p)
+define_types("CORERemoveInstance",[COREWireable_p])
 
 libcoreir_c.COREModuleDefGetInterface.argtypes = [COREModuleDef_p]
 libcoreir_c.COREModuleDefGetInterface.restype = COREWireable_p
@@ -186,7 +194,8 @@ libcoreir_c.COREConnectionGetFirst.restype = COREWireable_p
 libcoreir_c.COREConnectionGetSecond.argtypes = [COREConnection_p]
 libcoreir_c.COREConnectionGetSecond.restype = COREWireable_p
 
-libcoreir_c.COREModuleDefConnect.argtypes = [COREModuleDef_p, COREWireable_p, COREWireable_p]
+define_types("COREModuleDefConnect",[COREModuleDef_p, COREWireable_p, COREWireable_p])
+define_types("COREModuleDefDisconnect",[COREModuleDef_p, COREWireable_p, COREWireable_p])
 
 libcoreir_c.COREPrintModuleDef.argtypes = [COREModuleDef_p]
 
