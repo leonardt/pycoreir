@@ -4,6 +4,8 @@ from coreir.lib import libcoreir_c
 from coreir.type import Type, COREValue_p, Value
 from coreir.util import LazyDict
 import coreir.module
+import random
+from hwtypes import BitVector
 
 class COREWireable(ct.Structure):
     pass
@@ -94,3 +96,25 @@ class Connection(CoreIRType):
     @property
     def second(self):
         return Wireable(libcoreir_c.COREConnectionGetSecond(self.ptr), self.context)
+
+def connect_const(port : Wireable,value : int):
+    if not isinstance(port,Wireable):
+        raise TypeError("Needs to be an Instance")
+    c = port.context
+    if not (port.type.kind in ("BitIn","Array")):
+        raise NotImplementedError(f"{port.type.kind} bad. Use Bit or Array(Bit)")
+    width = 1 if port.type.kind == "BitIn" else port.type.size
+    if 2**width <= value:
+        raise TypeError(f"{value} cannot fit in {width} bits")
+    mdef = port.module_def
+    if width==1:
+        cnst = c.get_namespace("corebit").modules["const"]
+        value0 = c.new_values({"value":(value==1)})
+    else:
+        cnst = c.get_namespace("coreir").generators["const"](width=width)
+        value0 = c.new_values({"value":BitVector[width](value)})
+
+    cinst = mdef.add_module_instance(name=f"c{random.randint(0,2**15)}",module=cnst,config=value0)
+    mdef.connect(cinst.select("out"),port)
+
+
