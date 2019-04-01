@@ -37,9 +37,9 @@ script:
 - pip install -e .
 - pytest -s tests/
 - cd libcoreir-python
-- make install CXX=g++-4.9 prefix=$TRAVIS_BUILD_DIR/deps CXXFLAGS=-I$TRAVIS_BUILD_DIR/deps/include
+- make install PYTHONHOME=$TRAVIS_BUILD_DIR/miniconda CXX=g++-4.9 prefix=$TRAVIS_BUILD_DIR/deps CXXFLAGS=-I$TRAVIS_BUILD_DIR/deps/include
   LDFLAGS=-L$TRAVIS_BUILD_DIR/deps/lib
-- PYTHONPATH=$PYTHONPATH:$TRAVIS_BUILD_DIR:test make test CXX=g++-4.9 CXXFLAGS=-I$TRAVIS_BUILD_DIR/deps/include
+- PYTHONPATH=$PYTHONPATH:$TRAVIS_BUILD_DIR:test make test PYTHONHOME=$TRAVIS_BUILD_DIR/miniconda CXX=g++-4.9 CXXFLAGS=-I$TRAVIS_BUILD_DIR/deps/include
   LDFLAGS=-L$TRAVIS_BUILD_DIR/deps/lib
 - cd ..
 compiler:
