@@ -12,6 +12,7 @@ addons:
     - g++-4.9
 before_install:
 # install conda for py 3.7
+
 - wget http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh
 - chmod +x miniconda.sh
 - ./miniconda.sh -b -p $TRAVIS_BUILD_DIR/miniconda
@@ -37,9 +38,9 @@ script:
 - pip install -e .
 - pytest -s tests/
 - cd libcoreir-python
-- make install PYTHONHOME=$TRAVIS_BUILD_DIR/miniconda CXX=g++-4.9 prefix=$TRAVIS_BUILD_DIR/deps CXXFLAGS=-I$TRAVIS_BUILD_DIR/deps/include
+- make install PYTHONHOME=$TRAVIS_BUILD_DIR/miniconda/envs/test-env CXX=g++-4.9 prefix=$TRAVIS_BUILD_DIR/deps CXXFLAGS=-I$TRAVIS_BUILD_DIR/deps/include
   LDFLAGS=-L$TRAVIS_BUILD_DIR/deps/lib
-- PYTHONPATH=$PYTHONPATH:$TRAVIS_BUILD_DIR:test make test PYTHONHOME=$TRAVIS_BUILD_DIR/miniconda CXX=g++-4.9 CXXFLAGS=-I$TRAVIS_BUILD_DIR/deps/include
+- PYTHONPATH=$PYTHONPATH:$TRAVIS_BUILD_DIR:test make test PYTHONHOME=$TRAVIS_BUILD_DIR/miniconda/envs/test-env CXX=g++-4.9 CXXFLAGS=-I$TRAVIS_BUILD_DIR/deps/include
   LDFLAGS=-L$TRAVIS_BUILD_DIR/deps/lib
 - cd ..
 compiler:
