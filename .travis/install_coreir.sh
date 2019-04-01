@@ -9,6 +9,7 @@ if [ "$TRAVIS_BRANCH" == "dev" ]; then
     export CXX="g++-4.9";
     cd build
     cmake -DCMAKE_INSTALL_PREFIX:PATH=$TRAVIS_BUILD_DIR/deps ..
+    make install;
     cd ..;  # build
     cd ..;  # coreir
     cd ..;  # deps
