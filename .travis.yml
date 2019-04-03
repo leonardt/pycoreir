@@ -1,6 +1,7 @@
 language: python
-python:
-- '3.6'
+# python managed by conda until 3.7 available
+# python:
+# - '3.6'
 cache:
   apt: true
 addons:
@@ -10,6 +11,20 @@ addons:
     packages:
     - g++-4.9
 before_install:
+# install conda for py 3.7
+
+- wget http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh
+- chmod +x miniconda.sh
+- ./miniconda.sh -b -p $TRAVIS_BUILD_DIR/miniconda
+- export PATH=$TRAVIS_BUILD_DIR/miniconda/bin:$PATH
+- hash -r
+- conda config --set always_yes yes --set changeps1 no
+- conda update -q conda
+- conda create -q -n test-env python=3.7
+- source activate test-env
+- conda install pip
+- pip install pytest
+# End install conda
 - mkdir deps
 - mkdir deps/bin
 - mkdir deps/lib
@@ -23,9 +38,9 @@ script:
 - pip install -e .
 - pytest -s tests/
 - cd libcoreir-python
-- make install PYTHONHOME=$VIRTUAL_ENV CXX=g++-4.9 prefix=$TRAVIS_BUILD_DIR/deps CXXFLAGS=-I$TRAVIS_BUILD_DIR/deps/include
+- make install PYTHON_CONFIG=python3-config CXX=g++-4.9 prefix=$TRAVIS_BUILD_DIR/deps CXXFLAGS=-I$TRAVIS_BUILD_DIR/deps/include
   LDFLAGS=-L$TRAVIS_BUILD_DIR/deps/lib
-- PYTHONPATH=$PYTHONPATH:$TRAVIS_BUILD_DIR:test make test PYTHONHOME=$VIRTUAL_ENV CXX=g++-4.9 CXXFLAGS=-I$TRAVIS_BUILD_DIR/deps/include
+- PYTHONPATH=$PYTHONPATH:$TRAVIS_BUILD_DIR:test make test PYTHON_CONFIG=python3-config CXX=g++-4.9 CXXFLAGS=-I$TRAVIS_BUILD_DIR/deps/include
   LDFLAGS=-L$TRAVIS_BUILD_DIR/deps/lib
 - cd ..
 compiler:

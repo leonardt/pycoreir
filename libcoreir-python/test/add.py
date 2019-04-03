@@ -50,7 +50,7 @@ def double_type_gen(context, values):
 def double(context, values, module_def):
     import magma.backend.coreir_
     width = values['width'].value
-    doubleT = magma.Bits(width)
+    doubleT = magma.Bits[width]
     double = magma.DefineCircuit("double", "I", magma.In(doubleT), "O", magma.Out(doubleT))
     shift_amount = 2
     output = magma.concat(double.I[shift_amount:width], magma.bits(0, shift_amount))
