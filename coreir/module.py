@@ -63,6 +63,12 @@ class ModuleDef(CoreIRType):
             result.append(Instance(curr, self.context))
             curr = libcoreir_c.COREModuleDefInstancesIterNext(self.ptr, curr)
         return result
+    
+    def get_instance(self,inst_name):
+        for inst in self.instances:
+            if inst.name==inst_name:
+                return inst
+        raise ValueError(f"Cannot find instance {inst_name}")
 
     @property
     def connections(self):
