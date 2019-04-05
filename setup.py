@@ -19,13 +19,13 @@ class CoreIRExtension(Extension):
 
 class CoreIRBuild(build_ext):
     def run(self):
-        if not os.path.isdir(COREIR_PATH):
-            subprocess.check_call(["git", "clone", COREIR_REPO,
-                                   COREIR_PATH])
+        if os.path.isdir(COREIR_PATH):
+            shutil.rmtree(COREIR_PATH)
+        subprocess.check_call(["git", "clone", "--depth=1", COREIR_REPO,
+                               COREIR_PATH])
         build_dir = os.path.join(COREIR_PATH, "build")
-        subprocess.check_call(["cmake", "-DSTATIC=ON", "-S", COREIR_PATH, "-B",
-                               build_dir])
-        subprocess.check_call(["make", "-C", build_dir, "-j16"])
+        subprocess.check_call(["cmake", "-DSTATIC=ON", ".."], cwd=build_dir)
+        subprocess.check_call(["make", "-C", build_dir, "-j2"])
         # we only have one extension
         assert len(self.extensions) == 1
         ext = self.extensions[0]
