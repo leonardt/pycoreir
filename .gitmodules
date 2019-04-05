@@ -1,0 +1,3 @@
+[submodule "coreir-cpp"]
+	path = coreir-cpp
+	url = https://github.com/rdaly525/coreir

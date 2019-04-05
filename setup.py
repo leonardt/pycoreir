@@ -1,4 +1,42 @@
-from setuptools import setup
+import subprocess
+import os
+from setuptools import setup, Extension
+from setuptools.command.build_ext import build_ext
+import glob
+import shutil
+
+
+COREIR_PATH = "coreir-cpp"
+COREIR_REPO = "https://github.com/Kuree/coreir"
+COREIR_NAME = "coreir"
+
+class CoreIRExtension(Extension):
+    def __init__(self, name, sourcedir=''):
+        Extension.__init__(self, name, sources=[])
+        self.sourcedir = os.path.abspath(sourcedir)
+
+
+class CoreIRBuild(build_ext):
+    def run(self):
+        if not os.path.isdir(COREIR_PATH):
+            subprocess.check_call(["git", "clone", COREIR_REPO,
+                                   COREIR_PATH])
+        build_dir = os.path.join(COREIR_REPO, "build")
+        subprocess.check_call(["cmake", "-DSTATIC=ON", "-S", COREIR_REPO, "-B",
+                               build_dir])
+        subprocess.check_call(["make", "-C", build_dir, "-j2"])
+        # we only have one extension
+        assert len(self.extensions) == 1
+        ext = self.extensions[0]
+        extdir = \
+            os.path.abspath(os.path.dirname(self.get_ext_fullpath(ext.name)))
+        extdir = os.path.join(extdir, COREIR_NAME)
+        if not os.path.isdir(extdir):
+            os.mkdir(extdir)
+        # copy everything over
+        for filename in glob.glob(os.path.join(COREIR_PATH, "lib", "*.so")):
+            shutil.copy(filename, extdir)
+
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
@@ -14,5 +52,8 @@ setup(
     author_email='lenny@cs.stanford.edu',
     long_description=long_description,
     long_description_content_type="text/markdown",
-    install_requires=["hwtypes>=1.0.*"]
+    install_requires=["hwtypes>=1.0.*"],
+    ext_modules=[CoreIRExtension('coreir')],
+    cmdclass=dict(build_ext=CoreIRBuild),
+    zip_safe=False,
 )
