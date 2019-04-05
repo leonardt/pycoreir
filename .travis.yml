@@ -20,7 +20,7 @@ script:
     - docker exec manylinux pip install git+git://github.com/leonardt/Pyverilog.git
     - docker exec manylinux pytest -s /pycoreir/tests/
     # copy everything back
-    - docker exec manylinux bash -c "ls /pycoreir/dist/wheelhouse/*.whl" > wheels
+    - docker exec manylinux bash -c "ls /pycoreir/wheelhouse/*.whl" > wheels
     - while read whl; do docker cp manylinux:$whl .; done <wheels
     - ls *.whl
 
