@@ -18,7 +18,7 @@ class CoreIRExtension(Extension):
 
 
 class CoreIRBuild(build_ext):
-    libs = ["coreir-c", "coreirsim-c"]
+    libs = ["coreir-c", "coreirsim-c", "coreir-ice40"]
     def run(self):
         if not os.path.isdir(COREIR_PATH):
             subprocess.check_call(["git", "clone", "--depth=1", COREIR_REPO,
@@ -40,6 +40,7 @@ class CoreIRBuild(build_ext):
         for lib_name in self.libs:
             filename = os.path.join(COREIR_PATH, "lib",
                                     "lib{}.so".format(lib_name))
+            shutil.copy(filename, extdir)
 
 
 with open("README.md", "r") as fh:
