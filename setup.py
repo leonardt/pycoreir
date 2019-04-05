@@ -10,6 +10,7 @@ COREIR_PATH = "coreir-cpp"
 COREIR_REPO = "https://github.com/Kuree/coreir"
 COREIR_NAME = "coreir"
 
+
 class CoreIRExtension(Extension):
     def __init__(self, name, sourcedir=''):
         Extension.__init__(self, name, sources=[])
@@ -21,10 +22,10 @@ class CoreIRBuild(build_ext):
         if not os.path.isdir(COREIR_PATH):
             subprocess.check_call(["git", "clone", COREIR_REPO,
                                    COREIR_PATH])
-        build_dir = os.path.join(COREIR_REPO, "build")
-        subprocess.check_call(["cmake", "-DSTATIC=ON", "-S", COREIR_REPO, "-B",
+        build_dir = os.path.join(COREIR_PATH, "build")
+        subprocess.check_call(["cmake", "-DSTATIC=ON", "-S", COREIR_PATH, "-B",
                                build_dir])
-        subprocess.check_call(["make", "-C", build_dir, "-j2"])
+        subprocess.check_call(["make", "-C", build_dir, "-j16"])
         # we only have one extension
         assert len(self.extensions) == 1
         ext = self.extensions[0]
@@ -33,9 +34,10 @@ class CoreIRBuild(build_ext):
         extdir = os.path.join(extdir, COREIR_NAME)
         if not os.path.isdir(extdir):
             os.mkdir(extdir)
-        # copy everything over
-        for filename in glob.glob(os.path.join(COREIR_PATH, "lib", "*.so")):
-            shutil.copy(filename, extdir)
+        # copy libraries over
+        libs = ["libcoreir-c.so", "libcoreirsim-c.so"]
+        for lib_name in libs:
+            filename = os.path.join(COREIR_PATH, "lib", lib_name)
 
 
 with open("README.md", "r") as fh:
