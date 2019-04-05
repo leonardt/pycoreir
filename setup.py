@@ -7,7 +7,7 @@ import shutil
 
 
 COREIR_PATH = "coreir-cpp"
-COREIR_REPO = "https://github.com/Kuree/coreir"
+COREIR_REPO = "https://github.com/rdaly525/coreir"
 COREIR_NAME = "coreir"
 
 
