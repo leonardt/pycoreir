@@ -18,14 +18,16 @@ class CoreIRExtension(Extension):
 
 
 class CoreIRBuild(build_ext):
+    libs = ["coreir-c", "coreirsim-c"]
     def run(self):
-        if os.path.isdir(COREIR_PATH):
-            shutil.rmtree(COREIR_PATH)
-        subprocess.check_call(["git", "clone", "--depth=1", COREIR_REPO,
-                               COREIR_PATH])
+        if not os.path.isdir(COREIR_PATH):
+            subprocess.check_call(["git", "clone", "--depth=1", COREIR_REPO,
+                                   COREIR_PATH])
         build_dir = os.path.join(COREIR_PATH, "build")
         subprocess.check_call(["cmake", "-DSTATIC=ON", ".."], cwd=build_dir)
-        subprocess.check_call(["make", "-C", build_dir, "-j2"])
+        for lib_name in self.libs:
+            subprocess.check_call(["make", "-C", build_dir, "-j2",
+                                   lib_name])
         # we only have one extension
         assert len(self.extensions) == 1
         ext = self.extensions[0]
@@ -35,9 +37,9 @@ class CoreIRBuild(build_ext):
         if not os.path.isdir(extdir):
             os.mkdir(extdir)
         # copy libraries over
-        libs = ["libcoreir-c.so", "libcoreirsim-c.so"]
-        for lib_name in libs:
-            filename = os.path.join(COREIR_PATH, "lib", lib_name)
+        for lib_name in self.libs:
+            filename = os.path.join(COREIR_PATH, "lib",
+                                    "lib{}.so".format(lib_name))
 
 
 with open("README.md", "r") as fh:
