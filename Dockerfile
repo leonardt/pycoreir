@@ -55,11 +55,8 @@ RUN cd /tmp/gcc-$GCC_VERSION \
         --disable-multilib \
         --program-suffix=-$GCC_VERSION \
     && make -j8 \
-    && make install-strip
-
-# clean things up
-RUN cd /tmp \
-    && rm -rf *
+    && make install-strip \
+    && rm -rf /tmp/*
 
 ENV CC=/usr/local/gcc-${GCC_VERSION}/bin/gcc-${GCC_VERSION}
 ENV CXX=/usr/local/gcc-${GCC_VERSION}/bin/g++-${GCC_VERSION}
