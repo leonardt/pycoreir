@@ -1,8 +1,8 @@
 #ifndef COREIR_PYTHON_HPP_
 #define COREIR_PYTHON_HPP_
 
-#include "coreir/ir/typegen.h"
 #include <Python.h>
+#include "coreir/ir/typegen.h"
 namespace CoreIR {
     void pythonInitialize();
     void pythonFinalize();
