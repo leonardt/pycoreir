@@ -18,6 +18,7 @@ before_install:
 script:
     - docker exec manylinux pip install magma-lang  # For libcoreir-python test
     - docker exec manylinux pytest -s /pycoreir/tests/
+    - docker exec manylinux ./pycoreir/tests/libcoreir-python/run_travis_test.sh
     # copy everything back
     - docker exec manylinux bash -c "ls /pycoreir/wheelhouse/*.whl" > wheels
     - while read whl; do docker cp manylinux:$whl .; done <wheels
