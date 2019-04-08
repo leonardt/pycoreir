@@ -1,52 +1,29 @@
 language: python
-# python managed by conda until 3.7 available
-# python:
-# - '3.6'
-cache:
-  apt: true
-addons:
-  apt:
-    sources:
-    - ubuntu-toolchain-r-test
-    packages:
-    - g++-4.9
-before_install:
-# install conda for py 3.7
 
-- wget http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh
-- chmod +x miniconda.sh
-- ./miniconda.sh -b -p $TRAVIS_BUILD_DIR/miniconda
-- export PATH=$TRAVIS_BUILD_DIR/miniconda/bin:$PATH
-- hash -r
-- conda config --set always_yes yes --set changeps1 no
-- conda update -q conda
-- conda create -q -n test-env python=3.7
-- source activate test-env
-- conda install pip
-- pip install pytest
-# End install conda
-- mkdir deps
-- mkdir deps/bin
-- mkdir deps/lib
-- mkdir deps/include
-- export PATH=$TRAVIS_BUILD_DIR/deps/bin:$PATH
-- export LD_LIBRARY_PATH=$TRAVIS_BUILD_DIR/deps/lib:$LD_LIBRARY_PATH
-- source .travis/install_coreir.sh
+services:
+    - docker
+
+before_install:
+    - docker pull keyiz/manylinux-coreir
+    - docker run -d --name manylinux --rm -i -t keyiz/manylinux-coreir bash
+    - docker exec manylinux git clone https://github.com/Kuree/pycoreir
+    - docker exec manylinux bash -c "cd pycoreir && python setup.py bdist_wheel"
+    - docker exec manylinux bash -c "auditwheel show /pycoreir/dist/*.whl"
+    # we should have any external linked libraries at this point
+    - docker exec manylinux bash -c "cd pycoreir && auditwheel repair dist/*.whl"
+    # install the wheel for testing
+    - docker exec manylinux bash -c "cd pycoreir && pip install wheelhouse/*.whl"
+    - docker exec manylinux pip install pytest
+
 script:
-- pip install git+git://github.com/phanrahan/magma.git  # For libcoreir-python test
-- pip install git+git://github.com/leonardt/Pyverilog.git
-- pip install -e .
-- pytest -s tests/
-- cd libcoreir-python
-- make install PYTHON_CONFIG=python3-config CXX=g++-4.9 prefix=$TRAVIS_BUILD_DIR/deps CXXFLAGS=-I$TRAVIS_BUILD_DIR/deps/include
-  LDFLAGS=-L$TRAVIS_BUILD_DIR/deps/lib
-- PYTHONPATH=$PYTHONPATH:$TRAVIS_BUILD_DIR:test make test PYTHON_CONFIG=python3-config CXX=g++-4.9 CXXFLAGS=-I$TRAVIS_BUILD_DIR/deps/include
-  LDFLAGS=-L$TRAVIS_BUILD_DIR/deps/lib
-- cd ..
-compiler:
-- gcc
-os:
-- linux
+    - docker exec manylinux pip install git+git://github.com/phanrahan/magma.git  # For libcoreir-python test
+    - docker exec manylinux pip install git+git://github.com/leonardt/Pyverilog.git
+    - docker exec manylinux pytest -s /pycoreir/tests/
+    # copy everything back
+    - docker exec manylinux bash -c "ls /pycoreir/wheelhouse/*.whl" > wheels
+    - while read whl; do docker cp manylinux:$whl .; done <wheels
+    - ls *.whl
+
 deploy:
   provider: pypi
   user: leonardt

@@ -5,3 +5,4 @@ build
 dist
 *.pyc
 .idea/
+coreir-cpp
