@@ -18,7 +18,7 @@ PYTHON_PREFIX=$(shell $(PYTHON_CONFIG) --prefix)
 PYTHONHOME ?= $(PYTHON_PREFIX)
 override CXXFLAGS += $(shell $(PYTHON_CONFIG) --includes) -DPYTHON_HOME="L\"$(PYTHONHOME)\"" -DPYTHON_EXECUTABLE="L\"$(shell which python)\""
 PYTHON_LIBS = $(PYTHON_PREFIX)/lib
-override LDFLAGS += -L $(PYTHON_LIBS) $(shell $(PYTHON_CONFIG) --libs)
+override LDFLAGS += -L $(shell $(PYTHON_CONFIG) --configdir) $(shell $(PYTHON_CONFIG) --libs)
 DYLDFLAGS = -Wl,-rpath,$(PYTHON_LIBS)
 
 clean:
@@ -46,4 +46,4 @@ uninstall:
 test: build/libcoreir-python.$(TARGET) test/pythonTypegen.cpp test/add.py
 	$(CXX) $(CXXFLAGS) -o build/testPythonTypegen test/pythonTypegen.cpp -L ./build/ -lcoreir -lcoreir-python $(LDFLAGS) $(DYLDFLAGS)
 
-	./build/testPythonTypegen
+	PYTHONPATH=test:$PYTHONPATH ./build/testPythonTypegen
