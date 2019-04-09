@@ -4,6 +4,17 @@ from setuptools import setup, Extension
 from setuptools.command.build_ext import build_ext
 import glob
 import shutil
+import sys
+import platform
+
+
+_system = platform.system()
+if _system == "Linux":
+    lib_ext = "so"
+elif _system == "Darwin":
+    lib_ext = "dylib"
+else:
+    raise NotImplementedError(_system)
 
 
 COREIR_PATH = "coreir-cpp"
@@ -42,15 +53,17 @@ class CoreIRBuild(build_ext):
             os.mkdir(extdir)
         # copy libraries over
         for lib_name in self.libs:
-            filename = os.path.join(COREIR_PATH, "lib",
-                                    "lib{}.so".format(lib_name))
+            filename = os.path.join(
+                COREIR_PATH, "build", "lib",
+                "lib{}.{}".format(lib_name, lib_ext)
+            )
             shutil.copy(filename, extdir)
 
         # copy binary over
         filename = os.path.join(COREIR_PATH, "build", "bin", "coreir")
         shutil.copy(filename, extdir)
 
-        with open("bin/coreir", "r") as fh:
+        with open("bin/coreir.tmpl", "r") as fh:
             binary_wrapper_template = fh.read()
 
         with open("bin/coreir", "w") as fh:
