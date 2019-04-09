@@ -30,7 +30,7 @@ class CoreIRBuild(build_ext):
             subprocess.check_call(["make", "-C", build_dir, "-j2",
                                    lib_name])
         # make the binary
-        subprocess.check_call(["make", "-C", build_dir, "-j2", "coreir"])
+        subprocess.check_call(["make", "-C", build_dir, "-j2", "coreir-bin"])
 
         # we only have one extension
         assert len(self.extensions) == 1
