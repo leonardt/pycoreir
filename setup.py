@@ -50,7 +50,7 @@ class CoreIRBuild(build_ext):
         filename = os.path.join(COREIR_PATH, "build", "bin", "coreir")
         shutil.copy(filename, extdir)
 
-        with open("bin/coreir", "r") as binary_wrapper_template:
+        with open("bin/coreir", "r") as fh:
             binary_wrapper_template = fh.read()
 
         with open("bin/coreir", "w") as fh:
