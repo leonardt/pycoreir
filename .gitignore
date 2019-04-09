@@ -6,4 +6,3 @@ dist
 *.pyc
 .idea/
 coreir-cpp
-bin/coreir

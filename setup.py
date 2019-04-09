@@ -2,6 +2,7 @@ import subprocess
 import os
 from setuptools import setup, Extension
 from setuptools.command.build_ext import build_ext
+from distutils.command.build import build
 import glob
 import shutil
 import sys
@@ -11,10 +12,8 @@ import platform
 _system = platform.system()
 if _system == "Linux":
     lib_ext = "so"
-    LIBRARY_PATH_VAR = "LD_LIBRARY_PATH"
 elif _system == "Darwin":
     lib_ext = "dylib"
-    LIBRARY_PATH_VAR = "DYLD_LIBRARY_PATH"
 else:
     raise NotImplementedError(_system)
 
@@ -65,22 +64,12 @@ class CoreIRBuild(build_ext):
         filename = os.path.join(COREIR_PATH, "build", "bin", "coreir")
         shutil.copy(filename, extdir)
 
-        with open("bin/coreir.tmpl", "r") as fh:
-            binary_wrapper_template = fh.read()
-
-        with open("bin/coreir", "w") as fh:
-            fh.write(binary_wrapper_template.format(
-                coreir_binary_path=os.path.join(extdir, "coreir"),
-                library_path_var=f"{LIBRARY_PATH_VAR}={extdir}:{LIBRARY_PATH_VAR}"
-            ))
-
-
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setup(
     name='coreir',
-    version='2.0.1',
+    version='2.0.2.dev3',
     description='Python bindings for CoreIR',
     packages=["coreir"],
     license='BSD License',
@@ -93,5 +82,5 @@ setup(
     ext_modules=[CoreIRExtension('coreir')],
     scripts=["bin/coreir"],
     cmdclass=dict(build_ext=CoreIRBuild),
-    zip_safe=False,
+    zip_safe=False
 )
