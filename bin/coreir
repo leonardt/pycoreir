@@ -1,0 +1,2 @@
+#!/bin/bash
+{coreir_binary_path} "$@"

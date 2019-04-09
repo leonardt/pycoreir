@@ -46,6 +46,17 @@ class CoreIRBuild(build_ext):
                                     "lib{}.so".format(lib_name))
             shutil.copy(filename, extdir)
 
+        # copy binary over
+        filename = os.path.join(COREIR_PATH, "build", "bin", "coreir")
+        shutil.copy(filename, extdir)
+
+        with open("bin/coreir", "r") as binary_wrapper_template:
+            binary_wrapper_template = fh.read()
+
+        with open("bin/coreir", "w") as fh:
+            fh.write(binary_wrapper_template.format(
+                coreir_binary_path=os.path.join(extdir, "coreir")))
+
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
@@ -63,7 +74,7 @@ setup(
     long_description_content_type="text/markdown",
     install_requires=["hwtypes>=1.0.*"],
     ext_modules=[CoreIRExtension('coreir')],
-    scripts=[os.path.join(COREIR_PATH, "build", "bin", "coreir")],
+    scripts=["bin/coreir"],
     cmdclass=dict(build_ext=CoreIRBuild),
     zip_safe=False,
 )
