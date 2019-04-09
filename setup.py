@@ -29,6 +29,9 @@ class CoreIRBuild(build_ext):
         for lib_name in self.libs:
             subprocess.check_call(["make", "-C", build_dir, "-j2",
                                    lib_name])
+        # make the binary
+        subprocess.check_call(["make", "-C", build_dir, "-j2", "coreir"])
+
         # we only have one extension
         assert len(self.extensions) == 1
         ext = self.extensions[0]
