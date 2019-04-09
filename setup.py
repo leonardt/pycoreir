@@ -11,8 +11,10 @@ import platform
 _system = platform.system()
 if _system == "Linux":
     lib_ext = "so"
+    LIBRARY_PATH_VAR = "LD_LIBRARY_PATH"
 elif _system == "Darwin":
     lib_ext = "dylib"
+    LIBRARY_PATH_VAR = "DYLD_LIBRARY_PATH"
 else:
     raise NotImplementedError(_system)
 
@@ -68,7 +70,9 @@ class CoreIRBuild(build_ext):
 
         with open("bin/coreir", "w") as fh:
             fh.write(binary_wrapper_template.format(
-                coreir_binary_path=os.path.join(extdir, "coreir")))
+                coreir_binary_path=os.path.join(extdir, "coreir"),
+                library_path_var=f"{LIBRARY_PATH_VAR}={extdir}:{LIBRARY_PATH_VAR}"
+            ))
 
 
 with open("README.md", "r") as fh:
