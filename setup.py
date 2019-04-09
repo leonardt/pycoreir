@@ -60,6 +60,7 @@ setup(
     long_description_content_type="text/markdown",
     install_requires=["hwtypes>=1.0.*"],
     ext_modules=[CoreIRExtension('coreir')],
+    scripts=[os.path.join(COREIR_PATH, "bin", "coreir")],
     cmdclass=dict(build_ext=CoreIRBuild),
     zip_safe=False,
 )
