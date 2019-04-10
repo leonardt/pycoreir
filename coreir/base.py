@@ -12,11 +12,12 @@ _cache = {}
 class Memoize(type):
     def __call__(cls,ptr,*args,**kwargs):
         cptr = get_pointer_value(ptr)
-        if cptr in _cache:
-            return _cache[cptr]
+        inst = super().__call__(ptr, *args, **kwargs)
+        key = (cptr, type(inst))
+        if key in _cache:
+            inst = _cache[key]
         else:
-            inst = super().__call__(ptr,*args,**kwargs)
-            _cache[cptr] = inst
+            _cache[key] = inst
         return inst
 
 class CoreIRType(metaclass=Memoize):
