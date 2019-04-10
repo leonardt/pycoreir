@@ -23,8 +23,6 @@ def test_save_module():
         }),
         configparams
     )
-    print(add8.type)
-    print(type(add8.type))
     for port, type_ in add8.type.items():
         assert type_.kind == "Array"
         if port in ["in1", "in2"]:

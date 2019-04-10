@@ -62,7 +62,7 @@ class Value(CoreIRType):
                 return BitVector[width.value](None)
         elif type == 3:
             return libcoreir_c.COREValueStringGet(self.ptr).decode()
-        raise NotImplementedError()
+        raise NotImplementedError(type)
 
 class Values(CoreIRType):
     pass

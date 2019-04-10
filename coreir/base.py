@@ -10,9 +10,9 @@ def get_pointer_value(pointer):
 
 _cache = {}
 class Memoize(type):
-    def __call__(cls,ptr,*args,**kwargs):
+    def __call__(cls, ptr, context, *args,**kwargs):
         cptr = get_pointer_value(ptr)
-        inst = super().__call__(ptr, *args, **kwargs)
+        inst = super().__call__(ptr, context, *args, **kwargs)
         key = (cptr, type(inst))
         if key in _cache:
             inst = _cache[key]
@@ -20,11 +20,12 @@ class Memoize(type):
             _cache[key] = inst
         return inst
 
+
 class CoreIRType(metaclass=Memoize):
     def __init__(self, ptr, context):
         self.ptr = ptr
         self.context = context
-      
+
     def __hash__(self):
         return get_pointer_value(self.ptr)
 
