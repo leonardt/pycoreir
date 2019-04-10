@@ -38,8 +38,8 @@ class LazyDict(Mapping):
             _dict[ct.cast(c_keys[i], ct.c_char_p).value.decode()] = \
                 self.return_type(c_values[i], self.parent.context)
             libcoreir_c.COREFree(c_keys[i])
-        assert c_keys._b_needsfree_, "Pointer freed by ctypes"
-        assert c_values._b_needsfree_, "Pointer freed by ctypes"
+        assert c_keys._b_needsfree_, "Expected pointer to be freed by ctypes"
+        assert c_values._b_needsfree_, "Expected pointer to be freed by ctypes"
         return iter(_dict)
 
     def __len__(self):
