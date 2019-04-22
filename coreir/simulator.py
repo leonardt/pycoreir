@@ -21,8 +21,14 @@ class CORESimValue(ct.Structure):
 CORESimValue_p = ct.POINTER(CORESimValue)
 
 class SimulatorState(CoreIRType):
-    def __init__(self, module):
-        self.state = libcoreir_sim_c.CORENewSimulatorState(module.ptr)
+    @staticmethod
+    def make(module):
+        state = libcoreir_sim_c.CORENewSimulatorState(module.ptr)
+        return SimulatorState(state, module.context)
+
+    def __init__(self, pointer, context):
+        super().__init__(pointer, context)
+        self.state = pointer
 
     def __del__(self):
         libcoreir_sim_c.COREDeleteSimulatorState(self.state)
