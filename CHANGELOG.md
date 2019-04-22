@@ -4,9 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## Unreleased
 
-## 2.0.0 - 2020-03-11
+## 2.0.7 - 2019-04-22
+### Changed
+- Changed SimulatorState interface to match CoreIRType
+
+## 2.0.0 - 2019-03-11
 ### Changed
 - Changed dependency from bit_vector package to hwtypes package
 
@@ -24,6 +28,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Added `__hash__` and `__eq__` for CoreIRType based on the underlying C
   pointer value.
-
-[Unreleased]: https://github.com/leonardt/pycoreir/compare/v1.0.1...HEAD
-[1.0.0]: https://github.com/leonardt/pycoreir/compare/v1.0.0...1.0.1
