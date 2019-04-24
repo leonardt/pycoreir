@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 echo [distutils]                                  > ~/.pypirc
 echo index-servers =                             >> ~/.pypirc
 echo "  pypi"                                    >> ~/.pypirc
