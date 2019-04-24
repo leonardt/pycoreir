@@ -21,7 +21,7 @@ else
      source /Users/travis/.pyenv/versions/${PYTHON}/envs/venv/bin/activate
      python --version
 
-     python -m pip install cmake twine wheel
+     python -m pip install cmake twine wheel pytest
      python setup.py bdist_wheel
      pip install dist/*.whl
 fi
