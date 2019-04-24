@@ -5,5 +5,5 @@ if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
 else
     # osx
     pip install magma-lang
-    pytest -s /pycoreir/tests/
+    pytest -s tests/
 fi
