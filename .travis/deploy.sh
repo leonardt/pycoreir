@@ -9,6 +9,7 @@ echo password=$PYPI_PASSWORD                     >> ~/.pypirc
 
 if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
     docker cp ~/.pypirc manylinux:/home/
+    docker exec -i manylinux bash -c 'pip install twine'
     docker exec -i manylinux bash -c 'cd  /pycoreir && twine upload --config-file /home/.pypirc wheelhouse/*'
 
     # Upload source distribution too
