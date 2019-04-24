@@ -16,5 +16,6 @@ if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
     docker exec -i manylinux bash -c 'cd  /pycoreir && twine upload --config-file /home/.pypirc dist/*.tar.gz'
 else
     # osx
+    pip install twine
     twine upload dist/*
 fi
