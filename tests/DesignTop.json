@@ -3,15 +3,15 @@
   "global":{
     "modules":{
       "DesignTop":{
-        "type":["Record",{
-          "in":["Array",1,["Array",16,"BitIn"]],
-          "out":["Array",16,"Bit"]
-        }],
+        "type":["Record",[
+            ["in",["Array",1,["Array",16,"BitIn"]]],
+            ["out",["Array",16,"Bit"]]
+        ]],
         "instances":{
           "const2__348":{
             "genref":"coreir.const",
             "genargs":{"width":["Int",16]},
-            "modargs":{"value":[["BitVector",16],2]}
+            "modargs":{"value":[["BitVector",16],"16'h2"]}
           },
           "io16_out":{
             "genref":"cgralib.IO",
@@ -26,7 +26,7 @@
           "mul_347_348_349_PE":{
             "genref":"cgralib.PE",
             "genargs":{"numbitports":["Int",3], "numdataports":["Int",2], "op_kind":["String","alu"], "width":["Int",16]},
-            "modargs":{"alu_op":["String","mul"], "data0_mode":["String","BYPASS"], "data0_value":[["BitVector",16],0], "data1_mode":["String","BYPASS"], "data1_value":[["BitVector",16],0]}
+            "modargs":{"alu_op":["String","mul"], "data0_mode":["String","BYPASS"], "data0_value":[["BitVector",16],"16'h0"], "data1_mode":["String","BYPASS"], "data1_value":[["BitVector",16],"16'h0"], "signed": ["Bool", false]}
           }
         },
         "connections":[
