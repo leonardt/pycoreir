@@ -26,7 +26,7 @@ else
     git clone https://github.com/StanfordAHA/CGRAMapper
     cd CGRAMapper
     git clone https://github.com/rdaly525/coreir  # needed for coreir.h included by mapper
-    COREIR=$PWD/coreir make install -j
+    CXXFLAGS="-I ${PWD}/coreir/include" make install -j
     cd ..
     python -m pip install cmake twine wheel pytest
     python setup.py bdist_wheel
