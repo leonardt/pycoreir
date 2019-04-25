@@ -1,0 +1,41 @@
+{"top":"global.DesignTop",
+"namespaces":{
+  "global":{
+    "modules":{
+      "DesignTop":{
+        "type":["Record",{
+          "in":["Array",1,["Array",16,"BitIn"]],
+          "out":["Array",16,"Bit"]
+        }],
+        "instances":{
+          "const2__348":{
+            "genref":"coreir.const",
+            "genargs":{"width":["Int",16]},
+            "modargs":{"value":[["BitVector",16],2]}
+          },
+          "io16_out":{
+            "genref":"cgralib.IO",
+            "genargs":{"width":["Int",16]},
+            "modargs":{"mode":["String","o"]}
+          },
+          "io16in_in_0":{
+            "genref":"cgralib.IO",
+            "genargs":{"width":["Int",16]},
+            "modargs":{"mode":["String","i"]}
+          },
+          "mul_347_348_349_PE":{
+            "genref":"cgralib.PE",
+            "genargs":{"numbitports":["Int",3], "numdataports":["Int",2], "op_kind":["String","alu"], "width":["Int",16]},
+            "modargs":{"alu_op":["String","mul"], "data0_mode":["String","BYPASS"], "data0_value":[["BitVector",16],0], "data1_mode":["String","BYPASS"], "data1_value":[["BitVector",16],0]}
+          }
+        },
+        "connections":[
+          ["const2__348.out","mul_347_348_349_PE.data.in.1"],
+          ["io16_out.in","mul_347_348_349_PE.data.out"],
+          ["io16in_in_0.out","mul_347_348_349_PE.data.in.0"]
+        ]
+      }
+    }
+  }
+}
+}
