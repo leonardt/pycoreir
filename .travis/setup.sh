@@ -21,6 +21,12 @@ else
      source /Users/travis/.pyenv/versions/${PYTHON}/envs/venv/bin/activate
      python --version
 
+     # Install CGRAMapper for tests/test_load_from_file.py
+     # TODO: Ideally we can refactor that test file so we don't need this dependency
+     git clone https://github.com/StanfordAHA/CGRAMapper
+     cd CGRAMapper
+     make install -j
+     cd ..
      python -m pip install cmake twine wheel pytest
      python setup.py bdist_wheel
      pip install dist/*.whl
