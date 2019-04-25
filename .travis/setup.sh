@@ -23,6 +23,7 @@ else
 
      # Install CGRAMapper for tests/test_load_from_file.py
      # TODO: Ideally we can refactor that test file so we don't need this dependency
+     git clone https://github.com/rdaly525/coreir  # needed for coreir.h included by mapper
      git clone https://github.com/StanfordAHA/CGRAMapper
      cd CGRAMapper
      make install -j
