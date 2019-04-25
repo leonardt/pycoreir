@@ -12,8 +12,11 @@ import platform
 _system = platform.system()
 if _system == "Linux":
     lib_ext = "so"
+    static_build = True
 elif _system == "Darwin":
     lib_ext = "dylib"
+    # osx default xcode doesn't support static build
+    static_build = False
 else:
     raise NotImplementedError(_system)
 
@@ -37,7 +40,10 @@ class CoreIRBuild(build_ext):
             subprocess.check_call(["git", "clone", "--depth=1", COREIR_REPO,
                                    COREIR_PATH])
         build_dir = os.path.join(COREIR_PATH, "build")
-        subprocess.check_call(["cmake", "-DSTATIC=ON", ".."], cwd=build_dir)
+        if static_build:
+            subprocess.check_call(["cmake", "-DSTATIC=ON", ".."], cwd=build_dir)
+        else:
+            subprocess.check_call(["cmake", ".."], cwd=build_dir)
 
         for lib_name in self.libs:
             subprocess.check_call(["make", "-C", build_dir, "-j2",
