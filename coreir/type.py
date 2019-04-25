@@ -95,7 +95,8 @@ class Type(CoreIRType):
             1: "BitIn",
             2: "Array",
             3: "Record",
-            4: "Named"
+            4: "Named",
+            5: "BitInOut"
         }[kind]
 
     def is_input(self):
