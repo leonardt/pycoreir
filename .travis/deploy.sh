@@ -18,6 +18,10 @@ if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
     docker exec -i manylinux bash -c 'cd  /pycoreir && python setup.py sdist'
     docker exec -i manylinux bash -c 'cd  /pycoreir && twine upload --config-file /home/.pypirc dist/*.tar.gz'
 else
+    export PYTHON=3.7.0
+    export PYENV_VERSION=$PYTHON
+    export PATH="/Users/travis/.pyenv/shims:${PATH}"
+    source /Users/travis/.pyenv/versions/${PYTHON}/envs/venv/bin/activate
     # osx
     pip install twine
     twine upload dist/*
