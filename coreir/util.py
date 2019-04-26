@@ -2,6 +2,25 @@ from collections.abc import Mapping
 import ctypes as ct
 from .lib import libcoreir_c
 
+def decode_cptr_and_free(ptr):
+    #i = 0
+    #pstr = ""
+    #while ptr[i] != b'\0':
+    #    pstr += ptr[i].decode()
+    #    i += 1
+    #libcoreir_c.COREFree(ptr)
+    #return pstr
+
+    MAX_STR_LEN = 10000
+    plen = 0
+    while ptr[plen] != b'\0':
+        plen +=1
+        if plen > MAX_STR_LEN:
+            raise ValueError("ptr does not have a null terminator")
+
+    pstr = ptr[:plen].decode()
+    libcoreir_c.COREFree(ptr)
+    return pstr
 
 class LazyDict(Mapping):
     """

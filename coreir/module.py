@@ -4,6 +4,7 @@ from coreir.type import CoreIRType, Values
 from coreir.lib import libcoreir_c
 from coreir.wireable import Instance, Interface, Wireable
 from coreir.type import COREValue_p, COREValueType_p, Value, Record
+from coreir.util import decode_cptr_and_free
 import coreir.wireable
 import json
 
@@ -178,14 +179,13 @@ class Module(GlobalValue):
 
     def add_metadata(self, key, value):
         libcoreir_c.COREModuleAddMetaDataStr(self.ptr, str.encode(key), str.encode(value))
-    
+ 
+
     @property
     def metadata(self):
-        mptr = libcoreir_c.COREModuleGetMetaData(self.ptr)
-        mjson = json.loads(mptr.decode())
-        
-        #the following produces the error "pointer being freed was not allocated"
-        #libcoreir_c.COREFree(cmptr)
+        ptr_c = libcoreir_c.COREModuleGetMetaData(self.ptr)
+        pstr = decode_cptr_and_free(ptr_c)
+        mjson = json.loads(pstr)
         return mjson
 
 
