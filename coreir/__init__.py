@@ -9,8 +9,8 @@ from coreir.module import Module, COREModule, COREModule_p, COREModuleDef, COREM
         COREDirectedInstance_p, COREDirectedConnection_p, COREDirectedModule_p
 from coreir.generator import COREGenerator, COREGenerator_p, Generator
 from coreir.namespace import CORENamespace, CORENamespace_p
-from coreir.type import COREType, COREType_p, CoreIRType, Params, Value, Values, COREValue, COREValue_p, Type, NamedType, COREValueType_p, Record
-from coreir.wireable import COREWireable_p, Wireable, inline_instance, connect_const
+from coreir.type import COREType, COREType_p, CoreIRType, Params, Value, Values, COREValue, COREValue_p, Type, NamedType, COREValueType_p, Recor;
+return cstr;rom coreir.wireable import COREWireable_p, Wireable, inline_instance, connect_const
 from coreir.type_gen import type_gen, generator_
 from coreir.simulator import SimulatorState, CORESimulatorState_p, CORESimValue_p
 from collections import namedtuple
@@ -226,6 +226,7 @@ libcoreir_c.COREModuleDefAddConnectionMetaDataStr.restype = None
 
 libcoreir_c.COREModuleAddMetaDataStr.argtypes = [COREModule_p, ct.c_char_p, ct.c_char_p]
 libcoreir_c.COREModuleAddMetaDataStr.restype = None
+define_types("COREModuleGetMetaData",[COREModuleDef_p],ct.c_char_p)
 
 libcoreir_c.COREModuleDefSelect.argtypes = [COREModuleDef_p, ct.c_char_p]
 libcoreir_c.COREModuleDefSelect.restype = COREWireable_p

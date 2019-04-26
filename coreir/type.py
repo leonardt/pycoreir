@@ -140,6 +140,8 @@ class Record(Type):
             retval[keys[i].decode()] = getPyCoreIRType(values[i], self.context)
         return retval.items()
 
+    def __contains__(self,key):
+        return key in dict(self.items())
 
 class NamedType(Type):
     @property

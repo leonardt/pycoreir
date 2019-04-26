@@ -5,6 +5,7 @@ from coreir.lib import libcoreir_c
 from coreir.wireable import Instance, Interface, Wireable
 from coreir.type import COREValue_p, COREValueType_p, Value, Record
 import coreir.wireable
+import json
 
 
 class SelectError(RuntimeError):
@@ -92,6 +93,10 @@ class ModuleDef(CoreIRType):
 
     def add_metadata(self, a, b, key, value):
         libcoreir_c.COREModuleDefAddConnectionMetaDataStr(self.ptr, a.ptr, b.ptr, str.encode(key), str.encode(value))
+
+    @property
+    def metadata(self):
+        return json.loads(libcoreir_c.COREModuleGetMetaData(self.ptr).decode())
 
     def add_passthrough(self,wireable):
         if not isinstance(wireable,Wireable):
