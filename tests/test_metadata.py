@@ -13,3 +13,5 @@ def test_module_metadata():
     add16.add_metadata("foo",json.dumps(dummy_data))
     check = add16.metadata
     assert check == dict(foo=dummy_data)
+
+test_module_metadata()

@@ -181,7 +181,12 @@ class Module(GlobalValue):
     
     @property
     def metadata(self):
-        return json.loads(libcoreir_c.COREModuleGetMetaData(self.ptr).decode())
+        mptr = libcoreir_c.COREModuleGetMetaData(self.ptr)
+        mjson = json.loads(mptr.decode())
+        
+        #the following produces the error "pointer being freed was not allocated"
+        #libcoreir_c.COREFree(cmptr)
+        return mjson
 
 
 class COREDirectedInstance(ct.Structure):
