@@ -61,6 +61,9 @@ class Context:
     def print_errors(self):
         libcoreir_c.COREPrintErrors(self.context)
 
+    def BitInOut(self):
+        return Type(libcoreir_c.COREBitInOut(self.context),self)
+
     def BitIn(self):
         return Type(libcoreir_c.COREBitIn(self.context),self)
 
