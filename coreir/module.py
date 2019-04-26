@@ -94,9 +94,6 @@ class ModuleDef(CoreIRType):
     def add_metadata(self, a, b, key, value):
         libcoreir_c.COREModuleDefAddConnectionMetaDataStr(self.ptr, a.ptr, b.ptr, str.encode(key), str.encode(value))
 
-    @property
-    def metadata(self):
-        return json.loads(libcoreir_c.COREModuleGetMetaData(self.ptr).decode())
 
     def add_passthrough(self,wireable):
         if not isinstance(wireable,Wireable):
@@ -181,6 +178,10 @@ class Module(GlobalValue):
 
     def add_metadata(self, key, value):
         libcoreir_c.COREModuleAddMetaDataStr(self.ptr, str.encode(key), str.encode(value))
+    
+    @property
+    def metadata(self):
+        return json.loads(libcoreir_c.COREModuleGetMetaData(self.ptr).decode())
 
 
 class COREDirectedInstance(ct.Structure):
