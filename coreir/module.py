@@ -4,7 +4,9 @@ from coreir.type import CoreIRType, Values
 from coreir.lib import libcoreir_c
 from coreir.wireable import Instance, Interface, Wireable
 from coreir.type import COREValue_p, COREValueType_p, Value, Record
+from coreir.util import decode_cptr_and_free
 import coreir.wireable
+import json
 
 
 class SelectError(RuntimeError):
@@ -93,6 +95,7 @@ class ModuleDef(CoreIRType):
     def add_metadata(self, a, b, key, value):
         libcoreir_c.COREModuleDefAddConnectionMetaDataStr(self.ptr, a.ptr, b.ptr, str.encode(key), str.encode(value))
 
+
     def add_passthrough(self,wireable):
         if not isinstance(wireable,Wireable):
             raise TypeError("Needs to be an Instance")
@@ -176,6 +179,14 @@ class Module(GlobalValue):
 
     def add_metadata(self, key, value):
         libcoreir_c.COREModuleAddMetaDataStr(self.ptr, str.encode(key), str.encode(value))
+ 
+
+    @property
+    def metadata(self):
+        ptr_c = libcoreir_c.COREModuleGetMetaData(self.ptr)
+        pstr = decode_cptr_and_free(ptr_c)
+        mjson = json.loads(pstr)
+        return mjson
 
 
 class COREDirectedInstance(ct.Structure):

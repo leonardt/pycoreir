@@ -229,6 +229,7 @@ libcoreir_c.COREModuleDefAddConnectionMetaDataStr.restype = None
 
 libcoreir_c.COREModuleAddMetaDataStr.argtypes = [COREModule_p, ct.c_char_p, ct.c_char_p]
 libcoreir_c.COREModuleAddMetaDataStr.restype = None
+define_types("COREModuleGetMetaData",[COREModule_p],ct.POINTER(ct.c_char))
 
 libcoreir_c.COREModuleDefSelect.argtypes = [COREModuleDef_p, ct.c_char_p]
 libcoreir_c.COREModuleDefSelect.restype = COREWireable_p
