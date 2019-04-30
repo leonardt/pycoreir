@@ -1,3 +1,9 @@
+
+addons:
+  apt:
+    packages:
+    - g++-4.9
+
 os:
     - linux
     - osx
@@ -7,6 +13,7 @@ before_install:
 
 install:
     - pip install pytest
+    - export CXX="g++-4.9";
     - pip install -e .
 
 script:
