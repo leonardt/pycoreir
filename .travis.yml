@@ -1,12 +1,13 @@
-services:
-    - docker
-
 os:
     - linux
     - osx
 
 before_install:
     - source ./.travis/setup.sh
+
+install:
+    - pip install pytest
+    - pip install -e .
 
 script:
     - ./.travis/run.sh

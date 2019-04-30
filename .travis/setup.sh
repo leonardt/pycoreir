@@ -1,16 +1,17 @@
 #!/usr/bin/env bash
 
 if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
-    docker pull keyiz/manylinux-coreir
-    docker run -d --name manylinux --rm -i -t keyiz/manylinux-coreir bash
-    docker exec manylinux git clone https://github.com/leonardt/pycoreir
-    docker exec manylinux bash -c "cd pycoreir && python setup.py bdist_wheel"
-    docker exec manylinux bash -c "auditwheel show /pycoreir/dist/*.whl"
-    # we should have any external linked libraries at this point
-    docker exec manylinux bash -c "cd pycoreir && auditwheel repair dist/*.whl"
-    # install the wheel for testing
-    docker exec manylinux bash -c "cd pycoreir && pip install wheelhouse/*.whl"
-    docker exec manylinux pip install pytest
+     wget http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh
+     chmod +x miniconda.sh
+     ./miniconda.sh -b -p $TRAVIS_BUILD_DIR/miniconda
+     export PATH=$TRAVIS_BUILD_DIR/miniconda/bin:$PATH
+     hash -r
+     conda config --set always_yes yes --set changeps1 no
+     conda update -q conda 
+     conda create -q -n test-env python=3.7
+     source activate test-env
+     conda install pip
+
 else
      export PYTHON=3.7.0
      brew install pyenv-virtualenv
