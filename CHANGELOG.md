@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## 2.0.8 - 2019-04-22
 ### Added
+- Added libcoreir-rtlil to distributed wheel
+
+## 2.0.8 - 2019-04-22
+### Added
 - Added OSX build to travis
 
 ## 2.0.7 - 2019-04-22
