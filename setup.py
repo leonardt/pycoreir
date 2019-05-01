@@ -34,7 +34,7 @@ class CoreIRExtension(Extension):
 
 class CoreIRBuild(build_ext):
     libs = ["coreir-c", "coreirsim-c", "coreir-ice40", "coreir-aetherlinglib",
-            "coreir-commonlib", "coreir-float"]
+            "coreir-commonlib", "coreir-float", "coreir-rtlil"]
     def run(self):
         if not os.path.isdir(COREIR_PATH):
             subprocess.check_call(["git", "clone", "--depth=1", COREIR_REPO,
