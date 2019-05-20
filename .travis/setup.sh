@@ -3,6 +3,7 @@
 if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
     docker pull keyiz/manylinux-coreir
     docker run -d --name manylinux --rm -i -t keyiz/manylinux-coreir bash
+    docker exec manylinux bash -c "sudo apt-get install -y libgmp-dev libmpfr-dev libmpc-dev"
     docker exec manylinux git clone https://github.com/leonardt/pycoreir
     docker exec manylinux bash -c "cd pycoreir && python setup.py bdist_wheel"
     docker exec manylinux bash -c "auditwheel show /pycoreir/dist/*.whl"
@@ -14,6 +15,7 @@ if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
 else
      export PYTHON=3.7.0
      brew install pyenv-virtualenv
+     brew install gmp mpfr libmpc
      pyenv install ${PYTHON}
      export PYENV_VERSION=$PYTHON
      export PATH="/Users/travis/.pyenv/shims:${PATH}"
