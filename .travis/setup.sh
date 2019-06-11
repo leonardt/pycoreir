@@ -13,6 +13,7 @@ if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
     docker exec garnet-flow pip install pytest
 else
      export PYTHON=3.7.0
+     brew install gmp mpfr libmpc
      brew install pyenv-virtualenv
      pyenv install ${PYTHON}
      export PYENV_VERSION=$PYTHON
