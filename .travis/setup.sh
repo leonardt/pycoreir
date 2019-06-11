@@ -1,21 +1,20 @@
 #!/usr/bin/env bash
 
 if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
-    docker pull keyiz/manylinux-coreir
-    docker run -d --name manylinux --rm -i -t keyiz/manylinux-coreir bash
-    docker exec manylinux bash -c "sudo apt-get install -y libgmp-dev libmpfr-dev libmpc-dev"
-    docker exec manylinux git clone https://github.com/leonardt/pycoreir
-    docker exec manylinux bash -c "cd pycoreir && python setup.py bdist_wheel"
-    docker exec manylinux bash -c "auditwheel show /pycoreir/dist/*.whl"
+    docker pull keyiz/garnet-flow
+    docker run -d --name garnet-flow --rm -i -t keyiz/garnet-flow bash
+    docker exec garnet-flow git clone https://github.com/leonardt/pycoreir
+    docker exec garnet-flow bash -c "cd pycoreir && python setup.py bdist_wheel"
+    docker exec garnet-flow bash -c "auditwheel show /pycoreir/dist/*.whl"
     # we should have any external linked libraries at this point
-    docker exec manylinux bash -c "cd pycoreir && auditwheel repair dist/*.whl"
+    docker exec garnet-flow bash -c "cd pycoreir && auditwheel repair dist/*.whl"
     # install the wheel for testing
-    docker exec manylinux bash -c "cd pycoreir && pip install wheelhouse/*.whl"
-    docker exec manylinux pip install pytest
+    docker exec garnet-flow bash -c "cd pycoreir && pip install wheelhouse/*.whl"
+    docker exec garnet-flow pip install pytest
 else
      export PYTHON=3.7.0
-     brew install pyenv-virtualenv
      brew install gmp mpfr libmpc
+     brew install pyenv-virtualenv
      pyenv install ${PYTHON}
      export PYENV_VERSION=$PYTHON
      export PATH="/Users/travis/.pyenv/shims:${PATH}"
