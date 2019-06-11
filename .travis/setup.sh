@@ -3,7 +3,7 @@
 if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
     docker pull keyiz/manylinux-coreir
     docker run -d --name manylinux --rm -i -t keyiz/manylinux-coreir bash
-    docker exec manylinux bash -c "yum install libmpc-devel mpfr-devel gmp-devel"
+    docker exec manylinux bash -c "yum install -y libmpc-devel mpfr-devel gmp-devel"
     docker exec manylinux git clone https://github.com/leonardt/pycoreir
     docker exec manylinux bash -c "cd pycoreir && python setup.py bdist_wheel"
     docker exec manylinux bash -c "auditwheel show /pycoreir/dist/*.whl"
