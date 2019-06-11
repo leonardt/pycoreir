@@ -37,7 +37,7 @@ class CoreIRBuild(build_ext):
             "coreir-commonlib", "coreir-float", "coreir-rtlil", "coreir-float_CW"]
     def run(self):
         if not os.path.isdir(COREIR_PATH):
-            subprocess.check_call(["git", "clone", "-b", "float-fix", "--depth=1", COREIR_REPO,
+            subprocess.check_call(["git", "clone", "--depth=1", COREIR_REPO,
                                    COREIR_PATH])
         build_dir = os.path.join(COREIR_PATH, "build")
         if static_build:
