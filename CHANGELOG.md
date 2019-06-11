@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 2.0.14
+### Added
+- Adds support for coreir `float_CW` lib
+  https://github.com/leonardt/pycoreir/pull/95
+ 
 ## 2.0.8 - 2019-04-22
 ### Added
 - Added libcoreir-rtlil to distributed wheel
