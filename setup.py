@@ -34,7 +34,8 @@ class CoreIRExtension(Extension):
 
 class CoreIRBuild(build_ext):
     libs = ["coreir-c", "coreirsim-c", "coreir-ice40", "coreir-aetherlinglib",
-            "coreir-commonlib", "coreir-float", "coreir-rtlil", "coreir-float_CW"]
+            "coreir-commonlib", "coreir-float", "coreir-rtlil",
+            "coreir-float_CW", "coreir-float_DW"]
     def run(self):
         if not os.path.isdir(COREIR_PATH):
             subprocess.check_call(["git", "clone", "--depth=1", COREIR_REPO,
@@ -76,7 +77,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name='coreir',
-    version='2.0.17',
+    version='2.0.18',
     description='Python bindings for CoreIR',
     packages=["coreir"],
     license='BSD License',
