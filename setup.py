@@ -1,24 +1,24 @@
+"""
+Script for installing the pycoreir module
+"""
 import subprocess
 import os
+import shutil
+import platform
 from setuptools import setup, Extension
 from setuptools.command.build_ext import build_ext
-from distutils.command.build import build
-import glob
-import shutil
-import sys
-import platform
 
 
-_system = platform.system()
-if _system == "Linux":
-    lib_ext = "so"
-    static_build = True
-elif _system == "Darwin":
-    lib_ext = "dylib"
+SYSTEM = platform.system()
+if SYSTEM == "Linux":
+    LIB_EXT = "so"
+    STATIC_BUILD = True
+elif SYSTEM == "Darwin":
+    LIB_EXT = "dylib"
     # osx default xcode doesn't support static build
-    static_build = False
+    STATIC_BUILD = False
 else:
-    raise NotImplementedError(_system)
+    raise NotImplementedError(SYSTEM)
 
 
 COREIR_PATH = "coreir-cpp"
@@ -26,13 +26,10 @@ COREIR_REPO = "https://github.com/rdaly525/coreir"
 COREIR_NAME = "coreir"
 
 
-class CoreIRExtension(Extension):
-    def __init__(self, name, sourcedir=''):
-        Extension.__init__(self, name, sources=[])
-        self.sourcedir = os.path.abspath(sourcedir)
-
-
 class CoreIRBuild(build_ext):
+    """
+    Compile coreir libraries
+    """
     libs = ["coreir-c", "coreirsim-c", "coreir-ice40", "coreir-aetherlinglib",
             "coreir-commonlib", "coreir-float", "coreir-rtlil",
             "coreir-float_CW", "coreir-float_DW"]
@@ -41,7 +38,7 @@ class CoreIRBuild(build_ext):
             subprocess.check_call(["git", "clone", "--depth=1", COREIR_REPO,
                                    COREIR_PATH])
         build_dir = os.path.join(COREIR_PATH, "build")
-        if static_build:
+        if STATIC_BUILD:
             subprocess.check_call(["cmake", "-DSTATIC=ON", ".."], cwd=build_dir)
         else:
             subprocess.check_call(["cmake", ".."], cwd=build_dir)
@@ -64,7 +61,7 @@ class CoreIRBuild(build_ext):
         for lib_name in self.libs:
             filename = os.path.join(
                 COREIR_PATH, "build", "lib",
-                "lib{}.{}".format(lib_name, lib_ext)
+                "lib{}.{}".format(lib_name, LIB_EXT)
             )
             shutil.copy(filename, extdir)
 
@@ -73,7 +70,7 @@ class CoreIRBuild(build_ext):
         shutil.copy(filename, extdir)
 
 with open("README.md", "r") as fh:
-    long_description = fh.read()
+    LONG_DESCRIPTION = fh.read()
 
 setup(
     name='coreir',
@@ -84,11 +81,11 @@ setup(
     url='https://github.com/leonardt/pycoreir',
     author='Leonard Truong',
     author_email='lenny@cs.stanford.edu',
-    long_description=long_description,
+    long_description=LONG_DESCRIPTION,
     long_description_content_type="text/markdown",
     install_requires=["hwtypes>=1.0.*"],
-    ext_modules=[CoreIRExtension('coreir')],
-    scripts=["bin/coreir"],
+    ext_modules=[Extension('coreir', [])],
+    scripts=[os.path.join(COREIR_PATH, "build", "bin", "coreir")],
     cmdclass=dict(build_ext=CoreIRBuild),
     zip_safe=False
 )
