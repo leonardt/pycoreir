@@ -20,6 +20,10 @@ elif _system == "Darwin":
 else:
     raise NotImplementedError(_system)
 
+if os.environ['TRAVIS'] == 'true':
+    njobs = 2
+else:
+    njobs = max(2, len(os.sched_getaffinity(0)))
 
 COREIR_PATH = "coreir-cpp"
 COREIR_REPO = "https://github.com/rdaly525/coreir"
@@ -47,10 +51,10 @@ class CoreIRBuild(build_ext):
             subprocess.check_call(["cmake", ".."], cwd=build_dir)
 
         for lib_name in self.libs:
-            subprocess.check_call(["make", "-C", build_dir, "-j2",
+            subprocess.check_call(["make", "-C", build_dir, f"-j{njobs}",
                                    lib_name])
         # make the binary
-        subprocess.check_call(["make", "-C", build_dir, "-j2", "coreir-bin"])
+        subprocess.check_call(["make", "-C", build_dir, f"-j{njobs}", "coreir-bin"])
 
         # we only have one extension
         assert len(self.extensions) == 1
