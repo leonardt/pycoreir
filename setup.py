@@ -20,7 +20,7 @@ elif _system == "Darwin":
 else:
     raise NotImplementedError(_system)
 
-if os.environ['TRAVIS'] == 'true':
+if os.environ.get('TRAVIS') == 'true':
     njobs = 2
 else:
     njobs = max(2, len(os.sched_getaffinity(0)))
