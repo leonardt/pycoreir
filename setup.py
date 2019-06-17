@@ -7,7 +7,7 @@ import glob
 import shutil
 import sys
 import platform
-import psutil
+import multiprocessing
 
 
 _system = platform.system()
@@ -25,9 +25,9 @@ if os.environ.get('TRAVIS') == 'true':
     njobs = 2
 else:
     try:
-        cpus = len(psutil.Process().cpu_affinity())
+        cpus = len(os.sched_getaffinity(0))
     except AttributeError:
-        cpus = psutil.cpu_count()
+        cpus = multiprocessing.cpu_count()
     njobs = max(2, cpus)
 
 COREIR_PATH = "coreir-cpp"
