@@ -7,6 +7,7 @@ import glob
 import shutil
 import sys
 import platform
+import psutil
 
 
 _system = platform.system()
@@ -23,7 +24,11 @@ else:
 if os.environ.get('TRAVIS') == 'true':
     njobs = 2
 else:
-    njobs = max(2, len(os.sched_getaffinity(0)))
+    try:
+        cpus = len(psutil.Process().cpu_affinity())
+    except AttributeError:
+        cpus = psutil.cpu_count()
+    njobs = max(2, cpus)
 
 COREIR_PATH = "coreir-cpp"
 COREIR_REPO = "https://github.com/rdaly525/coreir"
