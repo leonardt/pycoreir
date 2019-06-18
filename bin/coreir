@@ -4,6 +4,7 @@ import platform
 import sys
 import os
 import coreir
+import subprocess
 
 
 _system = platform.system()
@@ -16,5 +17,6 @@ else:
 
 path = os.path.abspath(os.path.dirname(coreir.__file__))
 coreir_binary = os.path.join(path, "coreir")
-args = " ".join(sys.argv[1:])
-os.system(f"{LIBRARY_PATH_VAR}={path}:${LIBRARY_PATH_VAR} {coreir_binary} {args}")
+env = dict(os.environ)
+env[LIBRARY_PATH_VAR] = path
+subprocess.call([coreir_binary] + sys.argv[1:], env=env)
