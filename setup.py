@@ -86,9 +86,10 @@ with open("README.md", "r") as fh:
 
 
 kwargs = {}
+# If coreir is not present in the path, compile it from source
 if not shutil.which("coreir"):
     kwargs["ext_modules"] = [CoreIRExtension('coreir')]
-    kwargs["scripts"]= ["bin/coreir"]
+    kwargs["scripts"] = ["bin/coreir"]
     kwargs["cmdclass"] = dict(build_ext=CoreIRBuild)
 
 setup(
