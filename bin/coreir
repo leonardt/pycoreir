@@ -15,7 +15,7 @@ import shutil
 # If coreir is not present in the path, try using the static binary
 # distribution, this gives priority to the system installed version as we
 # assume that is what the user wants (e.g. buildling a custom version)
-if not shutil.which("coreir"):
+if shutil.which("coreir") != __file__:
     _system = platform.system()
     if _system == "Linux":
         LIBRARY_PATH_VAR = "LD_LIBRARY_PATH"
