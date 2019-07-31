@@ -1,3 +1,7 @@
+"""
+Wrapper script that uses statically compiled coreir binary distribution only if
+coreir is not already present in the path
+"""
 #!/usr/bin/env python
 
 import platform
@@ -5,18 +9,22 @@ import sys
 import os
 import coreir
 import subprocess
+import shutil
 
 
-_system = platform.system()
-if _system == "Linux":
-    LIBRARY_PATH_VAR = "LD_LIBRARY_PATH"
-elif _system == "Darwin":
-    LIBRARY_PATH_VAR = "DYLD_LIBRARY_PATH"
+if not shutil.which("coreir"):
+    _system = platform.system()
+    if _system == "Linux":
+        LIBRARY_PATH_VAR = "LD_LIBRARY_PATH"
+    elif _system == "Darwin":
+        LIBRARY_PATH_VAR = "DYLD_LIBRARY_PATH"
+    else:
+        raise NotImplementedError(_system)
+
+    path = os.path.abspath(os.path.dirname(coreir.__file__))
+    coreir_binary = os.path.join(path, "coreir")
+    env = dict(os.environ)
+    env[LIBRARY_PATH_VAR] = path
+    subprocess.call([coreir_binary] + sys.argv[1:], env=env)
 else:
-    raise NotImplementedError(_system)
-
-path = os.path.abspath(os.path.dirname(coreir.__file__))
-coreir_binary = os.path.join(path, "coreir")
-env = dict(os.environ)
-env[LIBRARY_PATH_VAR] = path
-subprocess.call([coreir_binary] + sys.argv[1:], env=env)
+    subprocess.call(["coreir"] + sys.argv[1:])

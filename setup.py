@@ -84,6 +84,13 @@ class CoreIRBuild(build_ext):
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
+
+scripts = []
+ext_modules = []
+if not shutil.which("coreir"):
+    ext_modules = [CoreIRExtension('coreir')]
+    scripts = ["bin/coreir"]
+
 setup(
     name='coreir',
     version='2.0.19',
@@ -96,8 +103,8 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     install_requires=["hwtypes>=1.0.*"],
-    ext_modules=[CoreIRExtension('coreir')],
-    scripts=["bin/coreir"],
+    ext_modules=ext_modules,
+    scripts=scripts,
     cmdclass=dict(build_ext=CoreIRBuild),
     zip_safe=False
 )
