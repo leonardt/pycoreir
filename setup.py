@@ -85,11 +85,11 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 
-scripts = []
-ext_modules = []
+kwargs = {}
 if not shutil.which("coreir"):
-    ext_modules = [CoreIRExtension('coreir')]
-    scripts = ["bin/coreir"]
+    kwargs["ext_modules"] = [CoreIRExtension('coreir')]
+    kwargs["scripts"]= ["bin/coreir"]
+    kwargs["cmdclass"] = dict(build_ext=CoreIRBuild)
 
 setup(
     name='coreir',
@@ -103,8 +103,6 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     install_requires=["hwtypes>=1.0.*"],
-    ext_modules=ext_modules,
-    scripts=scripts,
-    cmdclass=dict(build_ext=CoreIRBuild),
-    zip_safe=False
+    zip_safe=False,
+    **kwargs
 )
