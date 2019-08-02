@@ -1,9 +1,11 @@
 services:
     - docker
 
-os:
-    - linux
-    - osx
+matrix:
+  include:
+    - os: linux
+    - os: osx
+      osx_image: xcode10.2
 
 before_install:
     - source ./.travis/setup.sh
