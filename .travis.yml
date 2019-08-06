@@ -1,24 +1,64 @@
-services:
-    - docker
-
-os:
-    - linux
-    - osx
-
+matrix:
+  include:
+  - os: linux
+    addons:
+      apt:
+        sources:
+        - ubuntu-toolchain-r-test
+        packages:
+        - g++-7
+        - libgmp-dev
+        - libmpfr-dev
+        - libmpc-dev
+    env:
+    - CC=gcc-7
+    - CXX=g++-7
+  - os: osx
+    osx_image: xcode10.2
 before_install:
-    - source ./.travis/setup.sh
+- |
+  if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+    export PYTHON=3.7.0
+    brew install gmp mpfr libmpc
+    brew install pyenv-virtualenv
+    pyenv install ${PYTHON}
+    export PYENV_VERSION=$PYTHON
+    export PATH="/Users/travis/.pyenv/shims:${PATH}"
+    pyenv virtualenv venv
+    source /Users/travis/.pyenv/versions/${PYTHON}/envs/venv/bin/activate
+    python --version
 
+    python -m pip install cmake twine wheel pytest
+  else
+    # install conda for py 3.7
+    wget http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh
+    chmod +x miniconda.sh
+    ./miniconda.sh -b -p $TRAVIS_BUILD_DIR/miniconda
+    export PATH=$TRAVIS_BUILD_DIR/miniconda/bin:$PATH
+    hash -r
+    conda config --set always_yes yes --set changeps1 no
+    conda update -q conda
+    conda create -q -n test-env python=3.7
+    source activate test-env
+    conda install pip
+    # End install conda
+  fi
+install:
+- pip install -e .
+- pip install pytest magma-lang
 script:
-    - ./.travis/run.sh
-
+- pytest -s tests/
 deploy:
-- provider: script
-  script: /bin/bash .travis/deploy.sh
+  provider: pypi
+  user: leonardt
+  password:
+    secure: Mx/SV+tue8XSzBORAWGE8yUXBBFmZ4Hoq/Wav3Tw8xCMedKatzmAajLdmbkknvsVm/tAQstPYmMvIw3DEsrSdCuROaKMgg+ICpnadbRYO49/MEV4Wrc21cE1CToULTNSMnaonNAUAKq/IzPsIaqFjbK9OZZ4gNWG4EIpsZWgdiKCDhERsd8xqRYECPp5T7olZMQ5zlk9iS/MGu73ZKr6Vzh43YTOmO2i2/A36X8RcIvJjYFIL17EeqxRdIp+5RmATYcaFLFeDw7VKsCLFCBM1oFJuo8ATrxyYu7o44lvEWkqRWCgivul5eGhJ5kkw+ijj9Wd8Kf+B44l5nQcHmiacUWhk9KFfe3Q3/PfHkVQNp2Kl9xt/IXVyWAdTD2CUtYW5kdA/WMhBjNY6JB/NRgclplxWG2dZeBgiD5UbKXZPgns27K+X9wCFxx8NyKcbNEqaLwQt2YsFXYku1pfuIeTv9Yz2YkVf8TJVdUjj3xxA+SFHTTIkE636ArKpu51lyzRyeqc4Ai4JCf+MrwFInQa+2Dyah0xwAntAtGud7jHAR9W6shPk03VfKe/XS5fPh7vPno4KtombBz2naD3usiILhsmiC24WM6kBCPR4gJqZ4DXc35nSku30Yp4rGPKULgYTeMls8006BcqQhyLQZUnaLEpxnAswhJOJfk4GtwF0xw=
   skip_cleanup: true
   on:
     branch: master
     tags: true
-
+  distributions: "sdist"
+  skip_existing: true
 notifications:
   slack:
     rooms:
