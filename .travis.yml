@@ -19,13 +19,20 @@ matrix:
 
 before_install:
   - eval "${MATRIX_EVAL}"
+  # install conda for py 3.7
+  - wget http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh
+  - chmod +x miniconda.sh
+  - ./miniconda.sh -b -p $TRAVIS_BUILD_DIR/miniconda
+  - export PATH=$TRAVIS_BUILD_DIR/miniconda/bin:$PATH
+  - hash -r
+  - conda config --set always_yes yes --set changeps1 no
+  - conda update -q conda
+  - conda create -q -n test-env python=3.7
+  - source activate test-env
+  - conda install pip
+  # End install conda
   - |
     if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
-      # Install later python for compatability with cpp-coveralls
-      export PYTHON=3.7.0;
-      pyenv install ${PYTHON};
-      export PYENV_VERSION=$PYTHON;
-      export PATH="/Users/travis/.pyenv/shims:${PATH}";
       brew install gmp mpfr libmpc
     fi
   - pip install pytest magma-lang
