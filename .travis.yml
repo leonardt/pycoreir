@@ -57,20 +57,20 @@ deploy:
 - provider: script
   script: 
    - |
-    echo [distutils]                                  > ~/.pypirc
-    echo index-servers =                             >> ~/.pypirc
-    echo "  pypi"                                    >> ~/.pypirc
-    echo                                             >> ~/.pypirc
-    echo [pypi]                                      >> ~/.pypirc
-    echo repository=https://upload.pypi.org/legacy/  >> ~/.pypirc
-    echo username=leonardt                           >> ~/.pypirc
-    echo password=$PYPI_PASSWORD                     >> ~/.pypirc
+     echo [distutils]                                  > ~/.pypirc
+     echo index-servers =                             >> ~/.pypirc
+     echo "  pypi"                                    >> ~/.pypirc
+     echo                                             >> ~/.pypirc
+     echo [pypi]                                      >> ~/.pypirc
+     echo repository=https://upload.pypi.org/legacy/  >> ~/.pypirc
+     echo username=leonardt                           >> ~/.pypirc
+     echo password=$PYPI_PASSWORD                     >> ~/.pypirc
 
-    python setup.py sdist bdist_wheel
-    twine upload dist/*.whl
-    if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
-      twine upload dist/*.tar.gz
-    fi
+     python setup.py sdist bdist_wheel
+     twine upload dist/*.whl
+     if [[ "$TRAVIS_OS_NAME" != "osx" ]]; then
+       twine upload dist/*.tar.gz
+     fi
   skip_cleanup: true
   on:
     branch: master
