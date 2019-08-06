@@ -44,7 +44,7 @@ class CoreIRExtension(Extension):
 class CoreIRBuild(build_ext):
     libs = ["coreir-c", "coreirsim-c", "coreir-ice40", "coreir-aetherlinglib",
             "coreir-commonlib", "coreir-float", "coreir-rtlil",
-            "coreir-float_CW", "coreir-float_DW", "verilogAST"]
+            "coreir-float_CW", "coreir-float_DW"]
     def run(self):
         if not os.path.isdir(COREIR_PATH):
             subprocess.check_call(["git", "clone", "--depth=1", COREIR_REPO,
@@ -84,17 +84,9 @@ class CoreIRBuild(build_ext):
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
-
-kwargs = {}
-# If coreir is not present in the path, compile it from source
-if not shutil.which("coreir"):
-    kwargs["ext_modules"] = [CoreIRExtension('coreir')]
-    kwargs["scripts"] = ["bin/coreir"]
-    kwargs["cmdclass"] = dict(build_ext=CoreIRBuild)
-
 setup(
     name='coreir',
-    version='2.0.26',
+    version='2.0.19',
     description='Python bindings for CoreIR',
     packages=["coreir"],
     license='BSD License',
@@ -104,6 +96,8 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     install_requires=["hwtypes>=1.0.*"],
-    zip_safe=False,
-    **kwargs
+    ext_modules=[CoreIRExtension('coreir')],
+    scripts=["bin/coreir"],
+    cmdclass=dict(build_ext=CoreIRBuild),
+    zip_safe=False
 )
