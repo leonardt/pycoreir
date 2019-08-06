@@ -1,17 +1,37 @@
-services:
-    - docker
-
 matrix:
   include:
     - os: linux
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-7
+            - libgmp-dev
+            - libmpfr-dev
+            - libmpc-dev
+      env:
+        - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
+
     - os: osx
       osx_image: xcode10.2
 
+
 before_install:
-    - source ./.travis/setup.sh
+  - eval "${MATRIX_EVAL}"
+  - |
+    if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+      # Install later python for compatability with cpp-coveralls
+      export PYTHON=3.7.0;
+      pyenv install ${PYTHON};
+      export PYENV_VERSION=$PYTHON;
+      export PATH="/Users/travis/.pyenv/shims:${PATH}";
+      brew install gmp mpfr libmpc
+    fi
+  - pip install pytest magma-lang
 
 script:
-    - ./.travis/run.sh
+    - pytest -s tests/
 
 deploy:
 - provider: script
