@@ -94,7 +94,7 @@ if not shutil.which("coreir"):
 
 setup(
     name='coreir',
-    version='2.0.25',
+    version='2.0.26',
     description='Python bindings for CoreIR',
     packages=["coreir"],
     license='BSD License',
