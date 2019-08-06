@@ -35,6 +35,8 @@ before_install:
     if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
       brew install gmp mpfr libmpc
     fi
+install:
+  - pip install -e .
   - pip install pytest magma-lang
 
 script:
