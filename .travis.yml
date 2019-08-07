@@ -50,8 +50,8 @@ install:
   if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
     mkdir build && cd build && cmake .. && cmake --build . && make install && cd ..
   else
-    mkdir build && cd build && cmake -DCMAKE_INSTALL_PREFIX=/usr/lib .. && cmake --build . && sudo make install && cd ..
-    export LD_LIBRARY_PATH=/usr/lib:$LD_LIBRARY_PATH
+    mkdir build && cd build && cmake -DCMAKE_INSTALL_PREFIX=/usr/local/lib .. && cmake --build . && sudo make install && cd ..
+    export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
   fi
 - cd ..  # verilogAST-cpp
 - curl -s -L https://github.com/rdaly525/coreir/releases/latest | grep "href.*coreir.tar.gz" | cut -d \" -f 2 | xargs -I {} wget https://github.com"{}"
