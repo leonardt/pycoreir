@@ -48,11 +48,11 @@ install:
 - cd verilogAST-cpp
 - mkdir build && cd build && cmake -DCMAKE_INSTALL_PREFIX=/usr .. && cmake --build . && sudo make install && cd ..
 - cd ..  # verilogAST-cpp
-- curl -s -L https://github.com/rdaly525/coreir/releases/latest | grep "href.*coreir.tar.gz" | cut -d \" -f 2 | xargs -I {} wget https://github.com"{}"
-- mkdir coreir_release;
-- tar -xf coreir.tar.gz -C coreir_release --strip-components 1;
-- cd coreir_release && sudo make install && cd ..
-- coreir  # Test invoking coreir binary
+- git clone https://github.com/rdaly525/coreir.git
+- cd coreir/build
+- cmake -DCMAKE_INSTALL_PREFIX=/usr ..
+- make -j2
+- sudo make install
 - pip install -e .
 - pip install pytest magma-lang
 script:
