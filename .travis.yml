@@ -48,11 +48,12 @@ install:
 - cd verilogAST-cpp
 - mkdir build && cd build && cmake -DCMAKE_INSTALL_PREFIX=/usr .. && cmake --build . && sudo make install && cd ..
 - cd ..  # verilogAST-cpp
-- git clone https://github.com/rdaly525/coreir.git
-- cd coreir/build
+- git clone https://github.com/rdaly525/coreir.git coreir-cpp
+- cd coreir-cpp/build
 - cmake -DCMAKE_INSTALL_PREFIX=/usr ..
 - make -j2
 - sudo make install
+- cd ../..
 - pip install -e .
 - pip install pytest magma-lang
 script:
