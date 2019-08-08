@@ -18,31 +18,20 @@ matrix:
 before_install:
 - |
   if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
-    export PYTHON=3.7.0
-    brew install gmp mpfr libmpc
-    brew install pyenv-virtualenv
-    pyenv install ${PYTHON}
-    export PYENV_VERSION=$PYTHON
-    export PATH="/Users/travis/.pyenv/shims:${PATH}"
-    pyenv virtualenv venv
-    source /Users/travis/.pyenv/versions/${PYTHON}/envs/venv/bin/activate
-    python --version
-
-    python -m pip install cmake twine wheel pytest
+    wget https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh -O miniconda.sh
   else
     # install conda for py 3.7
     wget http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh
-    chmod +x miniconda.sh
-    ./miniconda.sh -b -p $TRAVIS_BUILD_DIR/miniconda
-    export PATH=$TRAVIS_BUILD_DIR/miniconda/bin:$PATH
-    hash -r
-    conda config --set always_yes yes --set changeps1 no
-    conda update -q conda
-    conda create -q -n test-env python=3.7
-    source activate test-env
-    conda install pip
-    # End install conda
   fi
+- chmod +x miniconda.sh
+- ./miniconda.sh -b -p $TRAVIS_BUILD_DIR/miniconda
+- export PATH=$TRAVIS_BUILD_DIR/miniconda/bin:$PATH
+- hash -r
+- conda config --set always_yes yes --set changeps1 no
+- conda update -q conda
+- conda create -q -n test-env python=3.7
+- source activate test-env
+- conda install pip
 install:
 - curl -s -L https://github.com/leonardt/verilogAST-cpp/releases/latest | grep "href.*libverilogAST-linux.tar.gz" | cut -d \" -f 2 | xargs -I {} wget https://github.com"{}"
 - tar -xf libverilogAST-linux.tar.gz
