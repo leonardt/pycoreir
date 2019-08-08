@@ -44,16 +44,9 @@ before_install:
     # End install conda
   fi
 install:
-- git clone https://github.com/leonardt/verilogAST-cpp
-- cd verilogAST-cpp
-- |
-  if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
-    mkdir build && cd build && cmake .. && cmake --build . && make install && cd ..
-  else
-    mkdir build && cd build && cmake -DCMAKE_INSTALL_PREFIX=/usr/local/lib .. && cmake --build . && sudo make install && cd ..
-    export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
-  fi
-- cd ..  # verilogAST-cpp
+- curl -s -L https://github.com/leonardt/verilogAST-cpp/releases/latest | grep "href.*libverilogAST-linux.tar.gz" | cut -d \" -f 2 | xargs -I {} wget https://github.com"{}"
+- tar -xf libverilogAST-linux.tar.gz
+- cd libverilogAST-linux && sudo make install && cd ..
 - curl -s -L https://github.com/rdaly525/coreir/releases/latest | grep "href.*coreir.tar.gz" | cut -d \" -f 2 | xargs -I {} wget https://github.com"{}"
 - mkdir coreir_release;
 - tar -xf coreir.tar.gz -C coreir_release --strip-components 1;
