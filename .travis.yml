@@ -33,9 +33,6 @@ before_install:
 - source activate test-env
 - conda install pip
 install:
-- curl -s -L https://github.com/leonardt/verilogAST-cpp/releases/latest | grep "href.*libverilogAST-linux.tar.gz" | cut -d \" -f 2 | xargs -I {} wget https://github.com"{}"
-- tar -xf libverilogAST-linux.tar.gz
-- cd libverilogAST-linux && sudo make install && cd ..
 - curl -s -L https://github.com/rdaly525/coreir/releases/latest | grep "href.*coreir.tar.gz" | cut -d \" -f 2 | xargs -I {} wget https://github.com"{}"
 - mkdir coreir_release;
 - tar -xf coreir.tar.gz -C coreir_release --strip-components 1;
