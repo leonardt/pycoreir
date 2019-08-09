@@ -29,7 +29,7 @@ before_install:
 - hash -r
 - conda config --set always_yes yes --set changeps1 no
 - conda update -q conda
-- conda create -q -n test-env python=3.7
+- conda create -q -n test-env python=3.7.3
 - source activate test-env
 - conda install pip
 install:
@@ -42,8 +42,6 @@ install:
     # avoid strange libjpeg error (see https://github.com/sgrif/pq-sys/issues/1
     # for some more info)
     export DYLD_LIBRARY_PATH=/System/Library/Frameworks/ImageIO.framework/Versions/A/Resources/:/usr/local/lib:$DYLD_LIBRARY_PATH
-  else
-    export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
   fi
 - coreir  # test command
 - pip install -e .
