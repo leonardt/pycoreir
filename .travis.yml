@@ -33,9 +33,9 @@ before_install:
 - source activate test-env
 - conda install pip
 install:
-- curl -s -L https://github.com/rdaly525/coreir/releases/latest | grep "href.*coreir.tar.gz" | cut -d \" -f 2 | xargs -I {} wget https://github.com"{}"
+- curl -s -L https://github.com/rdaly525/coreir/releases/latest | grep "href.*coreir-${TRAVIS_OS_NAME}.tar.gz" | cut -d \" -f 2 | xargs -I {} wget https://github.com"{}"
 - mkdir coreir_release;
-- tar -xf coreir.tar.gz -C coreir_release --strip-components 1;
+- tar -xf coreir-${TRAVIS_OS_NAME}.tar.gz -C coreir_release --strip-components 1;
 - cd coreir_release && sudo make install && cd ..
 - coreir  # test command
 - pip install -e .
