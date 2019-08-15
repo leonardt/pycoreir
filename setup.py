@@ -31,7 +31,7 @@ else:
     njobs = max(2, cpus)
 
 COREIR_PATH = "coreir-cpp"
-COREIR_REPO = "https://github.com/rdaly525/coreir"
+COREIR_REPO = "https://github.com/Kuree/coreir"
 COREIR_NAME = "coreir"
 
 
@@ -92,14 +92,14 @@ if False:
     kwargs["cmdclass"] = dict(build_ext=CoreIRBuild)
 
 setup(
-    name='coreir',
+    name='pycoreir',
     version='2.0.29',
-    description='Python bindings for CoreIR',
+    description='Python bindings for CoreIR with one click install',
     packages=["coreir"],
     license='BSD License',
-    url='https://github.com/leonardt/pycoreir',
-    author='Leonard Truong',
-    author_email='lenny@cs.stanford.edu',
+    url='https://github.com/Kuree/pycoreir',
+    author='Keyi Zhang',
+    author_email='keyi@cs.stanford.edu',
     long_description=long_description,
     long_description_content_type="text/markdown",
     install_requires=["hwtypes>=1.0.*"],

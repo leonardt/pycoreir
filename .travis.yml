@@ -1,65 +1,19 @@
-matrix:
-  include:
-  - os: linux
-    addons:
-      apt:
-        sources:
-        - ubuntu-toolchain-r-test
-        packages:
-        - g++-7
-        - libgmp-dev
-        - libmpfr-dev
-        - libmpc-dev
-    env:
-    - CC=gcc-7
-    - CXX=g++-7
-  - os: osx
-    osx_image: xcode10.2
+services:
+    - docker
+
+os:
+    - linux
+
 before_install:
-- |
-  if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
-    wget https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh -O miniconda.sh
-  else
-    # install conda for py 3.7
-    wget http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh
-  fi
-- chmod +x miniconda.sh
-- ./miniconda.sh -b -p $TRAVIS_BUILD_DIR/miniconda
-- export PATH=$TRAVIS_BUILD_DIR/miniconda/bin:$PATH
-- hash -r
-- conda config --set always_yes yes --set changeps1 no
-- conda update -q conda
-- conda create -q -n test-env python=3.7.3
-- source activate test-env
-- conda install pip
-install:
-- curl -s -L https://github.com/rdaly525/coreir/releases/latest | grep "href.*coreir-${TRAVIS_OS_NAME}.tar.gz" | cut -d \" -f 2 | xargs -I {} wget https://github.com"{}"
-- mkdir coreir_release;
-- tar -xf coreir-${TRAVIS_OS_NAME}.tar.gz -C coreir_release --strip-components 1;
-- cd coreir_release && sudo make install && cd ..
-- |
-  if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
-    # avoid strange libjpeg error (see https://github.com/sgrif/pq-sys/issues/1
-    # for some more info)
-    export DYLD_LIBRARY_PATH=/System/Library/Frameworks/ImageIO.framework/Versions/A/Resources/:/usr/local/lib:$DYLD_LIBRARY_PATH
-  fi
-- coreir  # test command
-- pip install -e .
-- pip install pytest magma-lang
+    - source ./.travis/setup.sh
+
 script:
-- pytest -s tests/
+    - ./.travis/run.sh
+
 deploy:
-  provider: pypi
-  user: leonardt
-  password:
-    secure: Mx/SV+tue8XSzBORAWGE8yUXBBFmZ4Hoq/Wav3Tw8xCMedKatzmAajLdmbkknvsVm/tAQstPYmMvIw3DEsrSdCuROaKMgg+ICpnadbRYO49/MEV4Wrc21cE1CToULTNSMnaonNAUAKq/IzPsIaqFjbK9OZZ4gNWG4EIpsZWgdiKCDhERsd8xqRYECPp5T7olZMQ5zlk9iS/MGu73ZKr6Vzh43YTOmO2i2/A36X8RcIvJjYFIL17EeqxRdIp+5RmATYcaFLFeDw7VKsCLFCBM1oFJuo8ATrxyYu7o44lvEWkqRWCgivul5eGhJ5kkw+ijj9Wd8Kf+B44l5nQcHmiacUWhk9KFfe3Q3/PfHkVQNp2Kl9xt/IXVyWAdTD2CUtYW5kdA/WMhBjNY6JB/NRgclplxWG2dZeBgiD5UbKXZPgns27K+X9wCFxx8NyKcbNEqaLwQt2YsFXYku1pfuIeTv9Yz2YkVf8TJVdUjj3xxA+SFHTTIkE636ArKpu51lyzRyeqc4Ai4JCf+MrwFInQa+2Dyah0xwAntAtGud7jHAR9W6shPk03VfKe/XS5fPh7vPno4KtombBz2naD3usiILhsmiC24WM6kBCPR4gJqZ4DXc35nSku30Yp4rGPKULgYTeMls8006BcqQhyLQZUnaLEpxnAswhJOJfk4GtwF0xw=
+- provider: script
+  script: /bin/bash .travis/deploy.sh
   skip_cleanup: true
   on:
     branch: master
     tags: true
-  distributions: "sdist"
-  skip_existing: true
-notifications:
-  slack:
-    rooms:
-      secure: vYqmNj2HcykuryVM6+KYnkT6XoAGhV+W90ln/hVrniUeGutZ5R/fxlF8T8zOtmM/CxcqPbsa/awusSiX77Xegrf8gEcdUy6Jmvlz68F89wmkua4RuMoUnymRoNNE+YE1jrNO/39X+gDSEbYlCob5TtWXBAlGDfIJ8rjaP9LJV1Y6lDvJeCp/k9RcJDs9OlPaGP237pWJUIKEN1BnGyAFSQbbdLF+mTg7BcZr5pT9iuNQAyjrZcle/DPdLg5V+C4IQCkA8lXnI2ushuL3xmrjQ4TBvUNrGojKTTir3fXkeU+Zed2jukvRVKjDyiKV2gWr1tqM3Nl3U7JIkJpTu6HxwRI16l2M35eE/1kmJ817AEc/2RepI6tPEYi3aLtAbLldltuYiiUvDVsf9sMS8ireqoHXEaPJD6IkrMp4Tm9TO/b267fC3lvrRYd927NjKlV0Pk/ZgcPKoNjP8aPxj2+FvoPlExdjEvwHFxWpTRzqnHJudYeKScFzSlFAW+vMIpNZ2JMBwcKL2ENwBIGX5T8mkkvKJcZGUS1Sv1sIqVaPuINW058a4ARSl/JHkE6KUW+452uOfWMhz+XD4NjOaAWK9So9Zw8g+x52+F5k4mlK7bkosqpkQ6uWYtHM42Wz2OYz2rL4S2EtetJf4/vLRAgzhRdmo9RDrYPRtInW8jcm7nM=
