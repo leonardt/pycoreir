@@ -1,3 +1,10 @@
+DISCLAIMER:
+===========
+This is an unofficial build for coreir/pycoreir. The purpose of this repo is to
+provide a one-button install for coreir binding on linux. It relies on some
+hacks on how coreir and its ecosystem are built. Please let me know if some of
+the dependencies are out-of-date. I will update them as soon as I can.
+
 [![Build Status](https://travis-ci.org/leonardt/pycoreir.svg?branch=master)](https://travis-ci.org/leonardt/pycoreir)
 
 Ultralight Python bindings for [coreir](https://github.com/rdaly525/coreir) using ctypes.
