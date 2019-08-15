@@ -6,3 +6,5 @@ dist
 *.pyc
 .idea/
 coreir-cpp
+coreir/*.so
+coreir/coreir
