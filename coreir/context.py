@@ -163,7 +163,7 @@ class Context:
 
     @lru_cache(maxsize=None)
     def get_lib(self, lib):
-        if lib in {"coreir", "mantle", "corebit"}:
+        if lib in {"coreir", "mantle", "corebit", "memory"}:
             return self.get_namespace(lib)
         elif lib == "global":
             return self.global_namespace
