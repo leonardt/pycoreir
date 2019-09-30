@@ -142,7 +142,10 @@ def test_wireable():
         assert expected == actual
 
     wireable = module_def.select("self")
-    assert get_pointer_addr(wireable.select("input").ptr) == get_pointer_addr(_input.ptr)
+    select = wireable.select("input")
+    assert isinstance(select, coreir.Select)
+    assert get_pointer_addr(select.ptr) == get_pointer_addr(_input.ptr)
+    assert select.parent == wireable
 
 
 def test_module_def_connections():
