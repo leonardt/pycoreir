@@ -33,7 +33,7 @@ else:
 COREIR_PATH = "coreir-cpp"
 COREIR_REPO = "https://github.com/rdaly525/coreir"
 COREIR_NAME = "coreir"
-COREIR_BRANCH = "c-api"
+COREIR_BRANCH = "master"
 
 
 class CoreIRExtension(Extension):
