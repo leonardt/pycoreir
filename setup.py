@@ -33,6 +33,7 @@ else:
 COREIR_PATH = "coreir-cpp"
 COREIR_REPO = "https://github.com/rdaly525/coreir"
 COREIR_NAME = "coreir"
+COREIR_BRANCH = "c-api"
 
 
 class CoreIRExtension(Extension):
@@ -47,8 +48,8 @@ class CoreIRBuild(build_ext):
             "coreir-float_CW", "coreir-float_DW", "verilogAST"]
     def run(self):
         if not os.path.isdir(COREIR_PATH):
-            subprocess.check_call(["git", "clone", "--depth=1", COREIR_REPO,
-                                   COREIR_PATH])
+            subprocess.check_call(["git", "clone", "--depth=1", "--branch",
+                                   COREIR_BRANCH, COREIR_REPO, COREIR_PATH])
         build_dir = os.path.join(COREIR_PATH, "build")
         if static_build:
             subprocess.check_call(["cmake", "-DSTATIC=ON", ".."], cwd=build_dir)
