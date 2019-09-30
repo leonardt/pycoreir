@@ -48,10 +48,9 @@ class Wireable(CoreIRType):
 
 
 class Select(Wireable):
-    pass
-    # @property
-    # def parent(self):
-    #     return Wireable(libcoreir_c.CORESelectGetParent(self.ptr))
+    @property
+    def parent(self):
+        return Wireable(libcoreir_c.CORESelectGetParent(self.ptr))
 
 
 class Instance(Wireable):
@@ -96,6 +95,10 @@ class Connection(CoreIRType):
     @property
     def second(self):
         return Wireable(libcoreir_c.COREConnectionGetSecond(self.ptr), self.context)
+
+
+def cast_to_select(wire : Wireable):
+    return Select(wire.ptr, wire.context)
 
 def connect_const(port : Wireable,value : int):
     if not isinstance(port,Wireable):
