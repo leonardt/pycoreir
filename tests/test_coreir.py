@@ -23,6 +23,15 @@ def test_save_module():
         }),
         configparams
     )
+    for key, value in add8.params.items():
+        if key == "init":
+            assert value.kind == int
+        elif key == "test_param0":
+            assert value.kind == int
+        elif key == "test_param1":
+            assert value.kind == int
+        else:
+            assert False, f"Found unexpected param {key}"
     for port, type_ in add8.type.items():
         assert type_.kind == "Array"
         if port in ["in1", "in2"]:
