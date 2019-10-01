@@ -1,0 +1,21 @@
+{"top":"global.top",
+"namespaces":{
+  "global":{
+    "modules":{
+      "top":{
+        "type":["Record",[
+          ["I",["Array",4,"BitIn"]],
+          ["O",["Array",4,"Bit"]]
+        ]],
+        "instances":{
+          "rom":{
+            "genref":"memory.rom",
+            "genargs":{"depth":["Int",6], "width":["Int",4]},
+            "modargs":{"init":["Json",[0,1,2,3,4,5]]}
+          }
+        }
+      }
+    }
+  }
+}
+}

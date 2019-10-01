@@ -1,7 +1,7 @@
 import ctypes as ct
 from coreir.base import CoreIRType
 from coreir.lib import libcoreir_c
-from coreir.type import Type, COREValue_p, Value
+from coreir.type import Type, COREValue_p, Value, COREValue, Value
 from coreir.util import LazyDict
 import coreir.module
 import random
@@ -71,6 +71,18 @@ class Instance(Wireable):
     @property
     def name(self):
         return libcoreir_c.COREInstanceGetInstname(self.ptr).decode()
+
+    @property
+    def mod_args(self):
+        num_args = ct.c_int()
+        names = ct.POINTER(ct.c_char_p)()
+        args = ct.POINTER(COREValue_p)()
+        libcoreir_c.COREGetModArgs(self.ptr, ct.byref(names), ct.byref(args),
+                                   ct.byref(num_args))
+        ret = {}
+        for i in range(num_args.value):
+            ret[names[i].decode()] = Value(args[i], self.context)
+        return ret
 
 
 def inline_instance(instance):

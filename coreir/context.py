@@ -1,3 +1,4 @@
+import json
 import ctypes as ct
 from coreir.type import COREType_p, Type, Params, COREValue_p, Values, Record
 from coreir.generator import Generator
@@ -124,6 +125,8 @@ class Context:
             elif isinstance(v, coreir.Type):
                 args.append(libcoreir_c.COREValueCoreIRType(self.context,
                     v.ptr))
+            elif isinstance(v, (dict, list)):
+                args.append(libcoreir_c.COREValueJSON(self.context, json.dumps(v).encode()))
             else:
                 raise NotImplementedError(v, type(v))
 
