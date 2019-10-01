@@ -86,15 +86,14 @@ with open("README.md", "r") as fh:
 
 
 kwargs = {}
-# If coreir is not present in the path, compile it from source
-if not shutil.which("coreir"):
+if False:
     kwargs["ext_modules"] = [CoreIRExtension('coreir')]
     kwargs["scripts"] = ["bin/coreir"]
     kwargs["cmdclass"] = dict(build_ext=CoreIRBuild)
 
 setup(
     name='coreir',
-    version='2.0.28',
+    version='2.0.29',
     description='Python bindings for CoreIR',
     packages=["coreir"],
     license='BSD License',

@@ -18,46 +18,32 @@ matrix:
 before_install:
 - |
   if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
-    export PYTHON=3.7.0
-    brew install gmp mpfr libmpc
-    brew install pyenv-virtualenv
-    pyenv install ${PYTHON}
-    export PYENV_VERSION=$PYTHON
-    export PATH="/Users/travis/.pyenv/shims:${PATH}"
-    pyenv virtualenv venv
-    source /Users/travis/.pyenv/versions/${PYTHON}/envs/venv/bin/activate
-    python --version
-
-    python -m pip install cmake twine wheel pytest
+    wget https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh -O miniconda.sh
   else
     # install conda for py 3.7
     wget http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh
-    chmod +x miniconda.sh
-    ./miniconda.sh -b -p $TRAVIS_BUILD_DIR/miniconda
-    export PATH=$TRAVIS_BUILD_DIR/miniconda/bin:$PATH
-    hash -r
-    conda config --set always_yes yes --set changeps1 no
-    conda update -q conda
-    conda create -q -n test-env python=3.7
-    source activate test-env
-    conda install pip
-    # End install conda
   fi
+- chmod +x miniconda.sh
+- ./miniconda.sh -b -p $TRAVIS_BUILD_DIR/miniconda
+- export PATH=$TRAVIS_BUILD_DIR/miniconda/bin:$PATH
+- hash -r
+- conda config --set always_yes yes --set changeps1 no
+- conda update -q conda
+- conda create -q -n test-env python=3.7.3
+- source activate test-env
+- conda install pip
 install:
-- git clone https://github.com/leonardt/verilogAST-cpp
-- cd verilogAST-cpp
+- curl -s -L https://github.com/rdaly525/coreir/releases/latest | grep "href.*coreir-${TRAVIS_OS_NAME}.tar.gz" | cut -d \" -f 2 | xargs -I {} wget https://github.com"{}"
+- mkdir coreir_release;
+- tar -xf coreir-${TRAVIS_OS_NAME}.tar.gz -C coreir_release --strip-components 1;
+- cd coreir_release && sudo make install && cd ..
 - |
   if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
-    mkdir build && cd build && cmake .. && cmake --build . && make install && cd ..
-  else
-    mkdir build && cd build && cmake -DCMAKE_INSTALL_PREFIX=/usr/local/lib .. && cmake --build . && sudo make install && cd ..
-    export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
+    # avoid strange libjpeg error (see https://github.com/sgrif/pq-sys/issues/1
+    # for some more info)
+    export DYLD_LIBRARY_PATH=/System/Library/Frameworks/ImageIO.framework/Versions/A/Resources/:/usr/local/lib:$DYLD_LIBRARY_PATH
   fi
-- cd ..  # verilogAST-cpp
-- curl -s -L https://github.com/rdaly525/coreir/releases/latest | grep "href.*coreir.tar.gz" | cut -d \" -f 2 | xargs -I {} wget https://github.com"{}"
-- mkdir coreir_release;
-- tar -xf coreir.tar.gz -C coreir_release --strip-components 1;
-- cd coreir_release && sudo make install && cd ..
+- coreir  # test command
 - pip install -e .
 - pip install pytest magma-lang
 script:
