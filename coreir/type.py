@@ -1,3 +1,4 @@
+import json
 import coreir
 import ctypes as ct
 from coreir.base import CoreIRType
@@ -29,6 +30,7 @@ class ValueType(CoreIRType):
             3: str,
             4: CoreIRType,
             5: coreir.Module,
+            6: json,
         }[libcoreir_c.COREValueTypeGetKind(self.ptr)]
 
 class COREValue(ct.Structure):
@@ -62,6 +64,8 @@ class Value(CoreIRType):
                 return BitVector[width.value](None)
         elif type == 3:
             return libcoreir_c.COREValueStringGet(self.ptr).decode()
+        elif type == 6:
+            return json.loads(libcoreir_c.COREValueJSONGet(self.ptr).decode())
         raise NotImplementedError(type)
 
 class Values(CoreIRType):
