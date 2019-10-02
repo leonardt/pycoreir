@@ -5,7 +5,6 @@ from coreir.base import CoreIRType
 from coreir.lib import libcoreir_c
 from collections import namedtuple
 from hwtypes import BitVector
-import json
 
 class COREType(ct.Structure):
     pass
