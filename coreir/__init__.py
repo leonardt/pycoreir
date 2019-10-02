@@ -144,7 +144,7 @@ libcoreir_c.COREGetModuleRef.restype = COREModule_p
 libcoreir_c.COREGetModArg.argtypes = [COREWireable_p, ct.c_char_p]
 libcoreir_c.COREGetModArg.restype = COREValue_p
 
-libcoreir_c.COREGetModArgs.argtypes = [COREWireable_p, ct.POINTER(ct.POINTER(ct.c_char_p)), ct.POINTER(ct.POINTER(COREValue_p)), ct.POINTER(ct.c_int)]
+libcoreir_c.COREGetModArgs.argtypes = [COREWireable_p, ct.POINTER(ct.POINTER(ct.POINTER(ct.c_char))), ct.POINTER(ct.POINTER(COREValue_p)), ct.POINTER(ct.c_int)]
 libcoreir_c.COREGetModArgs.restype = None
 
 libcoreir_c.COREHasModArg.argtypes = [COREWireable_p, ct.c_char_p]

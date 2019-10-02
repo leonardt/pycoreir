@@ -17,7 +17,7 @@ def test_upsample():
         "init": [i for i in range(6)]
     })
     inst = module_def.add_module_instance("rom", ROM_6x4, config)
-    for key, value in inst.mod_args.items():
+    for key, value in inst.config.items():
         assert key == "init"
         assert value.value == [i for i in range(6)]
     module.definition = module_def
