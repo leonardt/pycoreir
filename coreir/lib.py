@@ -11,12 +11,12 @@ def load_shared_lib(lib):
         shared_lib_ext = "dylib"
     else:
         raise NotImplementedError(_system)
-    # libpath = os.path.join(os.path.dirname(os.path.abspath(__file__)), lib)
-    # libpath = "{}.{}".format(libpath, shared_lib_ext)
-    # if not os.path.isfile(libpath):
-    #     # fall back to system lib
-    #     libpath = "{}.{}".format(lib, shared_lib_ext)
-    libpath = "{}.{}".format(lib, shared_lib_ext)
+    libpath = os.path.join(os.path.dirname(os.path.abspath(__file__)), lib)
+    libpath = "{}.{}".format(libpath, shared_lib_ext)
+    if not os.path.isfile(libpath):
+        # fall back to system lib
+        libpath = "{}.{}".format(lib, shared_lib_ext)
+    # libpath = "{}.{}".format(lib, shared_lib_ext)
     return cdll.LoadLibrary(libpath)
 
 
