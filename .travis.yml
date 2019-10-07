@@ -1,14 +1,16 @@
 services:
     - docker
 
+language: minimal
+
 os:
     - linux
 
 before_install:
     - source ./.travis/setup.sh
 
-script:
-    - ./.travis/run.sh
+# script:
+   # - ./.travis/run.sh
 
 deploy:
 - provider: script
