@@ -22,7 +22,7 @@ else
   make install prefix=$TRAVIS_BUILD_DIR/deps;
   cd ..; #coreir_release
 fi
-set -e
+
 if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
   # avoid strange libjpeg error (see https://github.com/sgrif/pq-sys/issues/1
   # for some more info)
@@ -31,5 +31,6 @@ if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
 else
   export LD_LIBRARY_PATH=$TRAVIS_BUILD_DIR/deps/lib:$LD_LIBRARY_PATH
 fi
+
 export PATH=$TRAVIS_BUILD_DIR/deps/bin:$PATH
 cd ..;  # deps
