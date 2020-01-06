@@ -16,7 +16,6 @@ def load_shared_lib(lib):
     if not os.path.isfile(libpath):
         # fall back to system lib
         libpath = "{}.{}".format(lib, shared_lib_ext)
-    # libpath = "{}.{}".format(lib, shared_lib_ext)
     return cdll.LoadLibrary(libpath)
 
 
