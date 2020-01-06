@@ -8,31 +8,12 @@ import platform
 import sys
 import os
 import coreir
+from coreir.lib import COREIR_BINARY_PATH
 import subprocess
 import shutil
 
 
-
-def is_binary(path):
-    # adapted from https://stackoverflow.com/a/7392391
-    textchars = bytearray({7,8,9,10,12,13,27} | set(range(0x20, 0x100)) - {0x7f})
-    is_binary_string = lambda bytes: bool(bytes.translate(None, textchars))
-    with open(path, "rb") as f:
-        try:
-            return is_binary_string(f.read(1024))
-        except UnicodeDecodeError:
-            # assume binary
-            return True
-
-# see if a coreir binary exists in the user's path
-binary_path = None
-for line in os.popen("which -a coreir").read().splitlines():
-    if is_binary(line):
-        binary_path = line
-        break
-
-
-if binary_path is None:
+if COREIR_BINARY_PATH is None:
     # Assume we did a static build and use the corresponding binary
     _system = platform.system()
     if _system == "Linux":
@@ -49,4 +30,4 @@ if binary_path is None:
     subprocess.call([coreir_binary] + sys.argv[1:], env=env)
 else:
     # Found existing binary in path, use this
-    subprocess.call([binary_path] + sys.argv[1:])
+    subprocess.call([COREIR_BINARY_PATH] + sys.argv[1:])
