@@ -52,12 +52,16 @@ class CoreIRBuild(build_ext):
         textchars = bytearray({7,8,9,10,12,13,27} | set(range(0x20, 0x100)) - {0x7f})
         is_binary_string = lambda bytes: bool(bytes.translate(None, textchars))
         with open(path) as f:
-            return is_binary_string(f.read(1024))
+            try:
+                return is_binary_string(f.read(1024))
+            except UnicodeDecodeError:
+                # assume binary
+                return True
 
     def run(self):
         # skip if coreir binary is found. this is useful if people want
         # to use their own version of coreir
-        # notice that if this may cause a problem if they are building this
+        # notice that this may cause a problem if they are building this
         # from scratch multiple times as the coreir will be in the path
         coreir_path = shutil.which("coreir")
         if coreir_path is not None and self.is_binary(coreir_path):
