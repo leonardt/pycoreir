@@ -12,10 +12,26 @@ import subprocess
 import shutil
 
 
-# If coreir is not present in the path, try using the static binary
-# distribution, this gives priority to the system installed version as we
-# assume that is what the user wants (e.g. buildling a custom version)
-if shutil.which("coreir") != __file__:
+
+def is_binary(path):
+    # adapted from https://stackoverflow.com/a/7392391
+    textchars = bytearray({7,8,9,10,12,13,27} | set(range(0x20, 0x100)) - {0x7f})
+    is_binary_string = lambda bytes: bool(bytes.translate(None, textchars))
+    with open(path, "rb") as f:
+        try:
+            return is_binary_string(f.read(1024))
+        except UnicodeDecodeError:
+            # assume binary
+            return True
+
+binary_path = None
+for line in os.popen("which -a coreir").read().splitlines():
+    if is_binary(line):
+        binary_path = line
+        break
+
+
+if binary_path is None:
     _system = platform.system()
     if _system == "Linux":
         LIBRARY_PATH_VAR = "LD_LIBRARY_PATH"
@@ -30,4 +46,4 @@ if shutil.which("coreir") != __file__:
     env[LIBRARY_PATH_VAR] = path
     subprocess.call([coreir_binary] + sys.argv[1:], env=env)
 else:
-    subprocess.call(["coreir"] + sys.argv[1:])
+    subprocess.call([binary_path] + sys.argv[1:])
