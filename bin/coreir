@@ -24,6 +24,7 @@ def is_binary(path):
             # assume binary
             return True
 
+# see if a coreir binary exists in the user's path
 binary_path = None
 for line in os.popen("which -a coreir").read().splitlines():
     if is_binary(line):
@@ -47,4 +48,5 @@ if binary_path is None:
     env[LIBRARY_PATH_VAR] = path
     subprocess.call([coreir_binary] + sys.argv[1:], env=env)
 else:
+    # Found existing binary in path, use this
     subprocess.call([binary_path] + sys.argv[1:])
