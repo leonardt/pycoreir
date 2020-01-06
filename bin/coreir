@@ -32,6 +32,7 @@ for line in os.popen("which -a coreir").read().splitlines():
 
 
 if binary_path is None:
+    # Assume we did a static build and use the corresponding binary
     _system = platform.system()
     if _system == "Linux":
         LIBRARY_PATH_VAR = "LD_LIBRARY_PATH"
