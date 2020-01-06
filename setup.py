@@ -103,6 +103,9 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     install_requires=["hwtypes>=1.0.*"],
+    ext_modules=[CoreIRExtension('coreir')],
+    scripts=["bin/coreir"],
+    cmdclass=dict(build_ext=CoreIRBuild),
     zip_safe=False
     # **kwargs
 )
