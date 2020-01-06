@@ -45,7 +45,28 @@ class CoreIRBuild(build_ext):
     libs = ["coreir-c", "coreirsim-c", "coreir-ice40", "coreir-aetherlinglib",
             "coreir-commonlib", "coreir-float", "coreir-rtlil",
             "coreir-float_CW", "coreir-float_DW", "verilogAST"]
+
+    @staticmethod
+    def is_binary(path):
+        # adapted from https://stackoverflow.com/a/7392391
+        textchars = bytearray({7,8,9,10,12,13,27} | set(range(0x20, 0x100)) - {0x7f})
+        is_binary_string = lambda bytes: bool(bytes.translate(None, textchars))
+        with open(path) as f:
+            try:
+                return is_binary_string(f.read(1024))
+            except UnicodeDecodeError:
+                # assume binary
+                return True
+
     def run(self):
+        # skip if coreir binary is found. this is useful if people want
+        # to use their own version of coreir
+        # notice that this may cause a problem if they are building this
+        # from scratch multiple times as the coreir will be in the path
+        coreir_path = shutil.which("coreir")
+        if coreir_path is not None and self.is_binary(coreir_path):
+            # we're done here since users provide their own coreir distribution
+            return
         if not os.path.isdir(COREIR_PATH):
             subprocess.check_call(["git", "clone", "--depth=1", COREIR_REPO,
                                    COREIR_PATH])
@@ -103,6 +124,9 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     install_requires=["hwtypes>=1.0.*"],
+    ext_modules=[CoreIRExtension('coreir')],
+    scripts=["bin/coreir"],
+    cmdclass=dict(build_ext=CoreIRBuild),
     zip_safe=False
     # **kwargs
 )
