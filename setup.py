@@ -64,7 +64,7 @@ class CoreIRBuild(build_ext):
             # we're done here since users provide their own coreir distribution
             return
         if not os.path.isdir(COREIR_PATH):
-            subprocess.check_call(["git", "clone", "--depth=1", "--branch=hotfix-verilogast-update", COREIR_REPO,
+            subprocess.check_call(["git", "clone", "--depth=1", COREIR_REPO,
                                    COREIR_PATH])
         build_dir = os.path.join(COREIR_PATH, "build")
         if static_build:
