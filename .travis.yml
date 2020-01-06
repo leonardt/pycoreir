@@ -24,23 +24,10 @@ install:
 - echo $TRAVIS_BRANCH
 - echo $TRAVIS_OS_NAME
 - echo $TRAVIS_BUILD_DIR
-- |
-    if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
-      source .travis/install_coreir.sh
-      coreir  # test command
-      pip install -e .
-      pip install pytest magma-lang
-    else
-      source ./.travis/setup.sh
-    fi
+- source ./.travis/setup.sh
 
 script:
-- |
-    if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
-      pytest -s tests/
-    else
-      source ./.travis/run.sh
-    fi
+- source ./.travis/run.sh
 deploy:
   provider: pypi
   user: leonardt
