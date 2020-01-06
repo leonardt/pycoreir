@@ -1,47 +1,46 @@
+services:
+    - docker
+
 matrix:
   include:
   - os: linux
-    addons:
-      apt:
-        sources:
-        - ubuntu-toolchain-r-test
-        packages:
-        - g++-7
-        - libgmp-dev
-        - libmpfr-dev
-        - libmpc-dev
-    env:
-    - CC=gcc-7
-    - CXX=g++-7
   - os: osx
     osx_image: xcode10.2
 before_install:
 - |
   if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
     wget https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh -O miniconda.sh
-  else
-    # install conda for py 3.7
-    wget http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh
+    chmod +x miniconda.sh
+    ./miniconda.sh -b -p $TRAVIS_BUILD_DIR/miniconda
+    export PATH=$TRAVIS_BUILD_DIR/miniconda/bin:$PATH
+    hash -r
+    conda config --set always_yes yes --set changeps1 no
+    conda update -q conda
+    conda create -q -n test-env python=3.7.3
+    source activate test-env
+    conda install pip
   fi
-- chmod +x miniconda.sh
-- ./miniconda.sh -b -p $TRAVIS_BUILD_DIR/miniconda
-- export PATH=$TRAVIS_BUILD_DIR/miniconda/bin:$PATH
-- hash -r
-- conda config --set always_yes yes --set changeps1 no
-- conda update -q conda
-- conda create -q -n test-env python=3.7.3
-- source activate test-env
-- conda install pip
 install:
 - echo $TRAVIS_BRANCH
 - echo $TRAVIS_OS_NAME
 - echo $TRAVIS_BUILD_DIR
-- source .travis/install_coreir.sh
-- coreir  # test command
-- pip install -e .
-- pip install pytest magma-lang
+- |
+    if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+      source .travis/install_coreir.sh
+      coreir  # test command
+      pip install -e .
+      pip install pytest magma-lang
+    else
+      source ./.travis/setup.sh
+    fi
+
 script:
-- pytest -s tests/
+- |
+    if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+      pytest -s tests/
+    else
+      source ./.travis/run.sh
+    fi
 deploy:
   provider: pypi
   user: leonardt
