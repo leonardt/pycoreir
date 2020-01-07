@@ -42,9 +42,9 @@ class CoreIRExtension(Extension):
 
 
 class CoreIRBuild(build_ext):
-    libs = ["coreir-c", "coreirsim-c", "coreir-ice40", "coreir-aetherlinglib",
-            "coreir-commonlib", "coreir-float", "coreir-rtlil",
-            "coreir-float_CW", "coreir-float_DW", "verilogAST"]
+    libs = ["coreir", "coreir-c", "coreirsim-c", "coreir-ice40",
+            "coreir-aetherlinglib", "coreir-commonlib", "coreir-float",
+            "coreir-rtlil", "coreir-float_CW", "coreir-float_DW", "verilogAST"]
 
     @staticmethod
     def is_binary(path):
@@ -66,20 +66,6 @@ class CoreIRBuild(build_ext):
         if coreir_binary_path is not None:
             # we're done here since users provide their own coreir distribution
             return
-        if not os.path.isdir(COREIR_PATH):
-            subprocess.check_call(["git", "clone", "--depth=1", COREIR_REPO,
-                                   COREIR_PATH])
-        build_dir = os.path.join(COREIR_PATH, "build")
-        if static_build:
-            subprocess.check_call(["cmake", "-DSTATIC=ON", ".."], cwd=build_dir)
-        else:
-            subprocess.check_call(["cmake", ".."], cwd=build_dir)
-
-        for lib_name in self.libs:
-            subprocess.check_call(["make", "-C", build_dir, f"-j{njobs}",
-                                   lib_name])
-        # make the binary
-        subprocess.check_call(["make", "-C", build_dir, f"-j{njobs}", "coreir-bin"])
 
         # we only have one extension
         assert len(self.extensions) == 1
@@ -89,6 +75,26 @@ class CoreIRBuild(build_ext):
         extdir = os.path.join(extdir, COREIR_NAME)
         if not os.path.isdir(extdir):
             os.mkdir(extdir)
+
+        if not os.path.isdir(COREIR_PATH):
+            subprocess.check_call(["git", "clone", "--depth=1", COREIR_REPO,
+                                   COREIR_PATH])
+
+        build_dir = os.path.join(COREIR_PATH, "build")
+
+        if static_build:
+            subprocess.check_call(["cmake", "-DSTATIC=ON", ".."],
+                                  cwd=build_dir)
+        else:
+            subprocess.check_call(["cmake", ".."], cwd=build_dir)
+
+        for lib_name in self.libs:
+            subprocess.check_call(["make", "-C", build_dir, f"-j{njobs}",
+                                   lib_name])
+        # make the binary
+        subprocess.check_call(["make", "-C", build_dir, f"-j{njobs}",
+                               "coreir-bin"])
+
         # copy libraries over
         for lib_name in self.libs:
             filename = os.path.join(
@@ -103,13 +109,6 @@ class CoreIRBuild(build_ext):
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
-
-
-kwargs = {}
-if False:
-    kwargs["ext_modules"] = [CoreIRExtension('coreir')]
-    kwargs["scripts"] = ["bin/coreir"]
-    kwargs["cmdclass"] = dict(build_ext=CoreIRBuild)
 
 setup(
     name='coreir',
