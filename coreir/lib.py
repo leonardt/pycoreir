@@ -36,7 +36,8 @@ FILE_PATH = os.path.abspath(os.path.dirname(__file__))
 
 # Assume we did a static build, append to LD path for libs
 if COREIR_BINARY_PATH is None:
-    cdll.LoadLibrary(os.path.join(FILE_PATH, "lib", "coreir"))
+    cdll.LoadLibrary(os.path.join(FILE_PATH, "lib",
+                                  f"libcoreir.{SHARED_LIB_EXT}"))
     for lib in os.listdir(os.path.join(FILE_PATH, "lib")):
         cdll.LoadLibrary(os.path.join(FILE_PATH, "lib", lib))
 
