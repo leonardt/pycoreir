@@ -30,17 +30,15 @@ install:
 
 script:
 - source ./.travis/run.sh
+
 deploy:
-  provider: pypi
-  user: leonardt
-  password:
-    secure: Mx/SV+tue8XSzBORAWGE8yUXBBFmZ4Hoq/Wav3Tw8xCMedKatzmAajLdmbkknvsVm/tAQstPYmMvIw3DEsrSdCuROaKMgg+ICpnadbRYO49/MEV4Wrc21cE1CToULTNSMnaonNAUAKq/IzPsIaqFjbK9OZZ4gNWG4EIpsZWgdiKCDhERsd8xqRYECPp5T7olZMQ5zlk9iS/MGu73ZKr6Vzh43YTOmO2i2/A36X8RcIvJjYFIL17EeqxRdIp+5RmATYcaFLFeDw7VKsCLFCBM1oFJuo8ATrxyYu7o44lvEWkqRWCgivul5eGhJ5kkw+ijj9Wd8Kf+B44l5nQcHmiacUWhk9KFfe3Q3/PfHkVQNp2Kl9xt/IXVyWAdTD2CUtYW5kdA/WMhBjNY6JB/NRgclplxWG2dZeBgiD5UbKXZPgns27K+X9wCFxx8NyKcbNEqaLwQt2YsFXYku1pfuIeTv9Yz2YkVf8TJVdUjj3xxA+SFHTTIkE636ArKpu51lyzRyeqc4Ai4JCf+MrwFInQa+2Dyah0xwAntAtGud7jHAR9W6shPk03VfKe/XS5fPh7vPno4KtombBz2naD3usiILhsmiC24WM6kBCPR4gJqZ4DXc35nSku30Yp4rGPKULgYTeMls8006BcqQhyLQZUnaLEpxnAswhJOJfk4GtwF0xw=
+- provider: script
+  script: /bin/bash .travis/deploy.sh
   skip_cleanup: true
   on:
     branch: master
     tags: true
-  distributions: "sdist"
-  skip_existing: true
+
 notifications:
   slack:
     rooms:
