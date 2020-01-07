@@ -75,6 +75,8 @@ class CoreIRBuild(build_ext):
         extdir = os.path.join(extdir, COREIR_NAME)
         if not os.path.isdir(extdir):
             os.mkdir(extdir)
+        if not os.path.isdir(os.path.join(extdir, "lib")):
+            os.mkdir(os.path.join(extdir, "lib"))
 
         if not os.path.isdir(COREIR_PATH):
             subprocess.check_call(["git", "clone", "--depth=1", COREIR_REPO,
@@ -101,11 +103,11 @@ class CoreIRBuild(build_ext):
                 COREIR_PATH, "build", "lib",
                 "lib{}.{}".format(lib_name, lib_ext)
             )
-            shutil.copy(filename, extdir)
+            shutil.copy(filename, os.path.join(extdir, "lib"))
 
         if not static_build:
             filename = os.path.join(COREIR_PATH, "build", "lib", "libcoreir.{}".format(lib_ext))
-            shutil.copy(filename, extdir)
+            shutil.copy(filename, os.path.join(extdir, "lib"))
 
         # copy binary over
         filename = os.path.join(COREIR_PATH, "build", "bin", "coreir")
