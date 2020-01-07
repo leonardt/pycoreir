@@ -16,7 +16,7 @@ if COREIR_BINARY_PATH is None:
     # Assume we did a static build and use the corresponding binary
     path = os.path.abspath(os.path.dirname(coreir.__file__))
     coreir_binary = os.path.join(path, "coreir")
-    subprocess.call([coreir_binary] + sys.argv[1:], env=env)
+    subprocess.call([coreir_binary] + sys.argv[1:])
 else:
     # Found existing binary in path, use this
     subprocess.call([COREIR_BINARY_PATH] + sys.argv[1:])
