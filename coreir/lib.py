@@ -32,16 +32,18 @@ elif SYSTEM == "Darwin":
 else:
     raise NotImplementedError(SYSTEM)
 
+FILE_PATH = os.path.abspath(os.path.dirname(__file__))
+
 # Assume we did a static build, append to LD path for libs
 if COREIR_BINARY_PATH is None:
     env = dict(os.environ)
-    env[LIBRARY_PATH_VAR] = path
+    env[LIBRARY_PATH_VAR] = FILE_PATH
 
 
 def load_shared_lib(lib):
     if COREIR_BINARY_PATH is None:
         # Assume we did a static build and use the corresponding binary
-        libpath = os.path.join(os.path.dirname(os.path.abspath(__file__)), lib)
+        libpath = os.path.join(FILE_PATH, lib)
         libpath = "{}.{}".format(libpath, SHARED_LIB_EXT)
     else:
         # Found existing binary, load lib from system path
