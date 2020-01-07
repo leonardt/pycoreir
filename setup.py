@@ -42,9 +42,9 @@ class CoreIRExtension(Extension):
 
 
 class CoreIRBuild(build_ext):
-    libs = ["coreir", "coreir-c", "coreirsim-c", "coreir-ice40",
-            "coreir-aetherlinglib", "coreir-commonlib", "coreir-float",
-            "coreir-rtlil", "coreir-float_CW", "coreir-float_DW", "verilogAST"]
+    libs = ["coreir-c", "coreirsim-c", "coreir-ice40", "coreir-aetherlinglib",
+            "coreir-commonlib", "coreir-float", "coreir-rtlil",
+            "coreir-float_CW", "coreir-float_DW", "verilogAST"]
 
     @staticmethod
     def is_binary(path):
@@ -101,6 +101,10 @@ class CoreIRBuild(build_ext):
                 COREIR_PATH, "build", "lib",
                 "lib{}.{}".format(lib_name, lib_ext)
             )
+            shutil.copy(filename, extdir)
+
+        if not static_build:
+            filename = os.path.join(COREIR_PATH, "build", "lib", "libcoreir.{}".format(lib_ext))
             shutil.copy(filename, extdir)
 
         # copy binary over
