@@ -22,22 +22,30 @@ for line in os.popen("which -a coreir").read().splitlines():
         COREIR_BINARY_PATH = line
         break
 
+SYSTEM = platform.system()
+if SYSTEM == "Linux":
+    LIBRARY_PATH_VAR = "LD_LIBRARY_PATH"
+    SHARED_LIB_EXT = "so"
+elif SYSTEM == "Darwin":
+    LIBRARY_PATH_VAR = "DYLD_LIBRARY_PATH"
+    SHARED_LIB_EXT = "dylib"
+else:
+    raise NotImplementedError(SYSTEM)
+
+# Assume we did a static build, append to LD path for libs
+if COREIR_BINARY_PATH is None:
+    env = dict(os.environ)
+    env[LIBRARY_PATH_VAR] = path
+
 
 def load_shared_lib(lib):
-    _system = platform.system()
-    if _system == "Linux":
-        shared_lib_ext = "so"
-    elif _system == "Darwin":
-        shared_lib_ext = "dylib"
-    else:
-        raise NotImplementedError(_system)
     if COREIR_BINARY_PATH is None:
         # Assume we did a static build and use the corresponding binary
         libpath = os.path.join(os.path.dirname(os.path.abspath(__file__)), lib)
-        libpath = "{}.{}".format(libpath, shared_lib_ext)
+        libpath = "{}.{}".format(libpath, SHARED_LIB_EXT)
     else:
         # Found existing binary, load lib from system path
-        libpath = "{}.{}".format(lib, shared_lib_ext)
+        libpath = "{}.{}".format(lib, SHARED_LIB_EXT)
     return cdll.LoadLibrary(libpath)
 
 

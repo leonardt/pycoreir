@@ -10,23 +10,12 @@ import os
 import coreir
 from coreir.lib import COREIR_BINARY_PATH
 import subprocess
-import shutil
 
 
 if COREIR_BINARY_PATH is None:
     # Assume we did a static build and use the corresponding binary
-    _system = platform.system()
-    if _system == "Linux":
-        LIBRARY_PATH_VAR = "LD_LIBRARY_PATH"
-    elif _system == "Darwin":
-        LIBRARY_PATH_VAR = "DYLD_LIBRARY_PATH"
-    else:
-        raise NotImplementedError(_system)
-
     path = os.path.abspath(os.path.dirname(coreir.__file__))
     coreir_binary = os.path.join(path, "coreir")
-    env = dict(os.environ)
-    env[LIBRARY_PATH_VAR] = path
     subprocess.call([coreir_binary] + sys.argv[1:], env=env)
 else:
     # Found existing binary in path, use this
