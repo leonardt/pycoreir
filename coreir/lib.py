@@ -42,7 +42,7 @@ if COREIR_BINARY_PATH is None:
 def load_shared_lib(lib):
     if COREIR_BINARY_PATH is None:
         # Assume we did a static build and use the corresponding binary
-        libpath = os.path.join(FILE_PATH, "lib", lib)
+        libpath = os.path.join(FILE_PATH, lib)
         libpath = "{}.{}".format(libpath, SHARED_LIB_EXT)
     else:
         # Found existing binary, load lib from system path
