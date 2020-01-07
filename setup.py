@@ -130,5 +130,4 @@ setup(
     scripts=["bin/coreir"],
     cmdclass=dict(build_ext=CoreIRBuild),
     zip_safe=False
-    # **kwargs
 )
