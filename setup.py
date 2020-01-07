@@ -103,10 +103,6 @@ class CoreIRBuild(build_ext):
             )
             shutil.copy(filename, extdir)
 
-        if not static_build:
-            filename = os.path.join(COREIR_PATH, "build", "lib", "libcoreir.{}".format(lib_ext))
-            shutil.copy(filename, extdir)
-
         # copy binary over
         filename = os.path.join(COREIR_PATH, "build", "bin", "coreir")
         shutil.copy(filename, extdir)
