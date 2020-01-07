@@ -83,10 +83,13 @@ class CoreIRBuild(build_ext):
         build_dir = os.path.join(COREIR_PATH, "build")
 
         if static_build:
-            subprocess.check_call(["cmake", "-DSTATIC=ON", ".."],
-                                  cwd=build_dir)
+            subprocess.check_call(["cmake",
+                                   f"-DCMAKE_INSTALL_PREFIX={extdir}",
+                                   "-DSTATIC=ON", ".."], cwd=build_dir)
         else:
-            subprocess.check_call(["cmake", ".."], cwd=build_dir)
+            subprocess.check_call(["cmake",
+                                   f"-DCMAKE_INSTALL_PREFIX={extdir}", ".."],
+                                  cwd=build_dir)
 
         for lib_name in self.libs:
             subprocess.check_call(["make", "-C", build_dir, f"-j{njobs}",
@@ -95,21 +98,8 @@ class CoreIRBuild(build_ext):
         subprocess.check_call(["make", "-C", build_dir, f"-j{njobs}",
                                "coreir-bin"])
 
-        # copy libraries over
-        for lib_name in self.libs:
-            filename = os.path.join(
-                COREIR_PATH, "build", "lib",
-                "lib{}.{}".format(lib_name, lib_ext)
-            )
-            shutil.copy(filename, extdir)
-
-        if not static_build:
-            filename = os.path.join(COREIR_PATH, "build", "lib", "libcoreir.{}".format(lib_ext))
-            shutil.copy(filename, extdir)
-
-        # copy binary over
-        filename = os.path.join(COREIR_PATH, "build", "bin", "coreir")
-        shutil.copy(filename, extdir)
+        # make install
+        subprocess.check_call(["make", "-C", build_dir, "install"])
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
