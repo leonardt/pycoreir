@@ -36,8 +36,7 @@ FILE_PATH = os.path.abspath(os.path.dirname(__file__))
 
 # Assume we did a static build, append to LD path for libs
 if COREIR_BINARY_PATH is None:
-    env = dict(os.environ)
-    env[LIBRARY_PATH_VAR] = FILE_PATH
+   os.environ[LIBRARY_PATH_VAR] = f"{os.environ.get(LIBRARY_PATH_VAR, '')}:{FILE_PATH}"
 
 
 def load_shared_lib(lib):
