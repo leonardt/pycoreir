@@ -4,6 +4,7 @@ Wrapper script that uses statically compiled coreir binary distribution only if
 coreir is not already present in the path
 """
 
+import platform
 import sys
 import os
 import coreir

@@ -24,13 +24,19 @@ for line in os.popen("which -a coreir").read().splitlines():
 
 SYSTEM = platform.system()
 if SYSTEM == "Linux":
+    LIBRARY_PATH_VAR = "LD_LIBRARY_PATH"
     SHARED_LIB_EXT = "so"
 elif SYSTEM == "Darwin":
+    LIBRARY_PATH_VAR = "DYLD_LIBRARY_PATH"
     SHARED_LIB_EXT = "dylib"
 else:
     raise NotImplementedError(SYSTEM)
 
 FILE_PATH = os.path.abspath(os.path.dirname(__file__))
+
+# Assume we did a static build, append to LD path for libs
+if COREIR_BINARY_PATH is None:
+   os.environ[LIBRARY_PATH_VAR] = f"{os.environ.get(LIBRARY_PATH_VAR, '')}:{FILE_PATH}"
 
 
 def load_shared_lib(lib):
