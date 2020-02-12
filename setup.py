@@ -112,7 +112,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name='coreir',
-    version='2.0.55',
+    version='2.0.56',
     description='Python bindings for CoreIR',
     packages=["coreir"],
     license='BSD License',
