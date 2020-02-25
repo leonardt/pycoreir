@@ -6,6 +6,8 @@ Ultralight Python bindings for [coreir](https://github.com/rdaly525/coreir) usin
 pip install coreir
 ```
 
+The Python package comes with a wheel that contains a pre-built CoreIR binary supporting manylinux and MacOS.  If the package finds a pre-existing installation of CoreIR (e.g. compiled from source), it will default to using that rather than the shipped binary (this enables you to override the package binary if, for example, you're using a development version to test a new feature).
+
 [CHANGELOG](./CHANGELOG.md)
 
 # Development Setup

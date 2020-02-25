@@ -144,7 +144,7 @@ libcoreir_c.COREGetModuleRef.restype = COREModule_p
 libcoreir_c.COREGetModArg.argtypes = [COREWireable_p, ct.c_char_p]
 libcoreir_c.COREGetModArg.restype = COREValue_p
 
-libcoreir_c.COREGetModArgs.argtypes = [COREWireable_p, ct.POINTER(ct.POINTER(ct.POINTER(ct.c_char))), ct.POINTER(ct.POINTER(COREValue_p))]
+libcoreir_c.COREGetModArgs.argtypes = [COREWireable_p, ct.POINTER(ct.POINTER(ct.POINTER(ct.c_char))), ct.POINTER(ct.POINTER(COREValue_p)), ct.POINTER(ct.c_int)]
 libcoreir_c.COREGetModArgs.restype = None
 
 libcoreir_c.COREHasModArg.argtypes = [COREWireable_p, ct.c_char_p]
@@ -155,6 +155,9 @@ libcoreir_c.COREGetValueType.restype = ct.c_int
 
 libcoreir_c.COREValueStringGet.argtypes = [COREValue_p]
 libcoreir_c.COREValueStringGet.restype = ct.c_char_p
+
+libcoreir_c.COREValueJSONGet.argtypes = [COREValue_p]
+libcoreir_c.COREValueJSONGet.restype = ct.c_char_p
 
 libcoreir_c.COREValueIntGet.argtypes = [COREValue_p]
 libcoreir_c.COREValueIntGet.restype = ct.c_int
@@ -187,6 +190,9 @@ libcoreir_c.COREValueModule.restype = COREValue_p
 
 libcoreir_c.COREValueCoreIRType.argtypes = [COREContext_p, COREType_p]
 libcoreir_c.COREValueCoreIRType.restype = COREValue_p
+
+libcoreir_c.COREValueJSON.argtypes = [COREContext_p, ct.c_char_p]
+libcoreir_c.COREValueJSON.restype = COREValue_p
 
 libcoreir_c.COREModuleDefGetConnections.argtypes = [COREModuleDef_p, ct.POINTER(ct.c_int)]
 libcoreir_c.COREModuleDefGetConnections.restype = ct.POINTER(COREConnection_p)
