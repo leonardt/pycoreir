@@ -65,7 +65,7 @@ class ModuleDef(CoreIRType):
             result.append(Instance(curr, self.context))
             curr = libcoreir_c.COREModuleDefInstancesIterNext(self.ptr, curr)
         return result
-    
+
     def get_instance(self,inst_name):
         for inst in self.instances:
             if inst.name==inst_name:
@@ -105,8 +105,6 @@ class ModuleDef(CoreIRType):
         if not isinstance(instance,Instance):
             raise TypeError("Needs to be an Instance")
         libcoreir_c.CORERemoveInstance(instance.ptr)
-
-
 
 class Module(GlobalValue):
     def new_definition(self):
@@ -159,7 +157,7 @@ class Module(GlobalValue):
         for i in range(num_args.value):
             ret[names[i].decode()] = Value(args[i], self.context)
         return ret
-    
+
     #These are the module params
     @property
     def params(self):
@@ -179,7 +177,6 @@ class Module(GlobalValue):
 
     def add_metadata(self, key, value):
         libcoreir_c.COREModuleAddMetaDataStr(self.ptr, str.encode(key), str.encode(value))
- 
 
     @property
     def metadata(self):

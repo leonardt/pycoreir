@@ -27,7 +27,7 @@ class Wireable(CoreIRType):
         return [result[i].decode() for i in range(size.value)]
 
     def select(self, field):
-        if  not libcoreir_c.COREWireableCanSelect(self.ptr,str.encode(field)):
+        if not libcoreir_c.COREWireableCanSelect(self.ptr,str.encode(field)):
             raise Exception("Cannot Select this Wireable with " + field)
         return Select(libcoreir_c.COREWireableSelect(self.ptr, str.encode(field)),self.context)
 
@@ -48,10 +48,9 @@ class Wireable(CoreIRType):
 
 
 class Select(Wireable):
-    pass
-    # @property
-    # def parent(self):
-    #     return Wireable(libcoreir_c.CORESelectGetParent(self.ptr))
+    @property
+    def parent(self):
+        return Wireable(libcoreir_c.COREWireableGetParent(self.ptr), self.context)
 
 
 class Instance(Wireable):
@@ -96,6 +95,10 @@ class Connection(CoreIRType):
     @property
     def second(self):
         return Wireable(libcoreir_c.COREConnectionGetSecond(self.ptr), self.context)
+
+
+def cast_to_select(wire : Wireable):
+    return Select(wire.ptr, wire.context)
 
 def connect_const(port : Wireable,value : int):
     if not isinstance(port,Wireable):
