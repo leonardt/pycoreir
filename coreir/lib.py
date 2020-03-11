@@ -25,10 +25,10 @@ for line in os.popen("which -a coreir").read().splitlines():
 SYSTEM = platform.system()
 if SYSTEM == "Linux":
     LIBRARY_PATH_VAR = "LD_LIBRARY_PATH"
-    SHARED_LIB_EXT = "so"
+    SHARED_LIB_EXT = ".so"
 elif SYSTEM == "Darwin":
     LIBRARY_PATH_VAR = "DYLD_LIBRARY_PATH"
-    SHARED_LIB_EXT = "dylib"
+    SHARED_LIB_EXT = ".dylib"
 else:
     raise NotImplementedError(SYSTEM)
 
@@ -39,15 +39,32 @@ if COREIR_BINARY_PATH is None:
    os.environ[LIBRARY_PATH_VAR] = f"{os.environ.get(LIBRARY_PATH_VAR, '')}:{FILE_PATH}"
 
 
-def load_shared_lib(lib):
+def get_lib_dir():
+    '''Return path to the library directory for coreir libs'''
     if COREIR_BINARY_PATH is None:
-        # Assume we did a static build and use the corresponding binary
-        libpath = os.path.join(FILE_PATH, lib)
-        libpath = "{}.{}".format(libpath, SHARED_LIB_EXT)
-    else:
-        # Found existing binary, load lib from system path
-        libpath = "{}.{}".format(lib, SHARED_LIB_EXT)
-    return cdll.LoadLibrary(libpath)
+        # Assume we did a static build and use the libraries we built
+        return FILE_PATH
+
+    # There's a binary on $PATH. Use the corresponding libraries (which we
+    # assume to be at ../lib relative to it)
+    bin_dir = os.path.dirname(COREIR_BINARY_PATH)
+    lib_dir = os.path.normpath(os.path.join(bin_dir, '../lib'))
+
+    if not os.path.isdir(lib_dir):
+        raise RuntimeError('We found a coreir binary at {}, but there\'s no '
+                           'corresponding library directory at {}.'
+                           .format(COREIR_BINARY_PATH, lib_dir))
+
+    return lib_dir
+
+
+def load_shared_lib(lib):
+    lib_dir = get_lib_dir()
+    lib_path = os.path.join(lib_dir, lib + SHARED_LIB_EXT)
+    if not os.path.exists(lib_path):
+        raise RuntimeError('No library at {}.'.format(lib_path))
+
+    return cdll.LoadLibrary(lib_path)
 
 
 def load_coreir_lib(suffix):
