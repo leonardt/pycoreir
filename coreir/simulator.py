@@ -58,7 +58,7 @@ class SimulatorState(CoreIRType):
 
     def set_value(self, path, new_val):
         cpath = make_charptr_arr(path)
-        if isinstance(new_val, bool) or new_val is 0 or new_val is 1:
+        if isinstance(new_val, bool) or new_val in [0, 1]:
             new_val = [new_val]
         bool_arr = make_bool_arr(new_val)
 
