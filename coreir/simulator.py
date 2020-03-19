@@ -3,6 +3,7 @@ from coreir.base import CoreIRType
 from coreir.lib import libcoreir_sim_c
 import coreir.module
 import coreir.context
+from hwtypes import BitVector
 
 def make_charptr_arr(path):
     return (ct.c_char_p * len(path))(*(p.encode() for p in path))
@@ -58,7 +59,8 @@ class SimulatorState(CoreIRType):
 
     def set_value(self, path, new_val):
         cpath = make_charptr_arr(path)
-        if isinstance(new_val, bool) or new_val in [0, 1]:
+        if (isinstance(new_val, bool) or
+                not isinstance(new_val, BitVector) and new_val in [0, 1]):
             new_val = [new_val]
         bool_arr = make_bool_arr(new_val)
 
