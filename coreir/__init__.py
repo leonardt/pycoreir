@@ -123,6 +123,19 @@ define_types("COREInlineInstance",[COREWireable_p],ct.c_bool)
 define_types("COREAddPassthrough",[COREWireable_p],COREWireable_p)
 define_types("CORERemoveInstance",[COREWireable_p])
 
+define_types("CORECompileToVerilog",
+             [
+                 COREContext_p,  # context
+                 COREModule_p,  # top
+                 ct.c_char_p,  # filename
+                 ct.c_int,  # num_libs
+                 ct.POINTER(ct.c_char_p),  # libs
+                 ct.c_char_p,  # split
+                 ct.c_char_p,  # product
+                 ct.c_bool,  # inilne
+                 ct.c_bool,  # verilator_debug
+             ], ct.c_bool)
+
 libcoreir_c.COREModuleDefGetInterface.argtypes = [COREModuleDef_p]
 libcoreir_c.COREModuleDefGetInterface.restype = COREWireable_p
 
