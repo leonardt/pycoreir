@@ -199,6 +199,11 @@ class Context:
                                                 num_libs, libs, split, product,
                                                 inline, verilator_debug)
 
+    def add_library_search_path(self, top, path, front=False):
+        path = ct.c_char_p(path.encode())
+        front = ct.c_bool(front)
+        return libcoreir_c.COREAddLibrarySearchPath(self.context, path, front)
+
     def __del__(self):
         if not self.external_ptr:
             libcoreir_c.COREDeleteContext(self.context)
