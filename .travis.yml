@@ -19,8 +19,7 @@ before_install:
     conda create -q -n test-env python=3.7.3
     source activate test-env
     conda install pip
-    # see https://github.com/Z3Prover/z3/issues/2800
-    pip install https://github.com/Z3Prover/z3/releases/download/Nightly/z3_solver-4.8.8.0-py2.py3-none-macosx_10_14_x86_64.whl
+    pip install z3
   fi
 install:
 - echo $TRAVIS_BRANCH
