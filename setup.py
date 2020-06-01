@@ -12,9 +12,11 @@ import multiprocessing
 
 _system = platform.system()
 if _system == "Linux":
+    extra_libs = []
     lib_ext = "so"
     static_build = True
 elif _system == "Darwin":
+    extra_libs = ["coreir", "coreirsim"]
     lib_ext = "dylib"
     # osx default xcode doesn't support static build
     static_build = False
@@ -66,7 +68,7 @@ class CoreIRExtension(Extension):
 class CoreIRBuild(build_ext):
     libs = ["coreir-c", "coreirsim-c", "coreir-ice40", "coreir-aetherlinglib",
             "coreir-commonlib", "coreir-float", "coreir-rtlil",
-            "coreir-float_CW", "coreir-float_DW", "verilogAST"]
+            "coreir-float_CW", "coreir-float_DW", "verilogAST"] + extra_libs
 
     def run(self):
         # skip if coreir binary is found. this is useful if people want
