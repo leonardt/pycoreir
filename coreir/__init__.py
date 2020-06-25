@@ -134,6 +134,7 @@ define_types("CORECompileToVerilog",
                  ct.c_char_p,  # product
                  ct.c_bool,  # inilne
                  ct.c_bool,  # verilator_debug
+                 ct.c_bool,  # disable-width-cast
              ], ct.c_bool)
 
 libcoreir_c.COREModuleDefGetInterface.argtypes = [COREModuleDef_p]

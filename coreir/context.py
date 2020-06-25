@@ -186,7 +186,8 @@ class Context:
                                                 namespaces_arr, ct.c_int(len(namespaces)))
 
     def compile_to_verilog(self, top, filename, libs=(), split="",
-                           product="", inline=False, verilator_debug=False):
+                           product="", inline=False, verilator_debug=False,
+                           disable_width_cast=False):
         top = top.ptr
         num_libs = ct.c_int(len(libs))
         libs = (ct.c_char_p * len(libs))(*(lib.encode() for lib in libs))
@@ -195,9 +196,11 @@ class Context:
         product = ct.c_char_p(product.encode())
         inline = ct.c_bool(inline)
         verilator_debug = ct.c_bool(verilator_debug)
+        disable_width_cast = ct.c_bool(disable_width_cast)
         return libcoreir_c.CORECompileToVerilog(self.context, top, filename,
                                                 num_libs, libs, split, product,
-                                                inline, verilator_debug)
+                                                inline, verilator_debug,
+                                                disable_width_cast)
 
     def __del__(self):
         if not self.external_ptr:
