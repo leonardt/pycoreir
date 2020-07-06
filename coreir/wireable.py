@@ -28,7 +28,7 @@ class Wireable(CoreIRType):
 
     def select(self, field):
         if not libcoreir_c.COREWireableCanSelect(self.ptr,str.encode(field)):
-            raise Exception("Cannot Select this Wireable with " + field)
+            raise Exception(f"Cannot Select {self.selectpath} with {field}")
         return Select(libcoreir_c.COREWireableSelect(self.ptr, str.encode(field)),self.context)
 
     @property

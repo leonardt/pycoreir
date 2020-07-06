@@ -61,7 +61,7 @@ class Value(CoreIRType):
             else:
                 width = ct.c_int()
                 libcoreir_c.COREValueBitVectorGetWidth(self.ptr, ct.byref(width))
-                return BitVector[width.value](None)
+                return BitVector[width.value](0)
         elif type == 3:
             return libcoreir_c.COREValueStringGet(self.ptr).decode()
         elif type == 6:
