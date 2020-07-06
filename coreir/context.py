@@ -59,6 +59,12 @@ class Context:
     def G(self):
         raise Exception("Context.G has been removed, use Context.global_namespace instead")
 
+    def get_version(self):
+        return libcoreir_c.COREGetVersion().decode()
+
+    def get_revision(self):
+        return libcoreir_c.COREGetRevision().decode()
+
     def print_errors(self):
         libcoreir_c.COREPrintErrors(self.context)
 

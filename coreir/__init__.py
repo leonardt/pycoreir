@@ -407,3 +407,9 @@ libcoreir_c.CORETypeIsOutput.restype = ct.c_bool
 
 libcoreir_c.COREGlobalValueGetNamespace.argtypes = [COREGlobalValue_p]
 libcoreir_c.COREGlobalValueGetNamespace.restype = CORENamespace_p
+
+libcoreir_c.COREGetVersion.argtypes = None
+libcoreir_c.COREGetVersion.restype = ct.c_char_p
+
+libcoreir_c.COREGetRevision.argtypes = None
+libcoreir_c.COREGetRevision.restype = ct.c_char_p

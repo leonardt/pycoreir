@@ -207,5 +207,13 @@ def test_context():
     _type = context.named_types[("coreir", "clkIn")]
     assert _type.kind == "Named"
 
+def test_version():
+    context = coreir.Context()
+    version = context.get_version()
+    revision = context.get_revision()
+    assert isinstance(version, str) and len(version) > 0
+    assert isinstance(revision, str) and len(revision) > 0
+    print("version:", version, revision)
+
 if __name__ == "__main__":
     test_module_def_instances()
