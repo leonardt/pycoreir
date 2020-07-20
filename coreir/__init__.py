@@ -57,6 +57,7 @@ libcoreir_c.COREContextRunPasses.argstypes = [COREContext_p, ct.POINTER(ct.c_cha
                                                         ct.POINTER(ct.c_char_p), ct.c_int]
 libcoreir_c.COREContextRunPasses.restype = ct.c_bool
 
+libcoreir_c.COREContextSetTop.argstypes = [COREContext_p, COREModule_p]
 
 libcoreir_c.COREPrintErrors.argtypes = [COREContext_p]
 
@@ -81,6 +82,9 @@ libcoreir_c.CORELoadModule.argtypes = [COREContext_p, ct.c_char_p, ct.POINTER(ct
 libcoreir_c.CORELoadModule.restype = COREModule_p
 
 libcoreir_c.CORESaveModule.argtypes = [COREModule_p, ct.c_char_p, ct.POINTER(ct.c_bool)]
+
+libcoreir_c.CORESaveContext.argtypes = [COREContext_p, ct.c_char_p, ct.c_bool,
+                                        ct.c_bool, ct.POINTER(ct.c_bool)]
 
 libcoreir_c.COREGetGlobal.argtypes = [COREContext_p]
 libcoreir_c.COREGetGlobal.restype = CORENamespace_p

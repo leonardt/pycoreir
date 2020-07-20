@@ -152,6 +152,15 @@ class Context:
 
         return coreir.module.Module(m,self)
 
+    def save_to_file(self, file_name, include_coreir=False, include_default_libs=True):
+        err = ct.c_bool(False)
+        libcoreir_c.CORESaveContext(self.context, str.encode(file_name),
+                                    include_coreir is False,
+                                    include_default_libs is False,
+                                    ct.byref(err))
+        if err.value is not False:
+            raise Exception("Error saving context")
+
     def load_library(self, name):
         lib = load_coreir_lib(name)
         func = getattr(lib,"CORELoadLibrary_{}".format(name))
@@ -226,3 +235,6 @@ class Context:
 
     def CoreIRType(self):
         return libcoreir_c.COREContextCOREIRType(self.context)
+
+    def set_top(self, module):
+        libcoreir_c.COREContextSetTop(self.context, module.ptr)
