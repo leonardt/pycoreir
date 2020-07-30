@@ -20,5 +20,5 @@ if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
 else
     # osx
     pip install twine
-    twine upload dist/*
+    twine upload wheelhouse/*
 fi

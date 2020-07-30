@@ -26,5 +26,5 @@ else
      delocate-wheel -v dist/*.whl -w wheels
      mkdir wheelhouse
      python .travis/fix_wheel.py wheels/*.whl -w wheelhouse
-     pip install dist/*.whl
+     pip install wheelhouse/*.whl
 fi
