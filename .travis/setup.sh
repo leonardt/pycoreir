@@ -20,9 +20,11 @@ if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
     docker exec garnet-flow pip install pytest
 else
      python --version
-     python -m pip install cmake twine wheel pytest delocate
+     python -m pip install cmake twine wheel pytest delocate wheeltools
      python setup.py bdist_wheel
      delocate-listdeps dist/*.whl
-     delocate-wheel -v dist/*.whl
+     delocate-wheel -v dist/*.whl -w wheels
+     mkdir wheelhouse
+     python .travis/fix_wheel.py wheels/*.whl -w wheelhouse
      pip install dist/*.whl
 fi
