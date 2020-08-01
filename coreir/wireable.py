@@ -100,6 +100,7 @@ class Connection(CoreIRType):
 def cast_to_select(wire : Wireable):
     return Select(wire.ptr, wire.context)
 
+_CNT = 0
 def connect_const(port : Wireable,value : int):
     if not isinstance(port,Wireable):
         raise TypeError("Needs to be an Instance")
@@ -117,7 +118,9 @@ def connect_const(port : Wireable,value : int):
         cnst = c.get_namespace("coreir").generators["const"](width=width)
         value0 = c.new_values({"value":BitVector[width](value)})
 
-    cinst = mdef.add_module_instance(name=f"c{random.randint(0,2**15)}",module=cnst,config=value0)
+    global _CNT
+    cinst = mdef.add_module_instance(name=f"c_{_CNT}",module=cnst,config=value0)
+    _CNT += 1
     mdef.connect(cinst.select("out"),port)
 
 
