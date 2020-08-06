@@ -53,7 +53,6 @@ class Context:
             self.external_ptr = False
             ptr = libcoreir_c.CORENewContext()
             _LIBRARY_CACHE.clear()
-        assert not self.external_ptr
         self.context = ptr
         self.global_namespace = Namespace(libcoreir_c.COREGetGlobal(self.context),self)
         self.named_types = NamedTypesDict(self)
