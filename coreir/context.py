@@ -52,7 +52,8 @@ class Context:
         if ptr is None:
             self.external_ptr = False
             ptr = libcoreir_c.CORENewContext()
-            _LIBRARY_CACHE.clear()
+            _LIBRARY_CACHE.setdefault(ct.addressof(ptr), {})
+        assert not self.external_ptr
         self.context = ptr
         self.global_namespace = Namespace(libcoreir_c.COREGetGlobal(self.context),self)
         self.named_types = NamedTypesDict(self)
@@ -164,14 +165,15 @@ class Context:
             raise Exception("Error saving context")
 
     def load_library(self, name):
-        if name in _LIBRARY_CACHE:
-            return _LIBRARY_CACHE[name]
+        c_addr = ct.addressof(self.context)
+        if name in _LIBRARY_CACHE[c_addr]:
+            return _LIBRARY_CACHE[c_addr][name]
         lib = load_coreir_lib(name)
         func = getattr(lib,"CORELoadLibrary_{}".format(name))
         func.argtypes = [COREContext_p]
         func.restype = CORENamespace_p
         ns = Namespace(func(self.context), self)
-        _LIBRARY_CACHE[name] = ns
+        _LIBRARY_CACHE[c_addr][name] = ns
         return ns
 
     def enable_symbol_table(self):
