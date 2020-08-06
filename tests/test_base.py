@@ -5,6 +5,10 @@ def test_eq():
     assert c.get_namespace("coreir") == c.get_namespace("coreir")
     assert c.get_namespace("coreir") is c.get_namespace("coreir")
 
+def test_lib_eq():
+    c = coreir.Context()
+    assert c.load_library("commonlib") is c.load_library("commonlib")
+
 def test_hash():
     c = coreir.Context()
     dict0 = {}
