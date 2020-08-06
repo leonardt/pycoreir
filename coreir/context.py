@@ -225,7 +225,6 @@ class Context:
 
     def __del__(self):
         if not self.external_ptr:
-            print("!!!Deleting Context!!!")
             libcoreir_c.COREDeleteContext(self.context)
 
     def Int(self):
