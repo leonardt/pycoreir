@@ -13,7 +13,7 @@ CORENamespace_p = ct.POINTER(CORENamespace)
 
 class Namespace(CoreIRType):
     def __init__(self, ptr, context):
-        super(Namespace, self).__init__(ptr, context)
+        super().__init__(ptr, context)
         self.generators = LazyDict(self, Generator, COREGenerator_p,
                 libcoreir_c.CORENamespaceGetGenerator,
                 libcoreir_c.CORENamespaceHasGenerator,
