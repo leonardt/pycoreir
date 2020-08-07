@@ -11,18 +11,23 @@ def get_pointer_value(pointer):
 _cache = {}
 class Memoize(type):
     def __call__(cls, ptr, context, *args,**kwargs):
+        assert isinstance(context, coreir.Context)
+        if context.context is not coreir.context._CONTEXT:
+            raise ValueError("")
+
         cptr = get_pointer_value(ptr)
-        inst = super().__call__(ptr, context, *args, **kwargs)
-        key = (cptr, type(inst))
-        if key in _cache:
-            inst = _cache[key]
-        else:
-            _cache[key] = inst
-        return inst
+        ccontext = ct.addressof(context.context)
+        key = (cptr, cls)
+        _cache.setdefault(ccontext, {})
+        if key not in _cache[ccontext]:
+            inst = super().__call__(ptr, context, *args, **kwargs)
+            _cache[ccontext][key] = inst
+        return _cache[ccontext][key]
 
 
 class CoreIRType(metaclass=Memoize):
     def __init__(self, ptr, context):
+        assert context.context is coreir.context._CONTEXT
         self.ptr = ptr
         self.context = context
 

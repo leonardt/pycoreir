@@ -44,6 +44,19 @@ class NamedTypesDict:
 
 
 _LIBRARY_CACHE = {}
+
+def namespace_cache(f):
+    def method(self, name: str):
+        c_addr = ct.addressof(self.context)
+        if name in _LIBRARY_CACHE[c_addr]:
+            return _LIBRARY_CACHE[c_addr][name]
+        ns = f(self, name)
+        assert isinstance(ns, Namespace)
+        _LIBRARY_CACHE[c_addr][name] = ns
+        return ns
+    return method
+
+_CONTEXT = None
 class Context:
     def __init__(self, ptr=None):
         # FIXME: Rename this to ptr or context_ptr to be consistent with other
@@ -51,11 +64,23 @@ class Context:
         self.external_ptr = True
         if ptr is None:
             self.external_ptr = False
+            global _CONTEXT
+            if _CONTEXT is not None:
+                libcoreir_c.COREDeleteContext(_CONTEXT)
             ptr = libcoreir_c.CORENewContext()
+            _CONTEXT = ptr
             _LIBRARY_CACHE.setdefault(ct.addressof(ptr), {})
         self.context = ptr
-        self.global_namespace = Namespace(libcoreir_c.COREGetGlobal(self.context),self)
+        #self.global_namespace = Namespace(libcoreir_c.COREGetGlobal(self.context),self)
         self.named_types = NamedTypesDict(self)
+
+    def __str__(self):
+        return f"Context<{self.external_ptr}, {self.context}>"
+
+    @property
+    def global_namespace(self):
+        return self.get_lib("global")
+
 
     @property
     def G(self):
@@ -146,6 +171,8 @@ class Context:
         return Values(gen_args,self)
 
     def load_from_file(self, file_name):
+        assert self.context is coreir.context._CONTEXT
+
         err = ct.c_bool(False)
         m = libcoreir_c.CORELoadModule(
                 self.context, ct.c_char_p(str.encode(file_name)),ct.byref(err))
@@ -163,35 +190,36 @@ class Context:
         if err.value is not False:
             raise Exception("Error saving context")
 
+    @namespace_cache
     def load_library(self, name):
-        c_addr = ct.addressof(self.context)
-        if name in _LIBRARY_CACHE[c_addr]:
-            return _LIBRARY_CACHE[c_addr][name]
         lib = load_coreir_lib(name)
         func = getattr(lib,"CORELoadLibrary_{}".format(name))
         func.argtypes = [COREContext_p]
         func.restype = CORENamespace_p
-        ns = Namespace(func(self.context), self)
-        _LIBRARY_CACHE[c_addr][name] = ns
-        return ns
+        return Namespace(func(self.context), self)
 
     def enable_symbol_table(self):
         libcoreir_sim_c.COREEnSymtable(self.context)
 
+    @namespace_cache
     def get_namespace(self,name):
-      ns = libcoreir_c.COREGetNamespace(self.context,ct.c_char_p(str.encode(name)))
-      return Namespace(ns,self)
+        ns = libcoreir_c.COREGetNamespace(self.context,ct.c_char_p(str.encode(name)))
+        return Namespace(ns, self)
 
     def new_namespace(self,name):
-      ns = libcoreir_c.CORENewNamespace(self.context,ct.c_char_p(str.encode(name)))
-      return Namespace(ns,self)
+        assert 0
+        c_addr = ct.addressof(self.context)
+        if name in _LIBRARY_CACHE[self.context]:
+            raise ValueError(f"Namespace {name} already exists!")
+        ns = libcoreir_c.CORENewNamespace(self.context,ct.c_char_p(str.encode(name)))
+        return Namespace(ns, self)
 
-    @lru_cache(maxsize=None)
+    @namespace_cache
     def get_lib(self, lib):
-        if lib in {"coreir", "mantle", "corebit", "memory"}:
+        if lib in {"global", "coreir", "mantle", "corebit", "memory"}:
             return self.get_namespace(lib)
-        elif lib == "global":
-            return self.global_namespace
+        #elif lib == "global":
+        #    return self.global_namespace
         else:
             return self.load_library(lib)
 
@@ -226,7 +254,11 @@ class Context:
 
     def __del__(self):
         if not self.external_ptr:
+            global _CONTEXT
+            assert _CONTEXT is self.context
             libcoreir_c.COREDeleteContext(self.context)
+            _CONTEXT = None
+
 
     def Int(self):
         return libcoreir_c.COREContextInt(self.context)
