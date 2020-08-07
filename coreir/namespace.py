@@ -13,7 +13,6 @@ CORENamespace_p = ct.POINTER(CORENamespace)
 
 class Namespace(CoreIRType):
     def __init__(self, ptr, context):
-        print("Creating new namespace with", context)
         super().__init__(ptr, context)
         self.generators = LazyDict(self, Generator, COREGenerator_p,
                 libcoreir_c.CORENamespaceGetGenerator,

@@ -56,7 +56,6 @@ def namespace_cache(f):
         return ns
     return method
 
-_CONTEXT = None
 class Context:
     def __init__(self, ptr=None):
         # FIXME: Rename this to ptr or context_ptr to be consistent with other
@@ -64,11 +63,7 @@ class Context:
         self.external_ptr = True
         if ptr is None:
             self.external_ptr = False
-            global _CONTEXT
-            if _CONTEXT is not None:
-                libcoreir_c.COREDeleteContext(_CONTEXT)
             ptr = libcoreir_c.CORENewContext()
-            _CONTEXT = ptr
             _LIBRARY_CACHE.setdefault(ct.addressof(ptr), {})
         self.context = ptr
         #self.global_namespace = Namespace(libcoreir_c.COREGetGlobal(self.context),self)
@@ -171,7 +166,6 @@ class Context:
         return Values(gen_args,self)
 
     def load_from_file(self, file_name):
-        assert self.context is coreir.context._CONTEXT
 
         err = ct.c_bool(False)
         m = libcoreir_c.CORELoadModule(
@@ -207,9 +201,8 @@ class Context:
         return Namespace(ns, self)
 
     def new_namespace(self,name):
-        assert 0
         c_addr = ct.addressof(self.context)
-        if name in _LIBRARY_CACHE[self.context]:
+        if name in _LIBRARY_CACHE[c_addr]:
             raise ValueError(f"Namespace {name} already exists!")
         ns = libcoreir_c.CORENewNamespace(self.context,ct.c_char_p(str.encode(name)))
         return Namespace(ns, self)
@@ -254,10 +247,7 @@ class Context:
 
     def __del__(self):
         if not self.external_ptr:
-            global _CONTEXT
-            assert _CONTEXT is self.context
             libcoreir_c.COREDeleteContext(self.context)
-            _CONTEXT = None
 
 
     def Int(self):

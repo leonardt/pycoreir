@@ -38,6 +38,4 @@ class Generator(CoreIRType):
                 raise ValueError("Arg(name={key}, value={value}) does not match expected type {kind}".format(key=key, value=value, kind=self.params[key].kind))
             gen_args[key] = value
         gen_args = self.context.new_values(gen_args)
-        mod = libcoreir_c.COREGeneratorGetModule(self.ptr, gen_args.ptr)
-        print(mod, type(mod))
         return Module(libcoreir_c.COREGeneratorGetModule(self.ptr, gen_args.ptr), self.context)

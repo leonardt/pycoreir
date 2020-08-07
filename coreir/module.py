@@ -28,14 +28,6 @@ COREModuleDef_p = ct.POINTER(COREModuleDef)
 class ModuleDef(CoreIRType):
     def add_module_instance(self, name, module, config=None):
         if module.context != self.context:
-            print("parent", self.context)
-            print("module_to_instance", module.context)
-            print(name, config)
-            print("to instance", module.name,flush=True)
-            module.print_()
-            print("contain", self.module.name, flush=True)
-            self.module.print_()
-            print("",flush=True)
             raise Exception("Wiring the instance of {} in the module {} bug as different "
                             "CoreIR contexts".format(module.name, self.module.name))
         if config==None:

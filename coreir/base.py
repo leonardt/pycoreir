@@ -12,9 +12,6 @@ _cache = {}
 class Memoize(type):
     def __call__(cls, ptr, context, *args,**kwargs):
         assert isinstance(context, coreir.Context)
-        if context.context is not coreir.context._CONTEXT:
-            raise ValueError("")
-
         cptr = get_pointer_value(ptr)
         ccontext = ct.addressof(context.context)
         key = (cptr, cls)
@@ -27,7 +24,6 @@ class Memoize(type):
 
 class CoreIRType(metaclass=Memoize):
     def __init__(self, ptr, context):
-        assert context.context is coreir.context._CONTEXT
         self.ptr = ptr
         self.context = context
 
