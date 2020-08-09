@@ -1,6 +1,6 @@
 import json
 import ctypes as ct
-from coreir.type import COREType_p, Type, Params, COREValue_p, Values, Record
+from coreir.type import COREType_p, Type, Params, COREValue_p, Values, Record, Value
 from coreir.generator import Generator
 from coreir.namespace import Namespace, CORENamespace_p
 from coreir.lib import libcoreir_c, load_coreir_lib, libcoreir_sim_c
@@ -136,7 +136,9 @@ class Context:
     def new_values(self,fields={}):
         args = []
         for v in fields.values():
-            if type(v) is int:
+            if isinstance(v, Value):
+                args.append(v.ptr)
+            elif type(v) is int:
                 args.append(libcoreir_c.COREValueInt(self.context, ct.c_int(v)))
             elif type(v) is str:
                 args.append(libcoreir_c.COREValueString(self.context,
