@@ -1,5 +1,6 @@
 import json
 import ctypes as ct
+from coreir.base import _cache
 from coreir.type import COREType_p, Type, Params, COREValue_p, Values, Record
 from coreir.generator import Generator
 from coreir.namespace import Namespace, CORENamespace_p
@@ -261,6 +262,8 @@ class Context:
         c_addr = ct.addressof(self.context)
         if c_addr in _library_cache:
             del _library_cache[c_addr]
+        if c_addr in _cache:
+            del _cache[c_addr]
         libcoreir_c.COREDeleteContext(self.context)
         self.context = None
 
