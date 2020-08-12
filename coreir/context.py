@@ -246,9 +246,20 @@ class Context:
                                                 disable_width_cast)
 
     def __del__(self):
-        if not self.external_ptr:
+        if self.context is not None and not self.external_ptr:
             libcoreir_c.COREDeleteContext(self.context)
 
+    def delete(self):
+        """
+        WARNING: Unsafe, will set self.context to None.  The pycoreir internal
+        code does not check for this.  For performance reasons, we do not add a
+        None check for all the API code, instead we assume if this is used that
+        the user is certain that the context object will no longer be used.
+        """
+        if self.context is None:
+            raise Exception("Context already deleted")
+        libcoreir_c.COREDeleteContext(self.context)
+        self.context = None
 
     def Int(self):
         return libcoreir_c.COREContextInt(self.context)
