@@ -246,9 +246,12 @@ class Context:
                                                 disable_width_cast)
 
     def __del__(self):
+        raise Exception()
         if not self.external_ptr:
             libcoreir_c.COREDeleteContext(self.context)
 
+    def delete(self):
+        libcoreir_c.COREDeleteContext(self.context)
 
     def Int(self):
         return libcoreir_c.COREContextInt(self.context)
