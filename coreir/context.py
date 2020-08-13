@@ -1,5 +1,6 @@
 import json
 import ctypes as ct
+from coreir.base import _cache
 from coreir.type import COREType_p, Type, Params, COREValue_p, Values, Record
 from coreir.generator import Generator
 from coreir.namespace import Namespace, CORENamespace_p
@@ -43,16 +44,16 @@ class NamedTypesDict:
         )
 
 
-_LIBRARY_CACHE = {}
+_library_cache = {}
 
 def namespace_cache(f):
     def method(self, name: str):
         c_addr = ct.addressof(self.context)
-        if name in _LIBRARY_CACHE[c_addr]:
-            return _LIBRARY_CACHE[c_addr][name]
+        if name in _library_cache[c_addr]:
+            return _library_cache[c_addr][name]
         ns = f(self, name)
         assert isinstance(ns, Namespace)
-        _LIBRARY_CACHE[c_addr][name] = ns
+        _library_cache[c_addr][name] = ns
         return ns
     return method
 
@@ -64,7 +65,7 @@ class Context:
         if ptr is None:
             self.external_ptr = False
             ptr = libcoreir_c.CORENewContext()
-            _LIBRARY_CACHE.setdefault(ct.addressof(ptr), {})
+            _library_cache.setdefault(ct.addressof(ptr), {})
         self.context = ptr
         #self.global_namespace = Namespace(libcoreir_c.COREGetGlobal(self.context),self)
         self.named_types = NamedTypesDict(self)
@@ -202,7 +203,7 @@ class Context:
 
     def new_namespace(self,name):
         c_addr = ct.addressof(self.context)
-        if name in _LIBRARY_CACHE[c_addr]:
+        if name in _library_cache[c_addr]:
             raise ValueError(f"Namespace {name} already exists!")
         ns = libcoreir_c.CORENewNamespace(self.context,ct.c_char_p(str.encode(name)))
         return Namespace(ns, self)
@@ -247,7 +248,7 @@ class Context:
 
     def __del__(self):
         if self.context is not None and not self.external_ptr:
-            libcoreir_c.COREDeleteContext(self.context)
+            self.delete()
 
     def delete(self):
         """
@@ -258,6 +259,11 @@ class Context:
         """
         if self.context is None:
             raise Exception("Context already deleted")
+        c_addr = ct.addressof(self.context)
+        if c_addr in _library_cache:
+            del _library_cache[c_addr]
+        if c_addr in _cache:
+            del _cache[c_addr]
         libcoreir_c.COREDeleteContext(self.context)
         self.context = None
 
