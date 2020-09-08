@@ -201,6 +201,10 @@ class Context:
         ns = libcoreir_c.COREGetNamespace(self.context,ct.c_char_p(str.encode(name)))
         return Namespace(ns, self)
 
+    def has_namespace(self,name):
+        return libcoreir_c.COREHasNamespace(self.context,
+                                            ct.c_char_p(str.encode(name)))
+
     def new_namespace(self,name):
         c_addr = ct.addressof(self.context)
         if name in _library_cache[c_addr]:

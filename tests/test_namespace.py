@@ -9,6 +9,7 @@ dir_path = os.path.dirname(os.path.realpath(__file__))
 def test_coreir():
     context = coreir.Context()
     assert context.global_namespace.name == "global"
+    assert context.has_namespace("coreir")
     coreir_stdlib = context.get_namespace("coreir")
     assert coreir_stdlib.name == "coreir"
 
@@ -58,7 +59,9 @@ def test_ice40():
 
 def test_new_namespace():
     context = coreir.Context()
+    assert not context.has_namespace("foo")
     foons = context.new_namespace("foo")
+    assert context.has_namespace("foo")
     module_typ = context.Record({"input": context.Array(8, context.BitIn()), "output": context.Array(9, context.Bit())})
     module = foons.new_module("bar", module_typ)
     assert module.namespace == foons
