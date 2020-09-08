@@ -1,8 +1,9 @@
 import ctypes as ct
 from coreir.type import CoreIRType
 from coreir.lib import libcoreir_c
-from coreir.type import COREValueType_p, ValueType
+from coreir.type import COREValueType_p, ValueType, Value
 from coreir.module import Module
+
 
 
 class COREGenerator(ct.Structure):
@@ -34,7 +35,10 @@ class Generator(CoreIRType):
         for key, value in kwargs.items():
             if key not in self.params:
                 raise KeyError("key={key} not in params={keys}".format(key=key, keys=self.params.keys()))
-            if not isinstance(value, self.params[key].kind):
+            if isinstance(value, Value):
+                if value.type != self.params[key].kind:
+                    raise ValueError(f"Arg(name={key}, ValueKind={value.type}) does not match expected ValueKind {self.params[key].kind}")
+            elif not isinstance(value, self.params[key].kind):
                 raise ValueError("Arg(name={key}, value={value}) does not match expected type {kind}".format(key=key, value=value, kind=self.params[key].kind))
             gen_args[key] = value
         gen_args = self.context.new_values(gen_args)

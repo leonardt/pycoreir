@@ -19,19 +19,23 @@ class COREValueType(ct.Structure):
 
 COREValueType_p = ct.POINTER(COREValueType)
 
+#Needs to be a function since coreir.Module has yet to be defined
+def get_kind_dict():
+    return {
+        # Defined in ir/valuetype.h
+        0: bool,
+        1: int,
+        2: BitVector,
+        3: str,
+        4: CoreIRType,
+        5: coreir.Module,
+        6: json,
+    }
+
 class ValueType(CoreIRType):
     @property
     def kind(self):
-        return {
-            # Defined in ir/valuetype.h
-            0: bool,
-            1: int,
-            2: BitVector,
-            3: str,
-            4: CoreIRType,
-            5: coreir.Module,
-            6: json,
-        }[libcoreir_c.COREValueTypeGetKind(self.ptr)]
+        return get_kind_dict()[libcoreir_c.COREValueTypeGetKind(self.ptr)]
 
 class COREValue(ct.Structure):
   pass
@@ -39,6 +43,11 @@ class COREValue(ct.Structure):
 COREValue_p = ct.POINTER(COREValue)
 
 class Value(CoreIRType):
+
+    @property
+    def type(self):
+        return get_kind_dict()[libcoreir_c.COREGetValueType(self.ptr)]
+
     @property
     def value(self):
         type = libcoreir_c.COREGetValueType(self.ptr)

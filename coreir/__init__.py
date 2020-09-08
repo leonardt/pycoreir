@@ -92,6 +92,9 @@ libcoreir_c.COREGetGlobal.restype = CORENamespace_p
 libcoreir_c.COREGetNamespace.argtypes = [COREContext_p, ct.c_char_p]
 libcoreir_c.COREGetNamespace.restype = CORENamespace_p
 
+libcoreir_c.COREHasNamespace.argtypes = [COREContext_p, ct.c_char_p]
+libcoreir_c.COREHasNamespace.restype = ct.c_bool
+
 libcoreir_c.CORENewNamespace.argtypes = [COREContext_p, ct.c_char_p]
 libcoreir_c.CORENewNamespace.restype = CORENamespace_p
 
