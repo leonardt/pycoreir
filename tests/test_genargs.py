@@ -8,6 +8,11 @@ def test_genargs():
     for instance in mod.definition.instances:
         assert instance.module.generator_args["width"].value == 4
 
+    # test creating coreir module from Value
+    width_value = mod.definition.instances[0].module.generator_args["width"]
+    assert isinstance(width_value, coreir.Value)
+    const_mod = context.get_namespace("coreir").generators["const"](width=width_value)
+
 
 if __name__ == "__main__":
     test_genargs()
