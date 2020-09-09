@@ -5,7 +5,6 @@ from coreir.type import COREValueType_p, ValueType, Value
 from coreir.module import Module
 
 
-
 class COREGenerator(ct.Structure):
     pass
 
