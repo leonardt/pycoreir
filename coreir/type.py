@@ -19,7 +19,7 @@ class COREValueType(ct.Structure):
 
 COREValueType_p = ct.POINTER(COREValueType)
 
-#Needs to be a function since coreir.Module has yet to be defined
+# Needs to be a function since coreir.Module has yet to be defined
 def get_kind_dict():
     return {
         # Defined in ir/valuetype.h
