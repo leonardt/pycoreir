@@ -43,7 +43,6 @@ class COREValue(ct.Structure):
 COREValue_p = ct.POINTER(COREValue)
 
 class Value(CoreIRType):
-
     @property
     def type(self):
         return get_kind_dict()[libcoreir_c.COREGetValueType(self.ptr)]
