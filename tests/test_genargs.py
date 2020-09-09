@@ -14,6 +14,5 @@ def test_genargs():
     const_mod = context.get_namespace("coreir").generators["const"](width=width_value)
 
 
-
 if __name__ == "__main__":
     test_genargs()
