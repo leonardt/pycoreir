@@ -265,7 +265,6 @@ class Context:
         None check for all the API code, instead we assume if this is used that
         the user is certain that the context object will no longer be used.
         """
-        print("DELETING", self)
         if self.context is None:
             raise Exception("Context already deleted")
         c_addr = ct.addressof(self.context)
