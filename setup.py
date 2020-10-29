@@ -35,7 +35,7 @@ else:
 COREIR_PATH = "coreir-cpp"
 COREIR_REPO = "https://github.com/rdaly525/coreir"
 COREIR_NAME = "coreir"
-COREIR_BRANCH = "leonardt-patch-2"
+COREIR_BRANCH = "master"
 
 
 TEXT_CHARS = bytearray({7, 8, 9, 10, 12, 13, 27} | set(range(0x20, 0x100)) -
