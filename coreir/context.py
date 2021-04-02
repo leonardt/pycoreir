@@ -187,6 +187,17 @@ class Context:
         if err.value is not False:
             raise Exception("Error saving context")
 
+    def serialize_header(self, file_name: str, modules: list):
+        assert all(isinstance(m, coreir.Module) for m in modules)
+
+        module_refs = (ct.c_char_p * len(modules))(*((m.ref_name).encode() for m in modules))
+        mlen = ct.c_uint(len(modules))
+
+        err = ct.c_bool(False)
+        libcoreir_c.CORESerializeHeader(self.context, str.encode(file_name), module_refs, mlen, ct.byref(err))
+        if err.value is not False:
+            raise Exception("Error saving header")
+
     @namespace_cache
     def load_library(self, name):
         lib = load_coreir_lib(name)

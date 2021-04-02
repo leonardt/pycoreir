@@ -12,3 +12,8 @@ class GlobalValue(CoreIRType):
     @property
     def namespace(self):
         return coreir.namespace.Namespace(libcoreir_c.COREGlobalValueGetNamespace(self.ptr), self.context)
+
+    @property
+    def ref_name(self):
+        assert hasattr(self, "name")
+        return f"{self.namespace.name}.{self.name}"

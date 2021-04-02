@@ -42,6 +42,13 @@ class COREValue(ct.Structure):
 
 COREValue_p = ct.POINTER(COREValue)
 
+class COREModule(ct.Structure):
+  pass
+
+COREModule_p = ct.POINTER(COREModule)
+
+
+
 class Value(CoreIRType):
     @property
     def type(self):
