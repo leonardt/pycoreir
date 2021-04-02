@@ -1,0 +1,26 @@
+{"top":"global.Add2",
+"namespaces":{
+  "global":{
+    "modules":{
+      "Add2":{
+        "type":["Record",[
+          ["in0",["Array",16,"BitIn"]],
+          ["in1",["Array",16,"BitIn"]],
+          ["out",["Array",16,"Bit"]]
+        ]],
+        "instances":{
+          "a0":{
+            "genref":"coreir.add",
+            "genargs":{"width":["Int",16]}
+          }
+        },
+        "connections":[
+          ["self.in0","a0.in0"],
+          ["self.in1","a0.in1"],
+          ["self.out","a0.out"]
+        ]
+      }
+    }
+  }
+}
+}

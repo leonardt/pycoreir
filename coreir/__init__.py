@@ -155,6 +155,16 @@ define_types(
     ]
 )
 
+define_types(
+    "CORELoadHeader",
+    [
+        COREContext_p,
+        ct.c_char_p,
+        ct.POINTER(ct.POINTER(ct.POINTER(ct.c_char))),
+        ct.POINTER(ct.c_uint),
+        ct.POINTER(ct.c_bool)
+    ]
+)
 
 
 libcoreir_c.COREModuleDefGetInterface.argtypes = [COREModuleDef_p]

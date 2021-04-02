@@ -198,6 +198,23 @@ class Context:
         if err.value is not False:
             raise Exception("Error saving header")
 
+    def load_header(self, file_name: str):
+        c_module_refs = ct.POINTER(ct.POINTER(ct.c_char))()
+        size = ct.c_uint()
+        err = ct.c_bool(False)
+        libcoreir_c.CORELoadHeader(self.context, str.encode(file_name), ct.byref(c_module_refs), ct.byref(size), ct.byref(err))
+        if err.value is not False:
+            raise Exception("Error loading header")
+        modules = []
+        for i in range(size.value):
+            mod_ref = ct.cast(c_module_refs[i], ct.c_char_p).value.decode()
+            modules.append(self.module_by_ref(mod_ref))
+        return modules
+
+    def module_by_ref(self, mod_ref: str):
+        nsname, mod_name = mod_ref.split(".")
+        return self.get_namespace(nsname).modules[mod_name]
+
     @namespace_cache
     def load_library(self, name):
         lib = load_coreir_lib(name)
