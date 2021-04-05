@@ -144,6 +144,58 @@ define_types("CORECompileToVerilog",
                  ct.c_bool,  # disable-width-cast
              ], ct.c_bool)
 
+define_types(
+    "CORESerializeHeader",
+    [
+        COREContext_p,
+        ct.c_char_p,
+        ct.POINTER(ct.c_char_p),
+        ct.c_uint,
+        ct.POINTER(ct.c_bool)
+    ]
+)
+
+define_types(
+    "CORESerializeDefinitions",
+    [
+        COREContext_p,
+        ct.c_char_p,
+        ct.POINTER(ct.c_char_p),
+        ct.c_uint,
+        ct.POINTER(ct.c_bool)
+    ]
+)
+
+define_types(
+    "CORELoadHeader",
+    [
+        COREContext_p,
+        ct.c_char_p,
+        ct.POINTER(ct.POINTER(ct.POINTER(ct.c_char))),
+        ct.POINTER(ct.c_uint),
+        ct.POINTER(ct.c_bool)
+    ]
+)
+
+define_types(
+    "CORELinkDefinitions",
+    [
+        COREContext_p,
+        ct.c_char_p,
+        ct.POINTER(ct.c_bool)
+    ]
+)
+
+define_types(
+    "CORESerializeToFile",
+    [
+        COREContext_p,
+        ct.c_char_p,
+        ct.POINTER(ct.c_bool)
+    ]
+)
+
+
 libcoreir_c.COREModuleDefGetInterface.argtypes = [COREModuleDef_p]
 libcoreir_c.COREModuleDefGetInterface.restype = COREWireable_p
 

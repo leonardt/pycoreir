@@ -1,0 +1,8 @@
+coreir.egg-info
+.cache
+__pycache__
+build
+dist
+*.pyc
+.idea/
+coreir-cpp
