@@ -68,6 +68,9 @@ def test_save_module():
     assert module.definition is not None, "Should have a definition"
     module.print_()
     module.save_to_file("_python_test_output.json")
+    del c
+
+    c = coreir.Context()
     mod = c.load_from_file("_python_test_output.json")
     mod_def = mod.definition
     print("=====================")

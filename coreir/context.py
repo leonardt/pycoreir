@@ -7,6 +7,7 @@ from coreir.namespace import Namespace, CORENamespace_p
 from coreir.lib import libcoreir_c, load_coreir_lib, libcoreir_sim_c
 from hwtypes import BitVector
 import coreir.module
+import typing as tp
 try:
     from functools import lru_cache
 except ImportError:
@@ -187,6 +188,16 @@ class Context:
         if err.value is not False:
             raise Exception("Error saving context")
 
+    def serialize_to_file(self, file_name):
+        err = ct.c_bool(False)
+        libcoreir_c.CORESerializeToFile(
+            self.context,
+            str.encode(file_name),
+            ct.byref(err)
+        )
+        if err.value is not False:
+            raise Exception("Error serializing file " + file_name)
+
     def serialize_header(self, file_name: str, modules: list):
         assert all(isinstance(m, coreir.Module) for m in modules)
 
@@ -196,13 +207,25 @@ class Context:
         err = ct.c_bool(False)
         libcoreir_c.CORESerializeHeader(self.context, str.encode(file_name), module_refs, mlen, ct.byref(err))
         if err.value is not False:
-            raise Exception("Error saving header")
+            raise Exception("Error serializing header")
+
+    def serialize_definitions(self, file_name: str, modules: list):
+        assert all(isinstance(m, coreir.Module) for m in modules)
+
+        module_refs = (ct.c_char_p * len(modules))(*((m.ref_name).encode() for m in modules))
+        mlen = ct.c_uint(len(modules))
+
+        err = ct.c_bool(False)
+        libcoreir_c.CORESerializeDefinitions(self.context, str.encode(file_name), module_refs, mlen, ct.byref(err))
+        if err.value is not False:
+            raise Exception("Error serializing definitions")
 
     def load_header(self, file_name: str):
         c_module_refs = ct.POINTER(ct.POINTER(ct.c_char))()
         size = ct.c_uint()
         err = ct.c_bool(False)
-        libcoreir_c.CORELoadHeader(self.context, str.encode(file_name), ct.byref(c_module_refs), ct.byref(size), ct.byref(err))
+        libcoreir_c.CORELoadHeader(self.context, str.encode(file_name), ct.byref(c_module_refs), ct.byref(size),
+                                   ct.byref(err))
         if err.value is not False:
             raise Exception("Error loading header")
         modules = []
@@ -210,6 +233,13 @@ class Context:
             mod_ref = ct.cast(c_module_refs[i], ct.c_char_p).value.decode()
             modules.append(self.module_by_ref(mod_ref))
         return modules
+
+    def link_definitions(self, file_name: str):
+        c_module_refs = ct.POINTER(ct.POINTER(ct.c_char))()
+        err = ct.c_bool(False)
+        libcoreir_c.CORELinkDefinitions(self.context, str.encode(file_name), ct.byref(err))
+        if err.value is not False:
+            raise Exception("Error loading header")
 
     def module_by_ref(self, mod_ref: str):
         nsname, mod_name = mod_ref.split(".")
