@@ -6,6 +6,8 @@ from coreir.util import LazyDict
 import coreir.module
 import random
 from hwtypes import BitVector
+from coreir.util import decode_cptr_and_free
+import json
 
 class COREWireable(ct.Structure):
     pass
@@ -71,6 +73,12 @@ class Instance(Wireable):
     def name(self):
         return libcoreir_c.COREInstanceGetInstname(self.ptr).decode()
 
+    @property
+    def metadata(self):
+        ptr_c = libcoreir_c.COREInstanceGetMetaData(self.ptr)
+        pstr = decode_cptr_and_free(ptr_c)
+        mjson = json.loads(pstr)
+        return mjson
 
 def inline_instance(instance):
     if not isinstance(instance,Instance):
