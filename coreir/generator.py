@@ -3,15 +3,16 @@ from coreir.type import CoreIRType
 from coreir.lib import libcoreir_c
 from coreir.type import COREValueType_p, ValueType, Value
 from coreir.module import Module
+from coreir.global_value import GlobalValue, COREGlobalValue
 
 
-class COREGenerator(ct.Structure):
+class COREGenerator(COREGlobalValue):
     pass
 
 COREGenerator_p = ct.POINTER(COREGenerator)
 
 
-class Generator(CoreIRType):
+class Generator(GlobalValue):
     @property
     def name(self):
         return libcoreir_c.COREGeneratorGetName(self.ptr).decode()
