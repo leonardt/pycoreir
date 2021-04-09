@@ -76,7 +76,7 @@ class Instance(Wireable):
     @property
     def metadata(self):
         ptr_c = libcoreir_c.COREInstanceGetMetaData(self.ptr)
-        pstr = decode_cptr_and_free(ptr_c)
+        pstr = decode_cptr_and_free(ptr_c, free=False)
         mjson = json.loads(pstr)
         return mjson
 
