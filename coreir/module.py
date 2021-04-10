@@ -66,7 +66,9 @@ class ModuleDef(CoreIRType):
             curr = libcoreir_c.COREModuleDefInstancesIterNext(self.ptr, curr)
         return result
 
-    def get_instance(self,inst_name):
+    def get_instance(self, inst_name):
+        if inst_name == "self":
+            return self.interface
         for inst in self.instances:
             if inst.name==inst_name:
                 return inst

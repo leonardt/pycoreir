@@ -87,7 +87,10 @@ def inline_instance(instance):
 
 
 class Interface(Wireable):
-    pass
+
+    @property
+    def name(self):
+        return "self"
 
 
 class Connection(CoreIRType):
