@@ -175,7 +175,8 @@ class Context:
         m = libcoreir_c.CORELoadModule(
                 self.context, ct.c_char_p(str.encode(file_name)),ct.byref(err))
         if (err.value):
-           self.print_errors()
+            self.print_errors()
+            raise ValueError(f"Error Loading file {file_name}")
 
         return coreir.module.Module(m,self)
 
