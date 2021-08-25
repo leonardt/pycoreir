@@ -1,10 +1,12 @@
 import ctypes as ct
+from typing import Mapping
+
 from coreir.global_value import GlobalValue, COREGlobalValue
 from coreir.type import CoreIRType, Values
 from coreir.lib import libcoreir_c
 from coreir.wireable import Instance, Interface, Wireable
 from coreir.type import COREValue_p, COREValueType_p, Value, Record, ValueType
-from coreir.util import decode_cptr_and_free
+from coreir.util import decode_cptr_and_free, raise_mapping
 import coreir.wireable
 import json
 
@@ -186,6 +188,14 @@ class Module(GlobalValue):
         pstr = decode_cptr_and_free(ptr_c)
         mjson = json.loads(pstr)
         return mjson
+
+    def link_module(self, key: str, target: 'Module') -> bool:
+        return libcoreir_c.COREModuleLinkModule(
+            str.encode(key), self.ptr, target.ptr)
+
+    def get_linked_modules(self) -> Mapping[str, 'Module']:
+        return raise_mapping(
+            self, COREModule_p, Module, libcoreir_c.COREModuleGetLinkedModules)
 
 
 class COREDirectedInstance(ct.Structure):
