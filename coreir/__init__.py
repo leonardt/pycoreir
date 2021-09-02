@@ -373,11 +373,23 @@ libcoreir_c.COREModuleGetGenArgs.restype = None
 libcoreir_c.COREModuleIsGenerated.argtypes = [COREModule_p]
 libcoreir_c.COREModuleIsGenerated.restype = ct.c_bool
 
-libcoreir_c.COREModuleGetLinkedModules.argtypes = [COREModule_p, ct.POINTER(ct.c_char), COREModule_p]
-libcoreir_c.COREModuleGetLinkedModules.restype = ct.c_bool
+# Link modules.
+libcoreir_c.COREModuleLinkModule.argtypes = [ct.POINTER(ct.c_char), COREModule_p, COREModule_p]
+libcoreir_c.COREModuleLinkModule.restype = ct.c_bool
 
 libcoreir_c.COREModuleGetLinkedModules.argtypes = [COREModule_p, ct.POINTER(ct.POINTER(ct.POINTER(ct.c_char))), ct.POINTER(ct.POINTER(COREModule_p))]
 libcoreir_c.COREModuleGetLinkedModules.restype = ct.c_bool
+
+# Link default modules.
+libcoreir_c.COREModuleLinkDefaultModule.argtypes = [COREModule_p, COREModule_p]
+libcoreir_c.COREModuleLinkDefaultModule.restype = ct.c_bool
+
+libcoreir_c.COREModuleHasDefaultLinkedModule.argtypes = [COREModule_p]
+libcoreir_c.COREModuleHasDefaultLinkedModule.restype = ct.c_bool
+
+libcoreir_c.COREModuleGetDefaultLinkedModule.argtypes = [COREModule_p]
+libcoreir_c.COREModuleGetDefaultLinkedModule.restype = COREModule_p
+
 
 libcoreir_c.CORENamespaceGetGenerator.argtypes = [CORENamespace_p, ct.c_char_p]
 libcoreir_c.CORENamespaceGetGenerator.restype = COREGenerator_p

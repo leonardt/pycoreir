@@ -197,6 +197,16 @@ class Module(GlobalValue):
         return raise_mapping(
             self, COREModule_p, Module, libcoreir_c.COREModuleGetLinkedModules)
 
+    def link_default_module(self, target: 'Module') -> bool:
+        return libcoreir_c.COREModuleLinkDefaultModule(self.ptr, target.ptr)
+
+    def has_default_linked_module(self) -> bool:
+        return libcoreir_c.COREModuleHasDefaultLinkedModule(self.ptr)
+
+    def get_default_linked_module(self) -> bool:
+        ptr = libcoreir_c.COREModuleGetDefaultLinkedModule(self.ptr)
+        return Module(ptr, self.context)
+
 
 class COREDirectedInstance(ct.Structure):
     pass
