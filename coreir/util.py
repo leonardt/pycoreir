@@ -23,6 +23,22 @@ def decode_cptr_and_free(ptr, free=True):
         libcoreir_c.COREFree(ptr)
     return pstr
 
+
+def raise_mapping(parent, core_return_type, return_type, iter_fn):
+    c_keys = ct.POINTER(ct.POINTER(ct.c_char))()
+    c_values = ct.POINTER(core_return_type)()
+    size = ct.c_int()
+    iter_fn(parent.ptr, ct.byref(c_keys), ct.byref(c_values), ct.byref(size))
+    dct = {}
+    for i in range(0, size.value):
+        value = return_type(c_values[i], parent.context)
+        dct[ct.cast(c_keys[i], ct.c_char_p).value.decode()] = value
+        libcoreir_c.COREFree(c_keys[i])
+    assert c_keys._b_needsfree_, "Expected pointer to be freed by ctypes"
+    assert c_values._b_needsfree_, "Expected pointer to be freed by ctypes"
+    return dct
+
+
 class LazyDict(Mapping):
     """
     Lazy object that implements the ``dict[key]`` interface. Instead
@@ -49,18 +65,12 @@ class LazyDict(Mapping):
                    self.parent.context)
 
     def __iter__(self):
-        c_keys = ct.POINTER(ct.POINTER(ct.c_char))()
-        c_values = ct.POINTER(self.core_return_type)()
-        size = ct.c_int()
-        self.iter_function(self.parent.ptr, ct.byref(c_keys), ct.byref(c_values), ct.byref(size))
-        _dict = {}
-        for i in range(0, size.value):
-            _dict[ct.cast(c_keys[i], ct.c_char_p).value.decode()] = \
-                self.return_type(c_values[i], self.parent.context)
-            libcoreir_c.COREFree(c_keys[i])
-        assert c_keys._b_needsfree_, "Expected pointer to be freed by ctypes"
-        assert c_values._b_needsfree_, "Expected pointer to be freed by ctypes"
-        return iter(_dict)
+        dct = raise_mapping(
+            self.parent,
+            self.core_return_type,
+            self.return_type,
+            self.iter_function)
+        return iter(dct)
 
     def __len__(self):
         # TODO: Should just be an API call
