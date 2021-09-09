@@ -1,0 +1,32 @@
+name: MacOS Test
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: macos-latest
+    if: "!contains(github.event.head_commit.message, 'skip ci')"
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-python@v2
+      with:
+        python-version: '3.8'
+    - name: Setup Python
+      shell: bash
+      run: |
+          python --version
+          brew install cmake
+          python -m pip install twine wheel pytest delocate wheeltools
+          python setup.py bdist_wheel
+          delocate-listdeps dist/*.whl
+          delocate-wheel -v dist/*.whl -w wheels
+          mkdir wheelhouse
+          python .travis/fix_wheel.py wheels/*.whl -w wheelhouse
+          pip install wheelhouse/*.whl
+    - name: Docker run
+      shell: bash -l {0}
+      run: |
+          pip install magma-lang
+          pytest -s tests/
