@@ -1,6 +1,9 @@
 name: MacOS Deploy
 
-on: [push]
+on:
+  push:
+    tags:
+      - v*
 
 jobs:
   build:
