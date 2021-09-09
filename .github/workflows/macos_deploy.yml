@@ -1,4 +1,4 @@
-name: MacOS Test
+name: MacOS Deploy
 
 on: [push]
 
@@ -44,6 +44,6 @@ jobs:
           
           pip install twine
           twine upload wheelhouse/*          
-          
+
       env:
         PYPI_PASSWORD: ${{ secrets.PYPI_PASSWORD }}

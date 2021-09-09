@@ -1,4 +1,5 @@
-[![Build Status](https://travis-ci.org/leonardt/pycoreir.svg?branch=master)](https://travis-ci.org/leonardt/pycoreir)
+[![Linux Test](https://github.com/leonardt/pycoreir/actions/workflows/linux.yml/badge.svg)](https://github.com/leonardt/pycoreir/actions/workflows/linux.yml)
+[![MacOS Test](https://github.com/leonardt/pycoreir/actions/workflows/macos.yml/badge.svg)](https://github.com/leonardt/pycoreir/actions/workflows/macos.yml)
 
 Ultralight Python bindings for [coreir](https://github.com/rdaly525/coreir) using ctypes.
 
