@@ -29,13 +29,13 @@ jobs:
           # install the wheel for testing
           # use garnetflow container to test since it has all the prereqs
           docker exec garnet-flow bash -c "cd pycoreir && pip install wheelhouse/*.whl"
-          docker exec garnet-flow pip install pytest
+          docker exec garnet-flow pip install pytest pytest-cov
     - name: Docker run
       shell: bash -l {0}
       run: |
           docker exec garnet-flow pip install magma-lang  # For libcoreir-python test
-          docker exec garnet-flow bash -c "cd /pycoreir && pytest -s tests/"
+          docker exec garnet-flow bash -c "cd /pycoreir && pytest -s --cov-report=xml --cov=coreir tests/"
     - name: Upload Coverage
       shell: bash
       run: |
-          docker exec -i garnet-flow bash -c "cd /garnet/ && bash <(curl -s https://codecov.io/bash) -t ${{ secrets.CODECOV_TOKEN }}"
+          docker exec -i garnet-flow bash -c "cd /pycoreir/ && bash <(curl -s https://codecov.io/bash) -t ${{ secrets.CODECOV_TOKEN }}"
