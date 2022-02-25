@@ -17,10 +17,11 @@ def is_binary(path):
 
 # see if a coreir binary exists in the user's path
 COREIR_BINARY_PATH = None
-for line in os.popen("which -a coreir").read().splitlines():
-    if is_binary(line):
-        COREIR_BINARY_PATH = line
-        break
+with os.popen("which -a coreir") as process:
+    for line in process.read().splitlines():
+        if is_binary(line):
+            COREIR_BINARY_PATH = line
+            break
 
 SYSTEM = platform.system()
 if SYSTEM == "Linux":
