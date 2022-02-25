@@ -16,6 +16,7 @@ jobs:
     - name: Setup Python
       shell: bash
       run: |
+          export MACOSX_DEPLOYMENT_TARGET=11_0
           python --version
           brew install cmake
           python -m pip install twine wheel pytest delocate wheeltools
