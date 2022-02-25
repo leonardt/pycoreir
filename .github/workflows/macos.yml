@@ -16,7 +16,7 @@ jobs:
     - name: Setup Python
       shell: bash
       run: |
-          export MACOSX_DEPLOYMENT_TARGET=11_6
+          export MACOSX_DEPLOYMENT_TARGET='11_6'
           python --version
           brew install cmake
           python -m pip install twine wheel pytest delocate wheeltools
@@ -26,7 +26,7 @@ jobs:
           mkdir wheelhouse
           python .travis/fix_wheel.py wheels/*.whl -w wheelhouse
           pip install wheelhouse/*.whl
-    - name: Docker run
+    - name: Test
       shell: bash -l {0}
       run: |
           pip install magma-lang
