@@ -1,6 +1,8 @@
 from ctypes import cdll
 import platform
 import os
+import subprocess
+import sys
 
 
 def is_binary(path):
@@ -17,10 +19,12 @@ def is_binary(path):
 
 # see if a coreir binary exists in the user's path
 COREIR_BINARY_PATH = None
-with os.popen("which -a coreir") as process:
-    for line in process.read().splitlines():
+with subprocess.Popen(["which", "-a", "coreir"],
+                      stdout=subprocess.PIPE,
+                      stderr=subprocess.DEVNULL) as process:
+    for line in process.stdout.read().splitlines():
         if is_binary(line):
-            COREIR_BINARY_PATH = line
+            COREIR_BINARY_PATH = line.decode(sys.stdout.encoding)
             break
 
 SYSTEM = platform.system()
