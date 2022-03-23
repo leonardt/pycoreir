@@ -21,7 +21,7 @@ COREIR_BINARY_PATH = None
 with subprocess.Popen(["which", "-a", "coreir"],
                       stdout=subprocess.PIPE,
                       stderr=subprocess.DEVNULL) as process:
-    for line in process.stdout.splitlines():
+    for line in process.stdout.read().splitlines():
         if is_binary(line):
             COREIR_BINARY_PATH = line
             break
