@@ -2,6 +2,7 @@ from ctypes import cdll
 import platform
 import os
 import subprocess
+import sys
 
 
 def is_binary(path):
@@ -23,7 +24,7 @@ with subprocess.Popen(["which", "-a", "coreir"],
                       stderr=subprocess.DEVNULL) as process:
     for line in process.stdout.read().splitlines():
         if is_binary(line):
-            COREIR_BINARY_PATH = line
+            COREIR_BINARY_PATH = line.decode(sys.stdout.encoding)
             break
 
 SYSTEM = platform.system()
@@ -52,7 +53,7 @@ def get_lib_dir():
     # There's a binary on $PATH. Use the corresponding libraries (which we
     # assume to be at ../lib relative to it)
     bin_dir = os.path.dirname(COREIR_BINARY_PATH)
-    lib_dir = os.path.normpath(os.path.join(bin_dir, b'../lib'))
+    lib_dir = os.path.normpath(os.path.join(bin_dir, '../lib'))
 
     if not os.path.isdir(lib_dir):
         raise RuntimeError('We found a coreir binary at {}, but there\'s no '
