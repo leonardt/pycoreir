@@ -23,7 +23,7 @@ with subprocess.Popen(["which", "-a", "coreir"],
                       stderr=subprocess.DEVNULL) as process:
     for line in process.stdout.read().splitlines():
         if is_binary(line):
-            COREIR_BINARY_PATH = line
+            COREIR_BINARY_PATH = str(line)
             break
 
 SYSTEM = platform.system()
