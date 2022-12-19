@@ -19,7 +19,7 @@ jobs:
           docker run -d --name garnet-flow --rm -it --mount type=bind,source="$(pwd)"/../pycoreir,target=/pycoreir keyiz/garnet-flow bash
           docker cp ../pycoreir manylinux:/
           docker exec manylinux bash -c "cd pycoreir && python setup.py bdist_wheel"
-          docker exec manylinux bash -c "pip install auditwheel wheeltools"
+          docker exec manylinux bash -c "pip install wheel==0.32.0 auditwheel wheeltools"
           docker exec manylinux bash -c "auditwheel show /pycoreir/dist/*.whl"
           # we should have any external linked libraries at this point
           docker exec manylinux bash -c "cd pycoreir && LD_LIBRARY_PATH=/pycoreir/coreir-cpp/build/lib:/opt/rh/devtoolset-2/root/usr/lib64:/opt/rh/devtoolset-2/root/usr/lib:/usr/local/lib64:/usr/local/lib auditwheel repair dist/*.whl -w wheels"
