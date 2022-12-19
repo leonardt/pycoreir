@@ -136,7 +136,7 @@ setup(
     author_email='lenny@cs.stanford.edu',
     long_description=long_description,
     long_description_content_type="text/markdown",
-    install_requires=["hwtypes>=1.0.*"],
+    install_requires=["hwtypes"],
     ext_modules=[CoreIRExtension('coreir')],
     scripts=scripts,
     cmdclass=dict(build_ext=CoreIRBuild),
