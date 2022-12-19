@@ -21,7 +21,7 @@ if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
 else
      python --version
      brew install cmake
-     python -m pip install twine wheel pytest delocate wheeltools
+     python -m pip install twine wheel==0.32.0 pytest delocate wheeltools
      python setup.py bdist_wheel
      delocate-listdeps dist/*.whl
      delocate-wheel -v dist/*.whl -w wheels
