@@ -11,7 +11,7 @@ try:
     from wheel.install import WheelFile
 except ImportError:  # As of Wheel 0.32.0
     from wheel.wheelfile import WheelFile
-from wheel_util import read_pkg_info, write_pkg_info
+from wheel.pkginfo import read_pkg_info, write_pkg_info
 from wheeltools.tools import unique_by_index
 from wheeltools.wheeltools import InWheelCtx
 
