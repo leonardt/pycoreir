@@ -49,6 +49,8 @@ _library_cache = {}
 
 def namespace_cache(f):
     def method(self, name: str):
+        if self.context is None:
+            raise ValueError("Cannot use deleted context!")
         c_addr = ct.addressof(self.context)
         if name in _library_cache[c_addr]:
             return _library_cache[c_addr][name]
